@@ -9,11 +9,15 @@ import {
 import { db } from 'src/boot/firebase';
 import { Fruit } from 'src/models/fruit';
 
-const addFruit = async (): Promise<void> => {
+const addFruit = async ({
+  name = '',
+  color = '',
+  size = '',
+}: Fruit): Promise<void> => {
   const docRef = await addDoc(collection(db, 'fruits'), {
-    name: 'Lemon',
-    color: 'Yellow',
-    size: 'Medium',
+    name,
+    color,
+    size,
   });
   console.log('Document added with ID:', docRef.id);
 };

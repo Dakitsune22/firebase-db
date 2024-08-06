@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import useFruits from 'src/composables/useFruits';
 import useFruitMutation from 'src/composables/useFruitMutation';
+import FruitDialog from 'src/components/FruitDialog.vue';
+import { Fruit } from 'src/models/fruit';
 
 defineOptions({
   name: 'FruitsPage',
@@ -9,6 +12,14 @@ defineOptions({
 const { fruitsQuery } = useFruits();
 const { fruitMutationAdd, fruitMutationUpdate, fruitMutationDelete } =
   useFruitMutation();
+
+const showFruitDialog = ref<boolean>(false);
+const fruitSelected = ref<Fruit>();
+
+const onFruitSelected = (fruit?: Fruit): void => {
+  showFruitDialog.value = true;
+  fruitSelected.value = fruit;
+};
 </script>
 
 <template>
@@ -22,9 +33,9 @@ const { fruitMutationAdd, fruitMutationUpdate, fruitMutationDelete } =
         color="primary"
         label="+"
         class="add-fruit"
-        @click="fruitMutationAdd.mutate"
+        @click="onFruitSelected()"
       />
-      <ul v-for="fruit in fruitsQuery.data.value" :key="fruit.name">
+      <ul v-for="fruit in fruitsQuery.data.value" :key="fruit.id">
         <li>
           Nombre: <span>{{ fruit.name }}</span>
         </li>
@@ -38,19 +49,10 @@ const { fruitMutationAdd, fruitMutationUpdate, fruitMutationDelete } =
           <q-btn
             dense
             color="primary"
-            label="Nombre"
+            icon="edit"
             class="q-ml-xs"
-            @click="
-              fruitMutationUpdate.mutate({
-                id: fruit.id,
-                name: 'X.x',
-                color: fruit.color,
-                size: fruit.size,
-              })
-            "
+            @click="onFruitSelected(fruit)"
           />
-          <q-btn dense color="primary" label="Color" class="q-ml-xs" />
-          <q-btn dense color="primary" label="Tamaño" class="q-ml-xs" />
           <q-btn
             dense
             color="negative"
@@ -60,6 +62,24 @@ const { fruitMutationAdd, fruitMutationUpdate, fruitMutationDelete } =
           />
         </div>
       </ul>
+      <q-dialog v-model="showFruitDialog" persistent>
+        <fruit-dialog
+          :id="fruitSelected?.id ? fruitSelected.id : 'Nueva'"
+          :name="fruitSelected?.name"
+          :color="fruitSelected?.color"
+          :size="fruitSelected?.size"
+          @save="
+            (f) => {
+              if (fruitSelected?.id) {
+                console.log(f);
+                fruitMutationUpdate.mutate(f);
+              } else {
+                fruitMutationAdd.mutate(f);
+              }
+            }
+          "
+        />
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -68,6 +88,16 @@ const { fruitMutationAdd, fruitMutationUpdate, fruitMutationDelete } =
 span {
   color: blueviolet;
 }
+// ul {
+//   border: 1px solid red;
+//   transition: all 2s;
+
+//   :hover {
+//     // transform: translateX(1);
+//     margin-left: 10px;
+//     // border: 2px solid blue;
+//   }
+// }
 .add-fruit {
   position: fixed;
   right: 25px;
