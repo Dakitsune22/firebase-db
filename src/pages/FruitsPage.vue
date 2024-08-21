@@ -88,16 +88,29 @@ const onFruitSelected = (fruit?: Fruit): void => {
 span {
   color: blueviolet;
 }
-// ul {
-//   border: 1px solid red;
-//   transition: all 2s;
 
-//   :hover {
-//     // transform: translateX(1);
-//     margin-left: 10px;
-//     // border: 2px solid blue;
-//   }
-// }
+ul {
+  // border: 1px solid red;
+  color: rgb(243, 23, 195);
+  // transition: color 2s;
+  transition: all 2s;
+  // margin-left: 10px;
+
+  @starting-style {
+    color: orange;
+    margin-left: 300px;
+  }
+
+  // :hover {
+  //   color: orange;
+  //   transition: color 2s;
+  //   // transform: translateX(10);
+  //   // margin-left: 10px;
+  //   // border: 2px solid blue;
+  //   // text-decoration: underline;
+  //   // font-weight: bold;
+  // }
+}
 .add-fruit {
   position: fixed;
   right: 25px;
