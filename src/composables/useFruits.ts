@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/vue-query';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { Fruit } from 'src/models/fruit';
+import { Fruit } from 'src/models';
 
 const getFruitById = async (fruitId: string): Promise<Fruit> => {
   const docRef = doc(db, 'fruits', fruitId);

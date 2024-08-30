@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import useFruits from 'src/composables/useFruits';
 import useFruitMutation from 'src/composables/useFruitMutation';
 import FruitDialog from 'src/components/FruitDialog.vue';
-import { Fruit } from 'src/models/fruit';
+import { Fruit } from 'src/models';
 
 defineOptions({
   name: 'FruitsPage',

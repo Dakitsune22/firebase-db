@@ -7,7 +7,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { Fruit } from 'src/models/fruit';
+import { Fruit } from 'src/models';
 
 const addFruit = async ({
   name = '',

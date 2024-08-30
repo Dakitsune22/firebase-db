@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { Todo, Meta } from 'components/models';
 import ExampleComponent from 'components/ExampleComponent.vue';
-import { createCalendar } from 'src/helpers/league-calendar';
 
 defineOptions({
   name: 'IndexPage',
@@ -33,10 +32,6 @@ const todos = ref<Todo[]>([
 
 const meta = ref<Meta>({
   totalCount: 1200,
-});
-
-onMounted(() => {
-  createCalendar(20);
 });
 </script>
 

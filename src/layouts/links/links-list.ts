@@ -25,4 +25,10 @@ export const linksList: EssentialLinkProps[] = [
     icon: 'favorite',
     link: '/fruits',
   },
+  {
+    title: 'Soccer',
+    caption: 'Spanish League',
+    icon: 'sports_soccer',
+    link: '/soccer',
+  },
 ];
