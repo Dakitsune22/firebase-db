@@ -8,6 +8,8 @@ import { teamsSpain1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
+import useRounds from 'src/composables/useRounds';
+import useSoccer from 'src/composables/storeWrappers/useSoccer';
 
 defineOptions({
   name: 'SoccerPage',
@@ -16,6 +18,9 @@ defineOptions({
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
 const { queryTeams } = useTeams();
+const { queryRound, queryCountRounds } = useRounds();
+
+const { currentRound } = useSoccer();
 
 const onRestartLeague = () => {
   // Rounds:
@@ -29,17 +34,37 @@ const onRestartLeague = () => {
     };
     for (let i = 0; i < r.length; i++) {
       sr.matches.push({
-        team1: r[i].split('-')[0],
-        team2: r[i].split('-')[1],
+        id: i + 1,
+        team1: Number(r[i].split('-')[0]),
+        team2: Number(r[i].split('-')[1]),
+        score1: 0,
+        score2: 0,
       });
     }
     console.log(sr);
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  teamsSpain1.forEach((team) => {
-    mutateTeamAdd.mutate({ league: 'teams-spain-1', name: team });
+  teamsSpain1.forEach((team, i) => {
+    mutateTeamAdd.mutate({ league: 'teams-spain-1', id: i, name: team });
   });
+};
+
+const onPreviousRound = () => {
+  if (currentRound.value > 1) {
+    currentRound.value--;
+    queryRound.refetch();
+  }
+};
+
+const onNextRound = () => {
+  if (
+    queryCountRounds.data.value &&
+    currentRound.value < queryCountRounds.data.value
+  ) {
+    currentRound.value++;
+    queryRound.refetch();
+  }
 };
 </script>
 
@@ -54,11 +79,29 @@ const onRestartLeague = () => {
         @click="onRestartLeague"
       />
     </div>
-    <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
-    <div v-else>
-      <div v-for="team in queryTeams.data.value" :key="team.name">
-        {{ team.name }} {{ team.points }} {{ team.goalDifference }}
-        {{ team.goalsConceded }}
+    <div>
+      <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
+      <div v-else>
+        <div v-for="team in queryTeams.data.value" :key="team.name">
+          {{ team.name }} {{ team.points }} {{ team.goalDifference }}
+          {{ team.goalsConceded }}
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- <div v-if="queryCountRounds.isFetched">
+        {{ queryCountRounds.data.value }}
+      </div> -->
+      <div class="round-header">
+        <q-btn icon="remove" size="sm" @click="onPreviousRound" />
+        <span class="q-ma-md text-bold">{{ currentRound }}</span>
+        <q-btn icon="add" size="sm" @click="onNextRound" />
+      </div>
+      <div v-if="queryRound.isLoading.value">CARGANDO...</div>
+      <div v-else class="round-matches">
+        <div v-for="match in queryRound.data.value?.matches" :key="match.id">
+          {{ teamsSpain1[match.team1] }} vs {{ teamsSpain1[match.team2] }}
+        </div>
       </div>
     </div>
   </q-page>

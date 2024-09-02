@@ -4,8 +4,9 @@ export interface SeasonRound {
 }
 
 interface Match {
-  team1: string;
-  team2: string;
+  id: number;
+  team1: number;
+  team2: number;
   score1?: number;
   score2?: number;
 }

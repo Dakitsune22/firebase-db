@@ -2,11 +2,17 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 
-let numTeam = 0;
+// let numTeam = 0;
 
-const addTeam = async (league: string, name: string): Promise<void> => {
+const addTeam = async (
+  league: string,
+  id: number,
+  name: string
+): Promise<void> => {
   //  await setDoc(doc(db, league, name), {
-  await setDoc(doc(db, league, (++numTeam).toString()), {
+  console.log({ id });
+  await setDoc(doc(db, league, id.toString()), {
+    // await setDoc(doc(db, league, (++numTeam).toString()), {
     name,
     points: 0,
     goalsScored: 0,
@@ -34,8 +40,15 @@ const useTeamMutation = () => {
   };
 
   const mutateTeamAdd = useMutation({
-    mutationFn: ({ league, name }: { league: string; name: string }) =>
-      addTeam(league, name),
+    mutationFn: ({
+      league,
+      id,
+      name,
+    }: {
+      league: string;
+      id: number;
+      name: string;
+    }) => addTeam(league, id, name),
     onSuccess: () => {
       refreshData();
     },
