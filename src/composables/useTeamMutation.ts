@@ -13,6 +13,7 @@ const addTeam = async (
   console.log({ id });
   await setDoc(doc(db, league, id.toString()), {
     // await setDoc(doc(db, league, (++numTeam).toString()), {
+    id,
     name,
     points: 0,
     goalsScored: 0,

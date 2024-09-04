@@ -3,6 +3,7 @@ export interface Team {
   goalDifference: number;
   goalsConceded: number;
   goalsScored: number;
+  id: number;
   losses: number;
   matchesPlayed: number;
   name: string;

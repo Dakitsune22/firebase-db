@@ -18,6 +18,7 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
       goalDifference: doc.data().goalDifference,
       goalsConceded: doc.data().goalsConceded,
       goalsScored: doc.data().goalsScored,
+      id: doc.data().id,
       losses: doc.data().losses,
       matchesPlayed: doc.data().matchesPlayed,
       name: doc.data().name,

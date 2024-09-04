@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  createCalendar,
-  //  generateLeagueCalendar,
-} from 'src/helpers/league-calendar';
+import { createCalendar } from 'src/helpers/league-calendar';
 import { SeasonRound } from 'src/models';
 import { teamsSpain1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
@@ -10,6 +7,8 @@ import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
+import SoccerMatch from 'src/components/SoccerMatch.vue';
+import SoccerTeam from 'src/components/SoccerTeam.vue';
 
 defineOptions({
   name: 'SoccerPage',
@@ -83,8 +82,9 @@ const onNextRound = () => {
       <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
       <div v-else>
         <div v-for="team in queryTeams.data.value" :key="team.name">
-          {{ team.name }} {{ team.points }} {{ team.goalDifference }}
-          {{ team.goalsConceded }}
+          <!-- {{ team.name }} {{ team.points }} {{ team.goalDifference }}
+          {{ team.goalsConceded }} -->
+          <soccer-team :team="team" />
         </div>
       </div>
     </div>
@@ -100,7 +100,15 @@ const onNextRound = () => {
       <div v-if="queryRound.isLoading.value">CARGANDO...</div>
       <div v-else class="round-matches">
         <div v-for="match in queryRound.data.value?.matches" :key="match.id">
-          {{ teamsSpain1[match.team1] }} vs {{ teamsSpain1[match.team2] }}
+          <!-- {{ teamsSpain1[match.team1] }} {{ match.score1 }} -
+          {{ match.score2 }} {{ teamsSpain1[match.team2] }} -->
+          <soccer-match
+            :id="match.id"
+            :team1="match.team1"
+            :team2="match.team2"
+            :score1="match.score1"
+            :score2="match.score2"
+          />
         </div>
       </div>
     </div>
