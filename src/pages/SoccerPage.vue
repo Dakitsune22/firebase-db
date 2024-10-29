@@ -9,6 +9,7 @@ import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
+import { ref } from 'vue';
 
 defineOptions({
   name: 'SoccerPage',
@@ -17,9 +18,25 @@ defineOptions({
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
 const { queryTeams } = useTeams();
+const { queryTeamById } = useTeams(2);
 const { queryRound, queryCountRounds } = useRounds();
 
 const { currentRound } = useSoccer();
+
+const roundKey = ref<number>(0);
+
+const forceRender = (): void => {
+  roundKey.value++;
+};
+
+// watch(() => currentRound.value,
+//       (newId, oldId) => {
+//         console.log({oldId}, {newId})
+//         if (newId !== oldId) {
+//             forceRender();
+//         }
+//       }
+// );
 
 const onRestartLeague = () => {
   // Rounds:
@@ -34,6 +51,7 @@ const onRestartLeague = () => {
     for (let i = 0; i < r.length; i++) {
       sr.matches.push({
         id: i + 1,
+        played: false,
         team1: Number(r[i].split('-')[0]),
         team2: Number(r[i].split('-')[1]),
         score1: 0,
@@ -49,22 +67,34 @@ const onRestartLeague = () => {
   });
 };
 
-const onPreviousRound = () => {
+const onPreviousRound = async () => {
   if (currentRound.value > 1) {
     currentRound.value--;
-    queryRound.refetch();
+    await queryRound.refetch();
+    // console.log(queryRound.data.value);
+    forceRender();
   }
 };
 
-const onNextRound = () => {
+const onNextRound = async () => {
   if (
     queryCountRounds.data.value &&
     currentRound.value < queryCountRounds.data.value
   ) {
     currentRound.value++;
-    queryRound.refetch();
+    await queryRound.refetch();
+    // console.log(queryRound.data.value);
+    forceRender();
   }
 };
+
+// const onSaveRound = () => {
+//   console.log('save round');
+//   if (queryRound.data.value) {
+//     // console.log(queryRound.data.value);
+//     mutateRoundPlay.mutate(queryRound.data.value);
+//   }
+// };
 </script>
 
 <template>
@@ -88,14 +118,26 @@ const onNextRound = () => {
         </div>
       </div>
     </div>
-    <div>
+    <div class="round">
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
       </div> -->
       <div class="round-header">
-        <q-btn icon="remove" size="sm" @click="onPreviousRound" />
+        <q-btn
+          icon="remove"
+          size="sm"
+          color="primary"
+          @click="onPreviousRound"
+        />
         <span class="q-ma-md text-bold">{{ currentRound }}</span>
-        <q-btn icon="add" size="sm" @click="onNextRound" />
+        <q-btn icon="add" size="sm" color="primary" @click="onNextRound" />
+        <!-- <q-btn
+          label="Guardar jornada"
+          color="primary"
+          icon="save"
+          class="round-header-savebtn q-pl-sm"
+          @click="onSaveRound"
+        /> -->
       </div>
       <div v-if="queryRound.isLoading.value">CARGANDO...</div>
       <div v-else class="round-matches">
@@ -103,7 +145,9 @@ const onNextRound = () => {
           <!-- {{ teamsSpain1[match.team1] }} {{ match.score1 }} -
           {{ match.score2 }} {{ teamsSpain1[match.team2] }} -->
           <soccer-match
+            :key="roundKey"
             :id="match.id"
+            :played="match.played"
             :team1="match.team1"
             :team2="match.team2"
             :score1="match.score1"
@@ -113,4 +157,20 @@ const onNextRound = () => {
       </div>
     </div>
   </q-page>
+  <div>
+    <div v-if="queryTeamById.isLoading.value">LOADING EQUIPO...</div>
+    <div v-else>
+      EQUIPO:
+      {{ queryTeamById.data.value }}
+    </div>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.round-header {
+  @include flexPosition(space-between, center);
+  // @include flexPosition(center, center);
+
+  // background-color: aqua;
+}
+</style>

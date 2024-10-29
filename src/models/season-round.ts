@@ -5,6 +5,7 @@ export interface SeasonRound {
 
 export interface Match {
   id: number;
+  played: boolean;
   team1: number;
   team2: number;
   score1: number;
