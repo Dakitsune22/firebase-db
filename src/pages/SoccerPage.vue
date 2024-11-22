@@ -38,7 +38,7 @@ const forceRender = (): void => {
 //       }
 // );
 
-const onRestartLeague = () => {
+const onRestartLeague = async () => {
   // Rounds:
   // const rounds = generateLeagueCalendar(teamsSpain1);
   const rounds = createCalendar(teamsSpain1.length);
@@ -65,6 +65,12 @@ const onRestartLeague = () => {
   teamsSpain1.forEach((team, i) => {
     mutateTeamAdd.mutate({ league: 'teams-spain-1', id: i, name: team });
   });
+
+  // Inicializamos ronda a 1 y refrescamos query:
+  currentRound.value = 1;
+  await queryRound.refetch();
+  // Cambiamos valor a roundkey para forzar repintado de rondas:
+  roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
 };
 
 const onPreviousRound = async () => {
@@ -159,10 +165,10 @@ const onNextRound = async () => {
   </q-page>
   <div>
     <div v-if="queryTeamById.isLoading.value">LOADING EQUIPO...</div>
-    <div v-else>
+    <!-- <div v-else>
       EQUIPO:
       {{ queryTeamById.data.value }}
-    </div>
+    </div> -->
   </div>
 </template>
 

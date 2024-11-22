@@ -12,6 +12,14 @@ const props = defineProps<Props>();
   <div>
     <q-list bordered separator dense>
       <q-item class="item">
+        <q-item-section class="section-img">
+          <q-img
+            :src="`/public/images/teams-spain-1/${props.team.id}.png`"
+            spinner-color="white"
+            width="30px"
+            height="30px"
+          />
+        </q-item-section>
         <q-item-section side class="section-team">{{
           // teamsSpain1[props.team.id]
           props.team.name
@@ -49,7 +57,7 @@ $x: rgba(42, 42, 42, 0.692);
 
 .item {
   background-color: lightgrey;
-  width: 400px;
+  // width: 400px;
 
   &-values {
     width: 200px;
@@ -58,9 +66,16 @@ $x: rgba(42, 42, 42, 0.692);
 }
 
 .section {
+  &-img {
+    // width: 30px;
+    // height: 40px;
+    // background-color: aqua;
+  }
   &-team {
-    //   background-color: aquamarine;
-    width: 130px;
+    // background-color: aquamarine;
+    align-items: start;
+    width: 140px;
+    padding-left: 5px;
     font-size: medium;
     color: $x;
   }
@@ -70,7 +85,7 @@ $x: rgba(42, 42, 42, 0.692);
 
     &-points {
       // text-align: center;
-      // width: 70px;
+      width: 50px;
       background-color: $x;
       color: whitesmoke;
       font-size: 20px;

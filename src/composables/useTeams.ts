@@ -20,18 +20,19 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
   //   const docs = await getDocs(collection(db, 'teams-spain-1'));
   const teams: Team[] = [];
   docs.forEach((doc) => {
-    teams.push({
-      draws: doc.data().draws,
-      goalDifference: doc.data().goalDifference,
-      goalsConceded: doc.data().goalsConceded,
-      goalsScored: doc.data().goalsScored,
-      id: doc.data().id,
-      losses: doc.data().losses,
-      matchesPlayed: doc.data().matchesPlayed,
-      name: doc.data().name,
-      points: doc.data().points,
-      wins: doc.data().wins,
-    });
+    // teams.push({
+    //   draws: doc.data().draws,
+    //   goalDifference: doc.data().goalDifference,
+    //   goalsConceded: doc.data().goalsConceded,
+    //   goalsScored: doc.data().goalsScored,
+    //   id: doc.data().id,
+    //   losses: doc.data().losses,
+    //   matchesPlayed: doc.data().matchesPlayed,
+    //   name: doc.data().name,
+    //   points: doc.data().points,
+    //   wins: doc.data().wins,
+    // });
+    teams.push(doc.data() as Team);
   });
   return teams;
 };
