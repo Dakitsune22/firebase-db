@@ -115,12 +115,22 @@ const onNextRound = async () => {
       />
     </div>
     <div>
+      <div class="teams-header">
+        <div class="teams-header-coleq">Equipo</div>
+        <div class="teams-header-colpts">Puntos</div>
+        <div class="teams-header-colval">PJ</div>
+        <div class="teams-header-colvalaux">PG</div>
+        <div class="teams-header-colvalaux">PE</div>
+        <div class="teams-header-colvalaux">PP</div>
+        <div class="teams-header-colvalaux">GF</div>
+        <div class="teams-header-colvalaux">GC</div>
+      </div>
       <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
       <div v-else>
-        <div v-for="team in queryTeams.data.value" :key="team.name">
+        <div v-for="(team, idx) in queryTeams.data.value" :key="team.id">
           <!-- {{ team.name }} {{ team.points }} {{ team.goalDifference }}
           {{ team.goalsConceded }} -->
-          <soccer-team :team="team" />
+          <soccer-team :team="team" :i-key="idx + 1" />
         </div>
       </div>
     </div>
@@ -135,7 +145,9 @@ const onNextRound = async () => {
           color="primary"
           @click="onPreviousRound"
         />
-        <span class="q-ma-md text-bold">{{ currentRound }}</span>
+        <span class="q-ma-md text-bold text-primary"
+          >JORNADA {{ currentRound }}</span
+        >
         <q-btn icon="add" size="sm" color="primary" @click="onNextRound" />
         <!-- <q-btn
           label="Guardar jornada"
@@ -178,5 +190,35 @@ const onNextRound = async () => {
   // @include flexPosition(center, center);
 
   // background-color: aqua;
+}
+.teams-header {
+  @include flexPosition(start, center);
+  // width: 100%;
+  color: $primary;
+  font-weight: 500;
+  font-size: small;
+
+  &-coleq {
+    width: 196px;
+    padding-left: 18px;
+    // background-color: aquamarine;
+  }
+  &-colpts {
+    width: 40px;
+    // background-color: bisque;
+    text-align: center;
+  }
+  &-colval {
+    width: 30px;
+    margin-left: 12px;
+    // background-color: aquamarine;
+    text-align: center;
+  }
+  &-colvalaux {
+    width: 32px;
+    margin-left: 1px;
+    // background-color: bisque;
+    text-align: center;
+  }
 }
 </style>

@@ -34,6 +34,13 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
     // });
     teams.push(doc.data() as Team);
   });
+  // Ordenamos equipos por puntos (desc), por diferencia de goles (desc) y por goles a favor (desc):
+  teams.sort(
+    (a, b) =>
+      b.points - a.points ||
+      b.goalDifference - a.goalDifference ||
+      b.goalsScored - a.goalsScored
+  );
   return teams;
 };
 

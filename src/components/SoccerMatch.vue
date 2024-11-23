@@ -63,7 +63,7 @@ const onPlayMatch = () => {
 
 <template>
   <div>
-    <q-list bordered separator dense>
+    <q-list bordered separator dense class="list">
       <q-item class="item">
         <q-item-section>
           <q-img
@@ -107,6 +107,12 @@ const onPlayMatch = () => {
 
 <style lang="scss" scoped>
 $darkGrey: rgba(42, 42, 42, 0.692);
+
+.list {
+  border: 1px solid rgb(150, 150, 150);
+  border-radius: 0.2em;
+  margin-top: 2px;
+}
 
 .item {
   background-color: lightgrey;

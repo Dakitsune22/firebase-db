@@ -4,14 +4,48 @@ import { Team } from 'src/models/team';
 
 interface Props {
   team: Team;
+  iKey: number;
 }
 const props = defineProps<Props>();
 </script>
 
 <template>
   <div>
-    <q-list bordered separator dense>
-      <q-item class="item">
+    <q-list
+      bordered
+      separator
+      dense
+      class="list"
+      :class="
+        props.iKey === 1
+          ? 'list-rank-best'
+          : props.iKey >= 2 && props.iKey <= 4
+          ? 'list-rank-champions'
+          : props.iKey === 5 || props.iKey === 6
+          ? 'list-rank-uefa'
+          : props.iKey === 7
+          ? 'list-rank-conference'
+          : props.iKey >= 18
+          ? 'list-rank-relegation'
+          : ''
+      "
+    >
+      <q-item
+        class="item"
+        :class="
+          props.iKey === 1
+            ? 'item-rank-best'
+            : props.iKey >= 2 && props.iKey <= 4
+            ? 'item-rank-champions'
+            : props.iKey === 5 || props.iKey === 6
+            ? 'item-rank-uefa'
+            : props.iKey === 7
+            ? 'item-rank-conference'
+            : props.iKey >= 18
+            ? 'item-rank-relegation'
+            : ''
+        "
+      >
         <q-item-section class="section-img">
           <q-img
             :src="`/public/images/teams-spain-1/${props.team.id}.png`"
@@ -53,15 +87,59 @@ const props = defineProps<Props>();
 </template>
 
 <style lang="scss" scoped>
-$x: rgba(42, 42, 42, 0.692);
+$darkGrey: rgba(42, 42, 42, 0.692);
+
+.list {
+  border-color: rgb(150, 150, 150);
+  border-width: 1px 1px 1px 1px;
+  border-radius: 0.2em;
+  margin-top: 2px;
+
+  &-rank {
+    &-best {
+      border-color: rgb(228, 170, 25);
+    }
+    &-champions {
+      border-color: rgb(233, 181, 50);
+    }
+    &-uefa {
+      border-color: rgb(83, 194, 245);
+    }
+    &-conference {
+      border-color: rgb(90, 197, 140);
+    }
+    &-relegation {
+      border-color: rgb(201, 61, 61);
+    }
+  }
+}
 
 .item {
   background-color: lightgrey;
+  // border: 1px solid darkgrey;
   // width: 400px;
 
   &-values {
     width: 200px;
     padding-right: 0;
+  }
+
+  &-rank {
+    &-best {
+      background-color: rgb(253, 206, 88);
+    }
+    &-champions {
+      background-color: rgb(255, 220, 133);
+    }
+    &-uefa {
+      background-color: rgb(152, 220, 252);
+    }
+    &-conference {
+      background-color: rgb(172, 231, 200);
+    }
+    &-relegation {
+      background-color: rgb(241, 169, 169);
+    }
   }
 }
 
@@ -76,8 +154,9 @@ $x: rgba(42, 42, 42, 0.692);
     align-items: start;
     width: 140px;
     padding-left: 5px;
-    font-size: medium;
-    color: $x;
+    font-size: larger;
+    // font-weight: 500;
+    color: $darkGrey;
   }
 
   &-value {
@@ -86,7 +165,7 @@ $x: rgba(42, 42, 42, 0.692);
     &-points {
       // text-align: center;
       width: 50px;
-      background-color: $x;
+      background-color: $darkGrey;
       color: whitesmoke;
       font-size: 20px;
       font-weight: 500;
