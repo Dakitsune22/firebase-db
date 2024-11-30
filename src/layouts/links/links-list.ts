@@ -26,9 +26,15 @@ export const linksList: EssentialLinkProps[] = [
     link: '/fruits',
   },
   {
-    title: 'Soccer',
-    caption: 'Spanish League',
+    title: 'Resultados y clasificación',
+    caption: 'La Liga',
     icon: 'sports_soccer',
     link: '/soccer',
+  },
+  {
+    title: 'Alta de jugador',
+    caption: 'La Liga',
+    icon: 'person_add',
+    link: '/add-player',
   },
 ];

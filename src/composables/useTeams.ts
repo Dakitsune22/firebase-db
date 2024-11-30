@@ -71,6 +71,7 @@ const useTeams = (id?: number) => {
 
   const queryTeamById = useQuery({
     queryKey: ['teams-spain-1', id],
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     queryFn: () => getTeamById(id!),
   });
 

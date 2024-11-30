@@ -10,10 +10,13 @@ import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 
 defineOptions({
   name: 'SoccerPage',
 });
+
+const $q = useQuasar();
 
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
@@ -38,7 +41,7 @@ const forceRender = (): void => {
 //       }
 // );
 
-const onRestartLeague = async () => {
+const restartLeague = async () => {
   // Rounds:
   // const rounds = generateLeagueCalendar(teamsSpain1);
   const rounds = createCalendar(teamsSpain1.length);
@@ -71,6 +74,30 @@ const onRestartLeague = async () => {
   await queryRound.refetch();
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+};
+
+const onRestartLeague = () => {
+  $q.dialog({
+    html: true,
+    title: '<span class="text-primary">Reiniciar liga</span',
+    message:
+      'Todos los datos actuales (clasificación, resultados, etc.) se eliminarán. <strong>¿Estás seguro de continuar?</strong>',
+    cancel: { label: 'Volver', flat: true },
+    ok: { icon: 'warning', label: 'Continuar', flat: true },
+    persistent: true,
+  })
+    .onOk(() => {
+      restartLeague();
+    })
+    .onOk(() => {
+      // console.log('>>>> second OK catcher')
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
 };
 
 const onPreviousRound = async () => {
@@ -145,9 +172,11 @@ const onNextRound = async () => {
           color="primary"
           @click="onPreviousRound"
         />
+        <span class="text-primary">····························· [</span>
         <span class="q-ma-md text-bold text-primary"
           >JORNADA {{ currentRound }}</span
         >
+        <span class="text-primary">] ·····························</span>
         <q-btn icon="add" size="sm" color="primary" @click="onNextRound" />
         <!-- <q-btn
           label="Guardar jornada"

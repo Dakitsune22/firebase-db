@@ -20,6 +20,11 @@ const routes: RouteRecordRaw[] = [
         path: '/soccer',
         component: () => import('pages/SoccerPage.vue'),
       },
+      {
+        name: 'addPlayer',
+        path: '/add-player',
+        component: () => import('pages/AddPlayerPage.vue'),
+      },
     ],
   },
 

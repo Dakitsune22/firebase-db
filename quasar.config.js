@@ -1,4 +1,4 @@
-/* eslint-env node */
+8; /* eslint-env node */
 
 /*
  * This file runs in a Node context (it's NOT transpiled by Babel), so use only
@@ -100,7 +100,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Dialog'],
     },
 
     // animations: 'all', // --- includes all animations
