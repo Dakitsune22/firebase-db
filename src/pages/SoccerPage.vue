@@ -65,8 +65,8 @@ const restartLeague = async () => {
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  teamsSpain1.forEach((team, i) => {
-    mutateTeamAdd.mutate({ league: 'teams-spain-1', id: i, name: team });
+  teamsSpain1.forEach((team) => {
+    mutateTeamAdd.mutate({ league: 'teams-spain-1', id: team.id });
   });
 
   // Inicializamos ronda a 1 y refrescamos query:

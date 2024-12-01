@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { Team } from 'src/models';
+// import players from 'src/data/players';
+import { teamsSpain1 } from 'src/data/teams';
 
 // let numTeam = 0;
 
@@ -13,26 +15,24 @@ interface teamUpdateData {
   team: Team;
 }
 
-const addTeam = async (
-  league: string,
-  id: number,
-  name: string
-): Promise<void> => {
+const addTeam = async (league: string, id: number): Promise<void> => {
   //  await setDoc(doc(db, league, name), {
   console.log({ id });
-  await setDoc(doc(db, league, id.toString()), {
-    // await setDoc(doc(db, league, (++numTeam).toString()), {
-    id,
-    name,
-    points: 0,
-    goalsScored: 0,
-    goalsConceded: 0,
-    goalDifference: 0,
-    matchesPlayed: 0,
-    wins: 0,
-    draws: 0,
-    losses: 0,
-  });
+  // await setDoc(doc(db, league, id.toString()), {
+  //   // await setDoc(doc(db, league, (++numTeam).toString()), {
+  //   id,
+  //   name,
+  //   points: 0,
+  //   goalsScored: 0,
+  //   goalsConceded: 0,
+  //   goalDifference: 0,
+  //   matchesPlayed: 0,
+  //   wins: 0,
+  //   draws: 0,
+  //   losses: 0,
+  //   players: players[id],
+  // });
+  await setDoc(doc(db, league, id.toString()), teamsSpain1[id]);
 };
 
 const updateTeam = async (t: teamUpdateData): Promise<void> => {
@@ -88,15 +88,8 @@ const useTeamMutation = () => {
   };
 
   const mutateTeamAdd = useMutation({
-    mutationFn: ({
-      league,
-      id,
-      name,
-    }: {
-      league: string;
-      id: number;
-      name: string;
-    }) => addTeam(league, id, name),
+    mutationFn: ({ league, id }: { league: string; id: number }) =>
+      addTeam(league, id),
     onSuccess: () => {
       refreshData();
     },

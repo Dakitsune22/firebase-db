@@ -1,3 +1,6 @@
+import { Player } from './player';
+import { Tactic } from './tactic';
+
 export interface Team {
   draws: number;
   goalDifference: number;
@@ -9,4 +12,6 @@ export interface Team {
   name: string;
   points: number;
   wins: number;
+  tactic: Tactic;
+  players: Player[];
 }

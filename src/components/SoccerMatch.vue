@@ -6,7 +6,8 @@ import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import { Team } from 'src/models';
+import { Player, Team } from 'src/models';
+import { getStartingLineup } from 'src/helpers/match-play';
 
 const props = defineProps<Match>();
 
@@ -26,8 +27,17 @@ const { mutateTeamUpdate } = useTeamMutation();
 const { queryTeamById: qt1 } = useTeams(matchRef.value.team1);
 const { queryTeamById: qt2 } = useTeams(matchRef.value.team2);
 
+const startingLineup1 = ref<Player[]>([]);
+const startingLineup2 = ref<Player[]>([]);
+
+const showMatchStats = ref<boolean>(false);
+
 const onPlayMatch = () => {
   if (matchRef.value.played) return;
+
+  // Obtener onces iniciales:
+  startingLineup1.value = getStartingLineup(qt1.data.value as Team);
+  startingLineup2.value = getStartingLineup(qt2.data.value as Team);
 
   matchRef.value.score1 = Number((Math.random() * 5).toFixed(0));
   matchRef.value.score2 = Number((Math.random() * 5).toFixed(0));
@@ -74,7 +84,7 @@ const onPlayMatch = () => {
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          teamsSpain1[props.team1]
+          teamsSpain1[props.team1].name
         }}</q-item-section>
         <q-item-section class="section-score"
           >{{ matchRef.score1 }}
@@ -91,7 +101,7 @@ const onPlayMatch = () => {
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          teamsSpain1[props.team2]
+          teamsSpain1[props.team2].name
         }}</q-item-section>
         <q-item-section
           class="section-sim"
@@ -100,16 +110,48 @@ const onPlayMatch = () => {
           "
           ><q-icon name="play_circle" size="26px" @click="onPlayMatch"
         /></q-item-section>
+        <q-item-section
+          class="section-sim"
+          :class="
+            matchRef.played ? 'section-sim-enabled' : 'section-sim-disabled'
+          "
+          @click="
+            matchRef.played
+              ? (showMatchStats = !showMatchStats)
+              : (showMatchStats = showMatchStats)
+          "
+          ><q-icon name="query_stats" size="22px"
+        /></q-item-section>
       </q-item>
     </q-list>
+    <div class="matchstats-container" v-if="showMatchStats">
+      <div class="matchstats-container-left">
+        <div>LOL</div>
+        <div v-for="p in startingLineup1" :key="p.shirtNumber">
+          {{ p.shirtNumber }} - {{ p.name }} ({{ p.position }} {{ p.overall }})
+        </div>
+      </div>
+      <div class="matchstats-container-right">
+        <div>
+          Media:
+          {{
+            (startingLineup2.reduce((a, b) => a + b.overall, 0) / 11).toFixed(1)
+          }}
+        </div>
+        <div v-for="p in startingLineup2" :key="p.shirtNumber">
+          {{ p.shirtNumber }} - {{ p.name }} ({{ p.position }} {{ p.overall }})
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 $darkGrey: rgba(42, 42, 42, 0.692);
+$midGrey: rgb(150, 150, 150);
 
 .list {
-  border: 1px solid rgb(150, 150, 150);
+  border: 1px solid $midGrey;
   border-radius: 0.2em;
   margin-top: 2px;
 }
@@ -150,6 +192,25 @@ $darkGrey: rgba(42, 42, 42, 0.692);
       color: white;
       cursor: default;
     }
+  }
+}
+.matchstats-container {
+  @include flexPosition(start, center);
+  background-color: lightgrey;
+  padding: 6px;
+  padding-top: 4px;
+  border: 1px solid $midGrey;
+  border-radius: 0.2em;
+  margin-top: 1px;
+  // height: 100px;
+
+  &-left {
+    width: 50%;
+    background-color: aquamarine;
+  }
+  &-right {
+    width: 50%;
+    background-color: bisque;
   }
 }
 </style>

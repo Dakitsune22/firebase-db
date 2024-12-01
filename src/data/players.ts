@@ -1,0 +1,48 @@
+import { Player } from 'src/models';
+import {
+  playersData0,
+  playersData1,
+  playersData2,
+  playersData3,
+  playersData4,
+  playersData5,
+  playersData6,
+  playersData7,
+  playersData8,
+  playersData9,
+  playersData10,
+  playersData11,
+  playersData12,
+  playersData13,
+  playersData14,
+  playersData15,
+  playersData16,
+  playersData17,
+  playersData18,
+  playersData19,
+} from './players-data';
+
+const playersSpain1: Player[][] = [
+  playersData0,
+  playersData1,
+  playersData2,
+  playersData3,
+  playersData4,
+  playersData5,
+  playersData6,
+  playersData7,
+  playersData8,
+  playersData9,
+  playersData10,
+  playersData11,
+  playersData12,
+  playersData13,
+  playersData14,
+  playersData15,
+  playersData16,
+  playersData17,
+  playersData18,
+  playersData19,
+];
+
+export default playersSpain1;

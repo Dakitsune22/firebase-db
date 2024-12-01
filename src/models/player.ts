@@ -5,7 +5,7 @@ export interface Player {
   nickname?: string;
   nationality: Flag;
   position: Position;
-  skillScore: number;
+  overall: number;
   seasonStats: SeasonStats;
 }
 

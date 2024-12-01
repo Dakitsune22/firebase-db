@@ -14,7 +14,7 @@ const player = ref<Player>({
   shirtNumber: 1,
   nationality: Flag.Spain,
   position: Position.POR,
-  skillScore: 75,
+  overall: 75,
   seasonStats: {
     goals: 0,
     assists: 0,
@@ -52,7 +52,7 @@ const onReset = () => {
     shirtNumber: 1,
     nationality: Flag.Spain,
     position: Position.POR,
-    skillScore: 75,
+    overall: 75,
     seasonStats: {
       goals: 0,
       assists: 0,
@@ -150,32 +150,32 @@ const onReset = () => {
           Potencial del jugador
         </q-badge>
         <q-slider
-          v-model="player.skillScore"
+          v-model="player.overall"
           :min="50"
           :max="99"
           :color="
-            player.skillScore < 55
+            player.overall < 55
               ? 'red-10'
-              : player.skillScore < 60
+              : player.overall < 60
               ? 'red-8'
-              : player.skillScore < 65
+              : player.overall < 65
               ? 'red'
-              : player.skillScore < 70
+              : player.overall < 70
               ? 'yellow-10'
-              : player.skillScore < 75
+              : player.overall < 75
               ? 'yellow-9'
-              : player.skillScore < 80
+              : player.overall < 80
               ? 'yellow-8'
-              : player.skillScore < 85
+              : player.overall < 85
               ? 'green-6'
-              : player.skillScore < 90
+              : player.overall < 90
               ? 'green-7'
-              : player.skillScore < 95
+              : player.overall < 95
               ? 'green-8'
               : 'green-9'
           "
           label-always
-          :switch-label-side="player.skillScore < 70 ? true : false"
+          :switch-label-side="player.overall < 70 ? true : false"
           :markers="10"
           thumb-size="30px"
           track-size="8px"
