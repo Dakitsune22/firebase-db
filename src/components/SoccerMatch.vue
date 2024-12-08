@@ -7,7 +7,8 @@ import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import { Player, Team } from 'src/models';
-import { getStartingLineup } from 'src/helpers/match-play';
+import { getStartingLineup, getScorers } from 'src/helpers/match-play';
+import SoccerMatchStats from './SoccerMatchStats.vue';
 
 const props = defineProps<Match>();
 
@@ -18,6 +19,10 @@ const matchRef = ref<Match>({
   team2: props.team2,
   score1: props.score1,
   score2: props.score2,
+  startingLineup1: props.startingLineup1,
+  startingLineup2: props.startingLineup2,
+  scorers1: props.scorers1,
+  scorers2: props.scorers2,
 });
 
 const { currentRound, roundMatches } = useSoccer();
@@ -27,26 +32,49 @@ const { mutateTeamUpdate } = useTeamMutation();
 const { queryTeamById: qt1 } = useTeams(matchRef.value.team1);
 const { queryTeamById: qt2 } = useTeams(matchRef.value.team2);
 
-const startingLineup1 = ref<Player[]>([]);
-const startingLineup2 = ref<Player[]>([]);
+// const startingLineup1 = ref<Player[]>([]);
+// const startingLineup2 = ref<Player[]>([]);
 
 const showMatchStats = ref<boolean>(false);
+
+// const mStatsKey = ref<number>(0);
+// const forceRender = (): void => {
+//   mStatsKey.value++;
+//   console.log(matchRef.value.startingLineup1);
+// };
 
 const onPlayMatch = () => {
   if (matchRef.value.played) return;
 
   // Obtener onces iniciales:
-  startingLineup1.value = getStartingLineup(qt1.data.value as Team);
-  startingLineup2.value = getStartingLineup(qt2.data.value as Team);
+  matchRef.value.startingLineup1 = getStartingLineup(qt1.data.value as Team);
+  matchRef.value.startingLineup2 = getStartingLineup(qt2.data.value as Team);
 
+  // Calcular resultado:
+  matchRef.value.played = true;
   matchRef.value.score1 = Number((Math.random() * 5).toFixed(0));
   matchRef.value.score2 = Number((Math.random() * 5).toFixed(0));
-  matchRef.value.played = true;
+
+  // Obtener goleadores:
+  matchRef.value.scorers1 = getScorers(
+    matchRef.value.score1,
+    matchRef.value.startingLineup1
+  );
+  matchRef.value.scorers2 = getScorers(
+    matchRef.value.score2,
+    matchRef.value.startingLineup2
+  );
 
   // ToDo: Actualizar datos de los equipos en store y BBDD.
+  roundMatches.value[matchRef.value.id - 1].played = matchRef.value.played;
   roundMatches.value[matchRef.value.id - 1].score1 = matchRef.value.score1;
   roundMatches.value[matchRef.value.id - 1].score2 = matchRef.value.score2;
-  roundMatches.value[matchRef.value.id - 1].played = matchRef.value.played;
+  roundMatches.value[matchRef.value.id - 1].startingLineup1 =
+    matchRef.value.startingLineup1;
+  roundMatches.value[matchRef.value.id - 1].startingLineup2 =
+    matchRef.value.startingLineup2;
+  roundMatches.value[matchRef.value.id - 1].scorers1 = matchRef.value.scorers1;
+  roundMatches.value[matchRef.value.id - 1].scorers2 = matchRef.value.scorers2;
 
   mutateRoundPlay.mutate({
     round: currentRound.value,
@@ -58,6 +86,7 @@ const onPlayMatch = () => {
     id: matchRef.value.team1,
     newGoalsScored: matchRef.value.score1,
     newGoalsConceded: matchRef.value.score2,
+    scorers: matchRef.value.scorers1,
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
 
@@ -66,6 +95,7 @@ const onPlayMatch = () => {
     id: matchRef.value.team2,
     newGoalsScored: matchRef.value.score2,
     newGoalsConceded: matchRef.value.score1,
+    scorers: matchRef.value.scorers2,
     team: qt2.data.value ? qt2.data.value : ({} as Team),
   });
 };
@@ -122,27 +152,90 @@ const onPlayMatch = () => {
           "
           ><q-icon name="query_stats" size="22px"
         /></q-item-section>
+        <!-- <q-item-section class="section-sim-enabled"
+          ><q-icon name="play_circle" size="26px" @click="forceRender"
+        /></q-item-section> -->
       </q-item>
     </q-list>
-    <div class="matchstats-container" v-if="showMatchStats">
+    <soccer-match-stats
+      v-if="showMatchStats"
+      :id="matchRef.id"
+      :played="matchRef.played"
+      :score1="matchRef.score1"
+      :score2="matchRef.score2"
+      :startingLineup1="matchRef.startingLineup1"
+      :startingLineup2="matchRef.startingLineup2"
+      :scorers1="matchRef.scorers1"
+      :scorers2="matchRef.scorers2"
+      :team1="matchRef.team1"
+      :team2="matchRef.team2"
+    />
+    <!-- <div class="matchstats-container" v-if="showMatchStats" :key="mStatsKey">
       <div class="matchstats-container-left">
-        <div>LOL</div>
-        <div v-for="p in startingLineup1" :key="p.shirtNumber">
-          {{ p.shirtNumber }} - {{ p.name }} ({{ p.position }} {{ p.overall }})
+        <div>
+          Once incial. Media:
+          {{
+            (
+              matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11
+            ).toFixed(1)
+          }}
+        </div>
+        <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber">
+          <div class="matchstats-container-player">
+            <q-img
+              :src="`/public/images/flags/h20/${p.nationality}.png`"
+              spinner-color="white"
+              width="20px"
+              height="14px"
+            />
+            <div class="matchstats-container-player-shirt">
+              {{ p.shirtNumber }}
+            </div>
+            <div class="matchstats-container-player-position">
+              {{ p.position }}
+            </div>
+            <div class="matchstats-container-player-name">
+              {{ p.name }}
+            </div>
+            <div class="matchstats-container-player-overall">
+              {{ p.overall }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="matchstats-container-right">
         <div>
-          Media:
+          Once inicial. Media:
           {{
-            (startingLineup2.reduce((a, b) => a + b.overall, 0) / 11).toFixed(1)
+            (
+              matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
+            ).toFixed(1)
           }}
         </div>
-        <div v-for="p in startingLineup2" :key="p.shirtNumber">
-          {{ p.shirtNumber }} - {{ p.name }} ({{ p.position }} {{ p.overall }})
+        <div v-for="p in matchRef.startingLineup2" :key="p.shirtNumber">
+          <div class="matchstats-container-player">
+            <q-img
+              :src="`/public/images/flags/h20/${p.nationality}.png`"
+              spinner-color="white"
+              width="20px"
+              height="14px"
+            />
+            <div class="matchstats-container-player-shirt">
+              {{ p.shirtNumber }}
+            </div>
+            <div class="matchstats-container-player-position">
+              {{ p.position }}
+            </div>
+            <div class="matchstats-container-player-name">
+              {{ p.name }}
+            </div>
+            <div class="matchstats-container-player-overall">
+              {{ p.overall }}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -194,23 +287,45 @@ $midGrey: rgb(150, 150, 150);
     }
   }
 }
-.matchstats-container {
-  @include flexPosition(start, center);
-  background-color: lightgrey;
-  padding: 6px;
-  padding-top: 4px;
-  border: 1px solid $midGrey;
-  border-radius: 0.2em;
-  margin-top: 1px;
-  // height: 100px;
+// .matchstats-container {
+//   @include flexPosition(start, start);
+//   background-color: lightgrey;
+//   padding: 6px;
+//   padding-top: 4px;
+//   border: 1px solid $midGrey;
+//   border-radius: 0.2em;
+//   margin-top: 1px;
+//   // height: 100px;
 
-  &-left {
-    width: 50%;
-    background-color: aquamarine;
-  }
-  &-right {
-    width: 50%;
-    background-color: bisque;
-  }
-}
+//   &-left {
+//     width: 50%;
+//     background-color: aquamarine;
+//   }
+//   &-right {
+//     width: 50%;
+//     background-color: bisque;
+//   }
+
+//   &-player {
+//     @include flexPosition(start, center);
+//     // align-items: center;
+//     gap: 5px;
+
+//     &-shirt {
+//       width: 8%;
+//       text-align: right;
+//       // background-color: aqua;
+//     }
+//     &-position {
+//       width: 15%;
+//       // background-color: antiquewhite;
+//     }
+//     &-name {
+//       width: 62%;
+//     }
+//     &-overall {
+//       width: 15%;
+//     }
+//   }
+// }
 </style>

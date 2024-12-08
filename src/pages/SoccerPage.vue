@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
 import { SeasonRound } from 'src/models';
 import { teamsSpain1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
+import usePlayers from 'src/composables/UsePlayers';
 import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
-import { ref } from 'vue';
-import { useQuasar } from 'quasar';
 
 defineOptions({
   name: 'SoccerPage',
@@ -22,6 +23,7 @@ const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
 const { queryTeams } = useTeams();
 const { queryTeamById } = useTeams(2);
+const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
 
 const { currentRound } = useSoccer();
@@ -59,6 +61,10 @@ const restartLeague = async () => {
         team2: Number(r[i].split('-')[1]),
         score1: 0,
         score2: 0,
+        scorers1: [],
+        scorers2: [],
+        startingLineup1: [],
+        startingLineup2: [],
       });
     }
     console.log(sr);
@@ -199,6 +205,10 @@ const onNextRound = async () => {
             :team2="match.team2"
             :score1="match.score1"
             :score2="match.score2"
+            :scorers1="match.scorers1"
+            :scorers2="match.scorers2"
+            :startingLineup1="match.startingLineup1"
+            :startingLineup2="match.startingLineup2"
           />
         </div>
       </div>
@@ -210,6 +220,20 @@ const onNextRound = async () => {
       EQUIPO:
       {{ queryTeamById.data.value }}
     </div> -->
+  </div>
+  <div>
+    <div v-if="queryTopScorers.isLoading.value">LOADING TOP SCORERS...</div>
+    <div v-else>
+      TOP SCORERS:
+      <div
+        v-for="player in queryTopScorers.data.value"
+        :key="
+          player.name + player.surname + player.position + player.shirtNumber
+        "
+      >
+        {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }}
+      </div>
+    </div>
   </div>
 </template>
 

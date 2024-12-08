@@ -12,6 +12,7 @@ interface teamUpdateData {
   id: number;
   newGoalsScored: number;
   newGoalsConceded: number;
+  scorers: number[];
   team: Team;
 }
 
@@ -43,6 +44,7 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
   //ToDO: Continuar por aquí. Hacer el update de los datos del equipo (t.team) a partir de los goles marcados y encajados.
 
   const ut: Team = { ...t.team };
+  ut.players = t.team.players.map((p) => ({ ...p }));
   // if (queryTeamById.data.value) {
   //   t = queryTeamById.data.value;
   //   t.goalsScored += goalsScored;
@@ -65,6 +67,15 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
     ut.draws++;
     ut.points++;
   }
+  // Actualizamos goles de jugador en BD:
+  t.scorers.forEach((scorer) => {
+    const pIdx = ut.players.findIndex((p) => p.shirtNumber === scorer);
+    if (pIdx === -1) return;
+    ut.players[pIdx].seasonStats = {
+      ...ut.players[pIdx].seasonStats,
+      goals: ut.players[pIdx].seasonStats.goals + 1,
+    };
+  });
 
   console.log('after update', ut);
 
@@ -85,6 +96,14 @@ const useTeamMutation = () => {
       queryKey: ['teams-spain-1'],
       exact: true,
     });
+    queryClient.invalidateQueries({
+      queryKey: ['spain-1-top-scorers'],
+      exact: true,
+    });
+    queryClient.refetchQueries({
+      queryKey: ['spain-1-top-scorers'],
+      exact: true,
+    });
   };
 
   const mutateTeamAdd = useMutation({
@@ -101,9 +120,17 @@ const useTeamMutation = () => {
       id,
       newGoalsScored,
       newGoalsConceded,
+      scorers,
       team,
     }: teamUpdateData) =>
-      updateTeam({ league, id, newGoalsScored, newGoalsConceded, team }),
+      updateTeam({
+        league,
+        id,
+        newGoalsScored,
+        newGoalsConceded,
+        scorers,
+        team,
+      }),
     onSuccess: () => {
       refreshData();
     },

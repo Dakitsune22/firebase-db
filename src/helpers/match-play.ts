@@ -23,18 +23,6 @@ export const getStartingLineup = (team: Team): Player[] => {
     filteredPlayers.sort((a, b) => b.overall - a.overall);
     console.log(filteredPlayers);
 
-    // startingLineup.push(filteredPlayers[0]);
-
-    // filteredPlayers.forEach((player) => {
-    //   if (
-    //     startingLineup.findIndex((p) => p.shirtNumber === player.shirtNumber) <
-    //     0
-    //   ) {
-    //     startingLineup.push(player);
-    //     return false;
-    //   }
-    // });
-
     for (let i = 0; i < filteredPlayers.length; i++) {
       if (
         startingLineup.findIndex(
@@ -51,4 +39,16 @@ export const getStartingLineup = (team: Team): Player[] => {
     console.log(player.position, player.shirtNumber, player.overall);
   });
   return startingLineup;
+};
+
+export const getScorers = (goals: number, players: Player[]): number[] => {
+  const scorers: number[] = [];
+  console.log('Players:');
+  console.log(players);
+  for (let i = 0; i < goals; i++) {
+    const iPlayer = Math.floor(Math.random() * players.length);
+    console.log('Index player:', iPlayer);
+    scorers.push(players[iPlayer].shirtNumber);
+  }
+  return scorers;
 };
