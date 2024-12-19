@@ -34,8 +34,9 @@ const matchRef = ref<Match>({
           <q-img
             :src="`/public/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="20px"
-            height="14px"
+            width="25px"
+            height="15px"
+            style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">
             {{ p.shirtNumber }}
@@ -44,7 +45,7 @@ const matchRef = ref<Match>({
             {{ p.position }}
           </div>
           <div class="matchstats-container-player-name">
-            {{ p.name }}
+            {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
@@ -75,8 +76,9 @@ const matchRef = ref<Match>({
           <q-img
             :src="`/public/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="20px"
-            height="14px"
+            width="25px"
+            height="15px"
+            style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">
             {{ p.shirtNumber }}
@@ -85,7 +87,7 @@ const matchRef = ref<Match>({
             {{ p.position }}
           </div>
           <div class="matchstats-container-player-name">
-            {{ p.name }}
+            {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
