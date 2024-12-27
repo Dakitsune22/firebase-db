@@ -6,8 +6,12 @@ import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import { Player, Team } from 'src/models';
-import { getStartingLineup, getScorers } from 'src/helpers/match-play';
+import { Team } from 'src/models';
+import {
+  getStartingLineup,
+  getScorers,
+  getMatchResult,
+} from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
 
 const props = defineProps<Match>();
@@ -32,9 +36,6 @@ const { mutateTeamUpdate } = useTeamMutation();
 const { queryTeamById: qt1 } = useTeams(matchRef.value.team1);
 const { queryTeamById: qt2 } = useTeams(matchRef.value.team2);
 
-// const startingLineup1 = ref<Player[]>([]);
-// const startingLineup2 = ref<Player[]>([]);
-
 const showMatchStats = ref<boolean>(false);
 
 // const mStatsKey = ref<number>(0);
@@ -52,8 +53,12 @@ const onPlayMatch = () => {
 
   // Calcular resultado:
   matchRef.value.played = true;
-  matchRef.value.score1 = Number((Math.random() * 5).toFixed(0));
-  matchRef.value.score2 = Number((Math.random() * 5).toFixed(0));
+  const matchResult = getMatchResult(
+    matchRef.value.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11,
+    matchRef.value.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
+  );
+  matchRef.value.score1 = matchResult.localScore;
+  matchRef.value.score2 = matchResult.awayScore;
 
   // Obtener goleadores:
   matchRef.value.scorers1 = getScorers(
@@ -65,7 +70,7 @@ const onPlayMatch = () => {
     matchRef.value.startingLineup2
   );
 
-  // ToDo: Actualizar datos de los equipos en store y BBDD.
+  // Actualizar datos de los equipos en store y BBDD.
   roundMatches.value[matchRef.value.id - 1].played = matchRef.value.played;
   roundMatches.value[matchRef.value.id - 1].score1 = matchRef.value.score1;
   roundMatches.value[matchRef.value.id - 1].score2 = matchRef.value.score2;
@@ -152,9 +157,6 @@ const onPlayMatch = () => {
           "
           ><q-icon name="query_stats" size="22px"
         /></q-item-section>
-        <!-- <q-item-section class="section-sim-enabled"
-          ><q-icon name="play_circle" size="26px" @click="forceRender"
-        /></q-item-section> -->
       </q-item>
     </q-list>
     <soccer-match-stats
@@ -170,72 +172,6 @@ const onPlayMatch = () => {
       :team1="matchRef.team1"
       :team2="matchRef.team2"
     />
-    <!-- <div class="matchstats-container" v-if="showMatchStats" :key="mStatsKey">
-      <div class="matchstats-container-left">
-        <div>
-          Once incial. Media:
-          {{
-            (
-              matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11
-            ).toFixed(1)
-          }}
-        </div>
-        <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber">
-          <div class="matchstats-container-player">
-            <q-img
-              :src="`/public/images/flags/h20/${p.nationality}.png`"
-              spinner-color="white"
-              width="20px"
-              height="14px"
-            />
-            <div class="matchstats-container-player-shirt">
-              {{ p.shirtNumber }}
-            </div>
-            <div class="matchstats-container-player-position">
-              {{ p.position }}
-            </div>
-            <div class="matchstats-container-player-name">
-              {{ p.name }}
-            </div>
-            <div class="matchstats-container-player-overall">
-              {{ p.overall }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="matchstats-container-right">
-        <div>
-          Once inicial. Media:
-          {{
-            (
-              matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
-            ).toFixed(1)
-          }}
-        </div>
-        <div v-for="p in matchRef.startingLineup2" :key="p.shirtNumber">
-          <div class="matchstats-container-player">
-            <q-img
-              :src="`/public/images/flags/h20/${p.nationality}.png`"
-              spinner-color="white"
-              width="20px"
-              height="14px"
-            />
-            <div class="matchstats-container-player-shirt">
-              {{ p.shirtNumber }}
-            </div>
-            <div class="matchstats-container-player-position">
-              {{ p.position }}
-            </div>
-            <div class="matchstats-container-player-name">
-              {{ p.name }}
-            </div>
-            <div class="matchstats-container-player-overall">
-              {{ p.overall }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -287,45 +223,4 @@ $midGrey: rgb(150, 150, 150);
     }
   }
 }
-// .matchstats-container {
-//   @include flexPosition(start, start);
-//   background-color: lightgrey;
-//   padding: 6px;
-//   padding-top: 4px;
-//   border: 1px solid $midGrey;
-//   border-radius: 0.2em;
-//   margin-top: 1px;
-//   // height: 100px;
-
-//   &-left {
-//     width: 50%;
-//     background-color: aquamarine;
-//   }
-//   &-right {
-//     width: 50%;
-//     background-color: bisque;
-//   }
-
-//   &-player {
-//     @include flexPosition(start, center);
-//     // align-items: center;
-//     gap: 5px;
-
-//     &-shirt {
-//       width: 8%;
-//       text-align: right;
-//       // background-color: aqua;
-//     }
-//     &-position {
-//       width: 15%;
-//       // background-color: antiquewhite;
-//     }
-//     &-name {
-//       width: 62%;
-//     }
-//     &-overall {
-//       width: 15%;
-//     }
-//   }
-// }
 </style>
