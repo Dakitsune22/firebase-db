@@ -54,7 +54,7 @@ export const playersData: Player[] = [
     surname: 'Raíllo',
     nationality: Nationality.Spain,
     position: Position.DF,
-    overall: 76,
+    overall: 78,
     seasonStats: initialSeasonStats,
   },
   {

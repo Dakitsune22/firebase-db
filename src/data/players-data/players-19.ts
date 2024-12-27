@@ -189,7 +189,7 @@ export const playersData: Player[] = [
     surname: 'Haller',
     nationality: Nationality.IvoryCoast,
     position: Position.DC,
-    overall: 78,
+    overall: 77,
     seasonStats: initialSeasonStats,
   },
   {
