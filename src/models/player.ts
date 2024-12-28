@@ -31,6 +31,7 @@ export enum Position {
 export enum Flag {
   Albania = 'al',
   Andorra = 'ad',
+  Angola = 'ao',
   Argelia = 'dz',
   Argentina = 'ar',
   Austria = 'at',

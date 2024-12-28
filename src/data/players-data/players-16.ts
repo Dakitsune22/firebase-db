@@ -209,7 +209,7 @@ export const playersData: Player[] = [
     nickname: 'Kike',
     nationality: Nationality.Spain,
     position: Position.DC,
-    overall: 72,
+    overall: 73,
     seasonStats: initialSeasonStats,
   },
 ];
