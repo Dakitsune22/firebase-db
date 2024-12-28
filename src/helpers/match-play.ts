@@ -14,7 +14,12 @@ export const getStartingLineup = (team: Team): Player[] => {
         startingLineup.findIndex((psl) => psl.shirtNumber === p.shirtNumber) < 0
     );
 
-    if (filteredPlayers.length === 0) {
+    // Si no hay ningún jugador de la posición requerida, o bien solo hay uno
+    // y necesita "descanso", añadimos alternativas a la lista:
+    if (
+      filteredPlayers.length === 0 ||
+      (filteredPlayers.length === 1 && Math.random() * 10 >= 7) // 0 a 6 no descansa, 7 a 9 descansa
+    ) {
       const posRep = positionReplacements.find(
         (pr) => pr.position === position
       );
@@ -32,7 +37,8 @@ export const getStartingLineup = (team: Team): Player[] => {
         });
       }
     }
-    filteredPlayers.sort((a, b) => b.overall - a.overall);
+    // filteredPlayers.sort((a, b) => b.overall - a.overall);
+    filteredPlayers.sort((a, b) => a.overall - b.overall);
     // console.log('Filtered players:');
     // console.log(filteredPlayers);
 
@@ -47,7 +53,35 @@ export const getStartingLineup = (team: Team): Player[] => {
     //   }
     // }
     if (filteredPlayers.length > 0) {
-      startingLineup.push(filteredPlayers[0]);
+      // Elegimos el jugador titular de entre los candidatos por posición (y reemplazos).
+      // Se da prioridad a los jugadores segun su nivel:
+      const diceResults: number[] = [];
+      let bonus = 0;
+
+      for (let i = 0; i < filteredPlayers.length; i++) {
+        console.log({ bonus });
+        diceResults.push(
+          Math.floor(Math.random() * (100 - filteredPlayers[i].overall) - bonus)
+        );
+        if (filteredPlayers[i].position === Position.POR) {
+          bonus += 3;
+        } else {
+          bonus += 1;
+        }
+        console.log(
+          filteredPlayers[i].name,
+          filteredPlayers[i].surname,
+          '-',
+          diceResults[i]
+        );
+      }
+      // Comprobamos el jugador que saco el dado más alto y lo añadimos como titular:
+      const minDice = Math.min(...diceResults);
+      console.log({ minDice });
+      const minDiceIndex = diceResults.findIndex((d) => d === minDice);
+      console.log({ minDiceIndex });
+      console.log(filteredPlayers[minDiceIndex]);
+      startingLineup.push(filteredPlayers[minDiceIndex]);
     }
   });
 

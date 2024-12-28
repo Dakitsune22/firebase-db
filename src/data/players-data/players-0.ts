@@ -27,7 +27,7 @@ export const playersData: Player[] = [
     surname: 'Szczęsny',
     nationality: Nationality.Poland,
     position: Position.POR,
-    overall: 81,
+    overall: 79,
     seasonStats: initialSeasonStats,
   },
   {
@@ -108,7 +108,7 @@ export const playersData: Player[] = [
     surname: 'Fort',
     nationality: Nationality.Spain,
     position: Position.LD,
-    overall: 71,
+    overall: 72,
     seasonStats: initialSeasonStats,
   },
   {
@@ -117,7 +117,7 @@ export const playersData: Player[] = [
     surname: 'Casadó',
     nationality: Nationality.Spain,
     position: Position.MC,
-    overall: 76,
+    overall: 77,
     seasonStats: initialSeasonStats,
   },
   {
@@ -126,7 +126,7 @@ export const playersData: Player[] = [
     surname: 'Bernal',
     nationality: Nationality.Spain,
     position: Position.MCD,
-    overall: 70,
+    overall: 71,
     seasonStats: initialSeasonStats,
   },
   {
@@ -136,7 +136,7 @@ export const playersData: Player[] = [
     nickname: 'Gavi',
     nationality: Nationality.Spain,
     position: Position.MC,
-    overall: 78,
+    overall: 79,
     seasonStats: initialSeasonStats,
   },
   {
@@ -159,12 +159,12 @@ export const playersData: Player[] = [
     seasonStats: initialSeasonStats,
   },
   {
-    shirtNumber: 18,
+    shirtNumber: 16,
     name: 'Fermín',
     surname: 'López',
     nationality: Nationality.Spain,
     position: Position.MCO,
-    overall: 76,
+    overall: 77,
     seasonStats: initialSeasonStats,
   },
   {
@@ -235,9 +235,10 @@ export const playersData: Player[] = [
     shirtNumber: 18,
     name: 'Pau',
     surname: 'Victor',
+    nickname: 'Pau Victor',
     nationality: Nationality.Spain,
     position: Position.DC,
-    overall: 73,
+    overall: 74,
     seasonStats: initialSeasonStats,
   },
 ];
