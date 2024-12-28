@@ -11,6 +11,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 2,
@@ -20,6 +21,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 3,
@@ -29,6 +31,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 4,
@@ -38,6 +41,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 5,
@@ -47,6 +51,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 6,
@@ -56,6 +61,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 7,
@@ -65,6 +71,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 8,
@@ -74,6 +81,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 9,
@@ -83,6 +91,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 10,
@@ -92,6 +101,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
   {
     shirtNumber: 11,
@@ -101,5 +111,6 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 99,
   },
 ];

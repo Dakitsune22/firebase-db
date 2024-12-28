@@ -41,8 +41,6 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
 
   console.log(t);
 
-  //ToDO: Continuar por aquí. Hacer el update de los datos del equipo (t.team) a partir de los goles marcados y encajados.
-
   const ut: Team = { ...t.team };
   ut.players = t.team.players.map((p) => ({ ...p }));
   // if (queryTeamById.data.value) {

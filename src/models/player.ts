@@ -7,6 +7,7 @@ export interface Player {
   position: Position;
   overall: number;
   seasonStats: SeasonStats;
+  teamId: number;
 }
 
 interface SeasonStats {

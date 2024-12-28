@@ -11,6 +11,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 78,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 1,
@@ -20,6 +21,7 @@ export const playersData: Player[] = [
     position: Position.POR,
     overall: 72,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 16,
@@ -29,6 +31,7 @@ export const playersData: Player[] = [
     position: Position.DF,
     overall: 76,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 24,
@@ -38,6 +41,7 @@ export const playersData: Player[] = [
     position: Position.DF,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 27,
@@ -47,6 +51,7 @@ export const playersData: Player[] = [
     position: Position.DF,
     overall: 70,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 5,
@@ -57,6 +62,7 @@ export const playersData: Player[] = [
     position: Position.DF,
     overall: 73,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 3,
@@ -66,6 +72,7 @@ export const playersData: Player[] = [
     position: Position.LI,
     overall: 74,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 22,
@@ -75,6 +82,7 @@ export const playersData: Player[] = [
     position: Position.LI,
     overall: 73,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 2,
@@ -84,6 +92,7 @@ export const playersData: Player[] = [
     position: Position.LD,
     overall: 77,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 20,
@@ -93,6 +102,7 @@ export const playersData: Player[] = [
     position: Position.LD,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 15,
@@ -102,6 +112,7 @@ export const playersData: Player[] = [
     position: Position.MCD,
     overall: 74,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 23,
@@ -111,6 +122,7 @@ export const playersData: Player[] = [
     position: Position.MC,
     overall: 77,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 4,
@@ -120,6 +132,7 @@ export const playersData: Player[] = [
     position: Position.MC,
     overall: 74,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 6,
@@ -129,6 +142,7 @@ export const playersData: Player[] = [
     position: Position.MC,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 17,
@@ -139,6 +153,7 @@ export const playersData: Player[] = [
     position: Position.MC,
     overall: 76,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 8,
@@ -148,6 +163,7 @@ export const playersData: Player[] = [
     position: Position.MCO,
     overall: 74,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 18,
@@ -158,6 +174,7 @@ export const playersData: Player[] = [
     position: Position.EI,
     overall: 76,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 7,
@@ -168,6 +185,7 @@ export const playersData: Player[] = [
     position: Position.MCO,
     overall: 78,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 19,
@@ -177,6 +195,7 @@ export const playersData: Player[] = [
     position: Position.ED,
     overall: 77,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 21,
@@ -186,6 +205,7 @@ export const playersData: Player[] = [
     position: Position.ED,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 12,
@@ -195,6 +215,7 @@ export const playersData: Player[] = [
     position: Position.DC,
     overall: 72,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 9,
@@ -204,6 +225,7 @@ export const playersData: Player[] = [
     position: Position.DC,
     overall: 73,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 11,
@@ -213,6 +235,7 @@ export const playersData: Player[] = [
     position: Position.DC,
     overall: 74,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
   {
     shirtNumber: 14,
@@ -222,5 +245,6 @@ export const playersData: Player[] = [
     position: Position.DC,
     overall: 75,
     seasonStats: initialSeasonStats,
+    teamId: 10,
   },
 ];

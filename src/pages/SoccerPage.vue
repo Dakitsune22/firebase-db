@@ -12,6 +12,7 @@ import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
+import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
 
 defineOptions({
   name: 'SoccerPage',
@@ -213,28 +214,22 @@ const onNextRound = async () => {
         </div>
       </div>
     </div>
-  </q-page>
-  <div>
-    <div v-if="queryTeamById.isLoading.value">LOADING EQUIPO...</div>
-    <!-- <div v-else>
-      EQUIPO:
-      {{ queryTeamById.data.value }}
-    </div> -->
-  </div>
-  <div>
-    <div v-if="queryTopScorers.isLoading.value">LOADING TOP SCORERS...</div>
-    <div v-else>
-      TOP SCORERS:
-      <div
-        v-for="player in queryTopScorers.data.value"
-        :key="
-          player.name + player.surname + player.position + player.shirtNumber
-        "
-      >
-        {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }}
+    <div>
+      <div v-if="queryTopScorers.isLoading.value">LOADING TOP SCORERS...</div>
+      <div v-else>
+        <div class="teams-header q-ml-md">Máximos goleadores:</div>
+        <div
+          v-for="player in queryTopScorers.data.value"
+          :key="
+            player.name + player.surname + player.position + player.shirtNumber
+          "
+        >
+          <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
+          <soccer-player-scorer :player="player" />
+        </div>
       </div>
     </div>
-  </div>
+  </q-page>
 </template>
 
 <style lang="scss" scoped>
