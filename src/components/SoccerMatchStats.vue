@@ -16,26 +16,44 @@ const matchRef = ref<Match>({
   scorers1: props.scorers1,
   scorers2: props.scorers2,
 });
+
+const ratingTeam1 = ref<number>(
+  matchRef.value.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11 / 10
+);
+const ratingTeam2 = ref<number>(
+  matchRef.value.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11 / 10
+);
 </script>
 
 <template>
   <div class="matchstats-container">
     <div class="matchstats-container-left">
-      <div>
-        Once incial. Media:
-        {{
-          (
-            matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11
-          ).toFixed(1)
-        }}
+      <div class="matchstats-container-rating">
+        <q-rating
+          v-model="ratingTeam1"
+          size="15px"
+          color="grey-8"
+          readonly
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
+          max="10"
+        />
+        <div class="matchstats-container-rating-overall">
+          {{
+            (
+              matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11
+            ).toFixed(1)
+          }}
+        </div>
       </div>
       <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber">
         <div class="matchstats-container-player">
           <q-img
             :src="`/public/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="25px"
-            height="15px"
+            width="27px"
+            height="14px"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">
@@ -63,21 +81,32 @@ const matchRef = ref<Match>({
       </div>
     </div>
     <div class="matchstats-container-right">
-      <div>
-        Once inicial. Media:
-        {{
-          (
-            matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
-          ).toFixed(1)
-        }}
+      <div class="matchstats-container-rating">
+        <q-rating
+          v-model="ratingTeam2"
+          size="15px"
+          color="grey-8"
+          readonly
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
+          max="10"
+        />
+        <div class="matchstats-container-rating-overall">
+          {{
+            (
+              matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
+            ).toFixed(1)
+          }}
+        </div>
       </div>
       <div v-for="p in matchRef.startingLineup2" :key="p.shirtNumber">
         <div class="matchstats-container-player">
           <q-img
             :src="`/public/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="25px"
-            height="15px"
+            width="27px"
+            height="14px"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">
@@ -130,6 +159,20 @@ $midGrey: rgb(150, 150, 150);
   &-right {
     width: 50%;
     // background-color: bisque;
+  }
+
+  &-rating {
+    @include flexPosition(start, center);
+    gap: 8px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    // background-color: aquamarine;
+
+    &-overall {
+      padding-top: 2px;
+      color: $darkGrey;
+    }
   }
 
   &-player {
