@@ -220,7 +220,7 @@ export const playersData: Player[] = [
     name: 'Irvin',
     surname: 'Cardona',
     nationality: Nationality.France,
-    position: Position.DC,
+    position: Position.MCO,
     overall: 75,
     seasonStats: initialSeasonStats,
   },

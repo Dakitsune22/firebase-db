@@ -131,7 +131,7 @@ export const teamsSpain1: Team[] = [
     ...initTeamData,
     id: i,
     name: 'Espanyol',
-    tactic: tactics.find((t) => t.name === TacticList['4-5-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['4-5-1-OF']) as Tactic,
     players: players[i++],
   },
   {

@@ -189,7 +189,7 @@ export const playersData: Player[] = [
     surname: 'Barry',
     nationality: Nationality.France,
     position: Position.DC,
-    overall: 78,
+    overall: 79,
     seasonStats: initialSeasonStats,
   },
   {
@@ -207,7 +207,7 @@ export const playersData: Player[] = [
     surname: 'Pérez',
     nickname: 'Ayoze Pérez',
     nationality: Nationality.Spain,
-    position: Position.DC,
+    position: Position.EI,
     overall: 78,
     seasonStats: initialSeasonStats,
   },

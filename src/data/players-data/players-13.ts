@@ -64,7 +64,7 @@ export const playersData: Player[] = [
     surname: 'Berchiche',
     nationality: Nationality.Spain,
     position: Position.LI,
-    overall: 77,
+    overall: 78,
     seasonStats: initialSeasonStats,
   },
   {

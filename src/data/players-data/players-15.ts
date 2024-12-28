@@ -200,7 +200,7 @@ export const playersData: Player[] = [
     surname: 'Douvikas',
     nationality: Nationality.Greece,
     position: Position.DC,
-    overall: 78,
+    overall: 77,
     seasonStats: initialSeasonStats,
   },
   {
@@ -218,7 +218,7 @@ export const playersData: Player[] = [
     surname: 'Aspas',
     nationality: Nationality.Spain,
     position: Position.DC,
-    overall: 81,
+    overall: 80,
     seasonStats: initialSeasonStats,
   },
 ];
