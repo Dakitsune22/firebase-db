@@ -29,7 +29,7 @@ const matchRef = ref<Match>({
   scorers2: props.scorers2,
 });
 
-const { currentRound, roundMatches } = useSoccer();
+const { roundMatches, getCurrentRound } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
 const { mutateTeamUpdate } = useTeamMutation();
 
@@ -82,7 +82,7 @@ const onPlayMatch = () => {
   roundMatches.value[matchRef.value.id - 1].scorers2 = matchRef.value.scorers2;
 
   mutateRoundPlay.mutate({
-    round: currentRound.value,
+    round: getCurrentRound(),
     matches: roundMatches.value,
   });
 

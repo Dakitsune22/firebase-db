@@ -21,7 +21,19 @@ const getPlayersByGoalsScored = async (): Promise<Player[]> => {
     });
   });
 
-  return players.sort((a, b) => {
+  // return players.sort((a, b) => {
+  //   if (a.seasonStats.goals && b.seasonStats.goals) {
+  //     if (a.seasonStats.goals > b.seasonStats.goals) {
+  //       return -1;
+  //     }
+  //     if (a.seasonStats.goals < b.seasonStats.goals) {
+  //       return 1;
+  //     }
+  //   }
+  //   return 0;
+  // });
+
+  players.sort((a, b) => {
     if (a.seasonStats.goals && b.seasonStats.goals) {
       if (a.seasonStats.goals > b.seasonStats.goals) {
         return -1;
@@ -32,6 +44,13 @@ const getPlayersByGoalsScored = async (): Promise<Player[]> => {
     }
     return 0;
   });
+
+  console.log('Players length:', players.length);
+  if (players.length >= 50) {
+    return players.slice(0, 50);
+  } else {
+    return players;
+  }
 };
 
 const usePlayers = () => {

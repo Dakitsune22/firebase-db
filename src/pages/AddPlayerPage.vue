@@ -20,6 +20,7 @@ const player = ref<Player>({
     assists: 0,
     injured: 0,
   },
+  teamId: 0,
 });
 
 const selectedTeamId = ref<number>(0);
@@ -58,6 +59,7 @@ const onReset = () => {
       assists: 0,
       injured: 0,
     },
+    teamId: 0,
   };
 };
 </script>

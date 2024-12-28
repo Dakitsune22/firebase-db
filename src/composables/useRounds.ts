@@ -9,12 +9,12 @@ import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
 import useSoccer from './storeWrappers/useSoccer';
 
-const { currentRound, roundMatches } = useSoccer();
+const { roundMatches, getCurrentRound } = useSoccer();
 
 //const getRound = async (roundNumber: number): Promise<SeasonRound> => {
 const getRound = async (): Promise<SeasonRound> => {
   // console.log('current round:', currentRound.value.toString());
-  const docRef = doc(db, 'season-rounds', currentRound.value.toString());
+  const docRef = doc(db, 'season-rounds', getCurrentRound().toString());
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

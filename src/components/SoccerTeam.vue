@@ -46,6 +46,7 @@ const props = defineProps<Props>();
             : ''
         "
       >
+        <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-img">
           <q-img
             :src="`/public/images/teams-spain-1/${props.team.id}.png`"
@@ -144,6 +145,12 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 }
 
 .section {
+  &-rank {
+    align-items: end;
+    width: 28px;
+    font-size: 12px;
+    color: $darkGrey;
+  }
   &-img {
     // width: 30px;
     // height: 40px;

@@ -2,16 +2,19 @@ import { storeToRefs } from 'pinia';
 import { useSoccerStore } from 'src/stores/soccer';
 
 const useSoccer = () => {
-  const { currentRound, roundMatches } = storeToRefs(useSoccerStore());
+  const { roundMatches } = storeToRefs(useSoccerStore());
+  const { getCurrentRound, setCurrentRound } = useSoccerStore();
 
   return {
     // State
-    currentRound,
+    // currentRound,
     roundMatches,
 
     // Getters
+    getCurrentRound,
 
     // Actions
+    setCurrentRound,
   };
 };
 

@@ -23,11 +23,11 @@ const $q = useQuasar();
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
 const { queryTeams } = useTeams();
-const { queryTeamById } = useTeams(2);
+// const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
 
-const { currentRound } = useSoccer();
+const { getCurrentRound, setCurrentRound } = useSoccer();
 
 const roundKey = ref<number>(0);
 
@@ -77,7 +77,8 @@ const restartLeague = async () => {
   });
 
   // Inicializamos ronda a 1 y refrescamos query:
-  currentRound.value = 1;
+  // currentRound.value = 1;
+  setCurrentRound(1);
   await queryRound.refetch();
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
@@ -108,8 +109,9 @@ const onRestartLeague = () => {
 };
 
 const onPreviousRound = async () => {
-  if (currentRound.value > 1) {
-    currentRound.value--;
+  if (getCurrentRound() > 1) {
+    // currentRound.value--;
+    setCurrentRound(getCurrentRound() - 1);
     await queryRound.refetch();
     // console.log(queryRound.data.value);
     forceRender();
@@ -119,9 +121,10 @@ const onPreviousRound = async () => {
 const onNextRound = async () => {
   if (
     queryCountRounds.data.value &&
-    currentRound.value < queryCountRounds.data.value
+    getCurrentRound() < queryCountRounds.data.value
   ) {
-    currentRound.value++;
+    // currentRound.value++;
+    setCurrentRound(getCurrentRound() + 1);
     await queryRound.refetch();
     // console.log(queryRound.data.value);
     forceRender();
@@ -138,7 +141,7 @@ const onNextRound = async () => {
 </script>
 
 <template>
-  <q-page class="row items-center justify-evenly">
+  <div class="page-bar">
     <div>
       <q-btn
         label="Reiniciar liga"
@@ -148,6 +151,9 @@ const onNextRound = async () => {
         @click="onRestartLeague"
       />
     </div>
+  </div>
+  <!-- <q-page class="row items-center justify-evenly"> -->
+  <q-page class="page-body">
     <div>
       <div class="teams-header">
         <div class="teams-header-coleq">Equipo</div>
@@ -174,17 +180,22 @@ const onNextRound = async () => {
       </div> -->
       <div class="round-header">
         <q-btn
-          icon="remove"
+          icon="arrow_back"
           size="sm"
           color="primary"
           @click="onPreviousRound"
         />
         <span class="text-primary">····························· [</span>
         <span class="q-ma-md text-bold text-primary"
-          >JORNADA {{ currentRound }}</span
+          >JORNADA {{ getCurrentRound() }}</span
         >
         <span class="text-primary">] ·····························</span>
-        <q-btn icon="add" size="sm" color="primary" @click="onNextRound" />
+        <q-btn
+          icon="arrow_forward"
+          size="sm"
+          color="primary"
+          @click="onNextRound"
+        />
         <!-- <q-btn
           label="Guardar jornada"
           color="primary"
@@ -217,15 +228,15 @@ const onNextRound = async () => {
     <div>
       <div v-if="queryTopScorers.isLoading.value">LOADING TOP SCORERS...</div>
       <div v-else>
-        <div class="teams-header q-ml-md">Máximos goleadores:</div>
+        <div class="scorers-header q-ml-md">Máximos goleadores:</div>
         <div
-          v-for="player in queryTopScorers.data.value"
+          v-for="(player, idx) in queryTopScorers.data.value"
           :key="
             player.name + player.surname + player.position + player.shirtNumber
           "
         >
           <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
-          <soccer-player-scorer :player="player" />
+          <soccer-player-scorer :player="player" :i-key="idx + 1" />
         </div>
       </div>
     </div>
@@ -233,14 +244,33 @@ const onNextRound = async () => {
 </template>
 
 <style lang="scss" scoped>
+.page-bar {
+  @include flexPosition(end, center);
+  width: 100%;
+  padding-top: 6px;
+  padding-right: 4px;
+  // padding: 0 16px;
+  // margin-bottom: 16px;
+  // background-color: aqua;
+}
+.page-body {
+  @include flexPosition(center, start);
+  flex-wrap: wrap;
+  gap: 34px;
+  padding-bottom: 10px;
+  // padding: 16px;
+  // padding-top: 0;
+  // padding-bottom: 0;
+}
 .round-header {
   @include flexPosition(space-between, center);
   // @include flexPosition(center, center);
-
+  height: 34px;
   // background-color: aqua;
 }
 .teams-header {
   @include flexPosition(start, center);
+  padding-top: 13px;
   // width: 100%;
   color: $primary;
   font-weight: 500;
@@ -268,5 +298,12 @@ const onNextRound = async () => {
     // background-color: bisque;
     text-align: center;
   }
+}
+.scorers-header {
+  @include flexPosition(start, center);
+  padding-top: 15px;
+  color: $primary;
+  font-weight: 500;
+  font-size: small;
 }
 </style>

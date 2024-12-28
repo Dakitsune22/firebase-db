@@ -3,6 +3,7 @@ import { Player } from 'src/models';
 
 interface Props {
   player: Player;
+  iKey: number;
 }
 
 const props = defineProps<Props>();
@@ -12,6 +13,7 @@ const props = defineProps<Props>();
   <div>
     <q-list bordered separator dense class="list">
       <q-item class="item">
+        <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-nationality">
           <q-img
             :src="`/public/images/flags/h20/${props.player.nationality}.png`"
@@ -63,6 +65,12 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 }
 
 .section {
+  &-rank {
+    align-items: end;
+    width: 28px;
+    font-size: 12px;
+    color: $darkGrey;
+  }
   &-nationality {
     width: 20px;
   }

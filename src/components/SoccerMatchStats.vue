@@ -32,7 +32,7 @@ const ratingTeam2 = ref<number>(
         <q-rating
           v-model="ratingTeam1"
           size="15px"
-          color="grey-8"
+          color="amber-11"
           readonly
           icon="star_border"
           icon-selected="star"
@@ -85,7 +85,7 @@ const ratingTeam2 = ref<number>(
         <q-rating
           v-model="ratingTeam2"
           size="15px"
-          color="grey-8"
+          color="amber-11"
           readonly
           icon="star_border"
           icon-selected="star"
@@ -170,8 +170,15 @@ $midGrey: rgb(150, 150, 150);
     // background-color: aquamarine;
 
     &-overall {
-      padding-top: 2px;
-      color: $darkGrey;
+      font-size: small;
+      font-weight: 400;
+      margin-left: 2px;
+      padding-top: 1px;
+      padding-left: 5px;
+      padding-right: 5px;
+      border-radius: 10%;
+      color: $amber-11;
+      background-color: $darkGrey;
     }
   }
 
