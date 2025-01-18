@@ -49,7 +49,7 @@ const props = defineProps<Props>();
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-img">
           <q-img
-            :src="`/public/images/teams-spain-1/${props.team.id}.png`"
+            :src="`/images/teams-spain-1/${props.team.id}.png`"
             spinner-color="white"
             width="30px"
             height="30px"

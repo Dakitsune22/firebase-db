@@ -230,7 +230,7 @@ export const playersData: Player[] = [
     teamId: 8,
   },
   {
-    shirtNumber: 22,
+    shirtNumber: 19,
     name: 'Bojan',
     surname: 'Miovski',
     nationality: Nationality.Macedonia,

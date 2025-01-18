@@ -177,7 +177,7 @@ export const playersData: Player[] = [
     teamId: 7,
   },
   {
-    shirtNumber: 18,
+    shirtNumber: 7,
     name: '',
     surname: '',
     nickname: 'Juanmi',

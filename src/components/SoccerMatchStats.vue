@@ -50,7 +50,7 @@ const ratingTeam2 = ref<number>(
       <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber">
         <div class="matchstats-container-player">
           <q-img
-            :src="`/public/images/flags/h20/${p.nationality}.png`"
+            :src="`/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
             width="27px"
             height="14px"
@@ -103,7 +103,7 @@ const ratingTeam2 = ref<number>(
       <div v-for="p in matchRef.startingLineup2" :key="p.shirtNumber">
         <div class="matchstats-container-player">
           <q-img
-            :src="`/public/images/flags/h20/${p.nationality}.png`"
+            :src="`/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
             width="27px"
             height="14px"

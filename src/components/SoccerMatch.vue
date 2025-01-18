@@ -112,7 +112,7 @@ const onPlayMatch = () => {
       <q-item class="item">
         <q-item-section>
           <q-img
-            :src="`/public/images/teams-spain-1/${props.team1}.png`"
+            :src="`/images/teams-spain-1/${props.team1}.png`"
             spinner-color="white"
             width="22px"
             height="22px"
@@ -129,7 +129,7 @@ const onPlayMatch = () => {
         }}</q-item-section>
         <q-item-section style="padding-left: 7px">
           <q-img
-            :src="`/public/images/teams-spain-1/${props.team2}.png`"
+            :src="`/images/teams-spain-1/${props.team2}.png`"
             spinner-color="white"
             width="22px"
             height="22px"

@@ -278,17 +278,18 @@ const onNextRound = async () => {
 
   &-coleq {
     width: 196px;
-    padding-left: 18px;
+    padding-left: 48px;
     // background-color: aquamarine;
   }
   &-colpts {
     width: 40px;
+    padding-left: 28px;
     // background-color: bisque;
     text-align: center;
   }
   &-colval {
     width: 30px;
-    margin-left: 12px;
+    margin-left: 42px;
     // background-color: aquamarine;
     text-align: center;
   }

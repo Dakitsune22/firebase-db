@@ -125,15 +125,15 @@ const getScorerByRate = (players: Player[]): Player => {
       case Position.LD:
       case Position.LI:
       case Position.MCD:
-        dice = Math.floor(Math.random() * 100) + 1;
+        dice = Math.floor(Math.random() * 70) + 1;
         break;
       case Position.MC:
-        dice = Math.floor(Math.random() * 80) + 21;
+        dice = Math.floor(Math.random() * 60) + 21;
         break;
       case Position.MCO:
       case Position.ED:
       case Position.EI:
-        dice = Math.floor(Math.random() * 70) + 31;
+        dice = Math.floor(Math.random() * 60) + 31;
         break;
       case Position.DC:
         dice = Math.floor(Math.random() * 60) + 41;

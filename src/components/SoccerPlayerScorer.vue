@@ -16,7 +16,7 @@ const props = defineProps<Props>();
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-nationality">
           <q-img
-            :src="`/public/images/flags/h20/${props.player.nationality}.png`"
+            :src="`/images/flags/h20/${props.player.nationality}.png`"
             spinner-color="white"
             width="27px"
             height="17px"
@@ -33,7 +33,7 @@ const props = defineProps<Props>();
         }}</q-item-section>
         <div class="section-team">
           <q-img
-            :src="`/public/images/teams-spain-1/${props.player.teamId}.png`"
+            :src="`/images/teams-spain-1/${props.player.teamId}.png`"
             spinner-color="white"
             width="26px"
             height="26px"
