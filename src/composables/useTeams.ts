@@ -9,15 +9,18 @@ import {
 } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
+import useSoccer from './storeWrappers/useSoccer';
+
+const { getCurrentLeague } = useSoccer();
 
 const getTeamsByPoints = async (): Promise<Team[]> => {
   const q = query(
-    collection(db, 'teams-spain-1'),
+    collection(db, `teams-${getCurrentLeague()}`),
     orderBy('points', 'desc')
     // orderBy('goalDifference', 'desc')
   );
   const docs = await getDocs(q);
-  //   const docs = await getDocs(collection(db, 'teams-spain-1'));
+  //   const docs = await getDocs(collection(db, 'teams-${getCurrentLeague()}'));
   const teams: Team[] = [];
   docs.forEach((doc) => {
     // teams.push({
@@ -45,7 +48,7 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
 };
 
 const getTeamById = async (teamId: number): Promise<Team> => {
-  const docRef = doc(db, 'teams-spain-1', teamId.toString());
+  const docRef = doc(db, `teams-${getCurrentLeague()}`, teamId.toString());
   const docSnap = await getDoc(docRef);
 
   let t: Team;
@@ -65,12 +68,12 @@ const getTeamById = async (teamId: number): Promise<Team> => {
 
 const useTeams = (id?: number) => {
   const queryTeams = useQuery({
-    queryKey: ['teams-spain-1'],
+    queryKey: [`teams-${getCurrentLeague()}`],
     queryFn: getTeamsByPoints,
   });
 
   const queryTeamById = useQuery({
-    queryKey: ['teams-spain-1', id],
+    queryKey: [`teams-${getCurrentLeague()}`, id],
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     queryFn: () => getTeamById(id!),
   });

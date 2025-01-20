@@ -9,12 +9,16 @@ import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
 import useSoccer from './storeWrappers/useSoccer';
 
-const { roundMatches, getCurrentRound } = useSoccer();
+const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 
 //const getRound = async (roundNumber: number): Promise<SeasonRound> => {
 const getRound = async (): Promise<SeasonRound> => {
   // console.log('current round:', currentRound.value.toString());
-  const docRef = doc(db, 'season-rounds', getCurrentRound().toString());
+  const docRef = doc(
+    db,
+    `season-rounds-${getCurrentLeague()}`,
+    getCurrentRound().toString()
+  );
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
@@ -30,18 +34,20 @@ const getRound = async (): Promise<SeasonRound> => {
 };
 
 const countTotalRounds = async (): Promise<number> => {
-  const docs = await getCountFromServer(collection(db, 'season-rounds'));
+  const docs = await getCountFromServer(
+    collection(db, `season-rounds-${getCurrentLeague()}`)
+  );
   return docs.data().count;
 };
 
 const useRounds = () => {
   const queryRound = useQuery({
-    queryKey: ['current-round'],
+    queryKey: [`current-round-${getCurrentLeague()}`],
     queryFn: getRound,
   });
 
   const queryCountRounds = useQuery({
-    queryKey: ['count-rounds'],
+    queryKey: [`count-rounds-${getCurrentLeague()}`],
     queryFn: countTotalRounds,
   });
 

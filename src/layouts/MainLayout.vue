@@ -14,6 +14,12 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 const { userId } = useUI();
+
+const pageKey = ref<number>(0);
+
+// const forceRender = (): void => {
+//   pageKey.value++;
+// };
 </script>
 
 <template>
@@ -48,7 +54,7 @@ const { userId } = useUI();
       </q-list>
     </q-drawer>
 
-    <q-page-container>
+    <q-page-container :key="pageKey">
       <router-view />
     </q-page-container>
   </q-layout>

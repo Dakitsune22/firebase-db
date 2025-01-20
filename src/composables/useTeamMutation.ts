@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { Team } from 'src/models';
+import { Leagues, Team } from 'src/models';
 // import players from 'src/data/players';
-import { teamsSpain1 } from 'src/data/teams';
+import { teamsEngland1, teamsSpain1 } from 'src/data/teams';
+import useSoccer from './storeWrappers/useSoccer';
 
 // let numTeam = 0;
 
 interface teamUpdateData {
-  league: string;
+  league: Leagues;
   id: number;
   newGoalsScored: number;
   newGoalsConceded: number;
@@ -16,7 +17,9 @@ interface teamUpdateData {
   team: Team;
 }
 
-const addTeam = async (league: string, id: number): Promise<void> => {
+const { getCurrentLeague } = useSoccer();
+
+const addTeam = async (league: Leagues, id: number): Promise<void> => {
   //  await setDoc(doc(db, league, name), {
   console.log({ id });
   // await setDoc(doc(db, league, id.toString()), {
@@ -33,7 +36,23 @@ const addTeam = async (league: string, id: number): Promise<void> => {
   //   losses: 0,
   //   players: players[id],
   // });
-  await setDoc(doc(db, league, id.toString()), teamsSpain1[id]);
+  let t: Team;
+
+  switch (league) {
+    case Leagues.LaLigaPrimeraDivision:
+      t = teamsSpain1[id];
+      break;
+
+    case Leagues.PremierLeague:
+      t = teamsEngland1[id];
+      break;
+
+    default:
+      t = teamsSpain1[id];
+      break;
+  }
+
+  await setDoc(doc(db, `teams-${league}`, id.toString()), t);
 };
 
 const updateTeam = async (t: teamUpdateData): Promise<void> => {
@@ -77,7 +96,7 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
 
   console.log('after update', ut);
 
-  await updateDoc(doc(db, t.league, t.id.toString()), {
+  await updateDoc(doc(db, `teams-${t.league}`, t.id.toString()), {
     ...ut,
   });
 };
@@ -87,25 +106,25 @@ const useTeamMutation = () => {
 
   const refreshData = (): void => {
     queryClient.invalidateQueries({
-      queryKey: ['teams-spain-1'],
+      queryKey: [`teams-${getCurrentLeague()}`],
       exact: true,
     });
     queryClient.refetchQueries({
-      queryKey: ['teams-spain-1'],
+      queryKey: [`teams-${getCurrentLeague()}`],
       exact: true,
     });
     queryClient.invalidateQueries({
-      queryKey: ['spain-1-top-scorers'],
+      queryKey: [`${getCurrentLeague()}-top-scorers`],
       exact: true,
     });
     queryClient.refetchQueries({
-      queryKey: ['spain-1-top-scorers'],
+      queryKey: [`${getCurrentLeague()}-top-scorers`],
       exact: true,
     });
   };
 
   const mutateTeamAdd = useMutation({
-    mutationFn: ({ league, id }: { league: string; id: number }) =>
+    mutationFn: ({ league, id }: { league: Leagues; id: number }) =>
       addTeam(league, id),
     onSuccess: () => {
       refreshData();

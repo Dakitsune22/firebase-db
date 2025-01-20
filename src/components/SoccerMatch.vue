@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
-import { teamsSpain1 } from 'src/data/teams';
+import { teamsSpain1, teamsEngland1 } from 'src/data/teams';
 import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import { Team } from 'src/models';
+import { Leagues, Team } from 'src/models';
 import {
   getStartingLineup,
   getScorers,
@@ -29,7 +29,7 @@ const matchRef = ref<Match>({
   scorers2: props.scorers2,
 });
 
-const { roundMatches, getCurrentRound } = useSoccer();
+const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
 const { mutateTeamUpdate } = useTeamMutation();
 
@@ -87,7 +87,7 @@ const onPlayMatch = () => {
   });
 
   mutateTeamUpdate.mutate({
-    league: 'teams-spain-1',
+    league: getCurrentLeague(),
     id: matchRef.value.team1,
     newGoalsScored: matchRef.value.score1,
     newGoalsConceded: matchRef.value.score2,
@@ -96,7 +96,7 @@ const onPlayMatch = () => {
   });
 
   mutateTeamUpdate.mutate({
-    league: 'teams-spain-1',
+    league: getCurrentLeague(),
     id: matchRef.value.team2,
     newGoalsScored: matchRef.value.score2,
     newGoalsConceded: matchRef.value.score1,
@@ -112,14 +112,18 @@ const onPlayMatch = () => {
       <q-item class="item">
         <q-item-section>
           <q-img
-            :src="`/images/teams-spain-1/${props.team1}.png`"
+            :src="`/images/teams-${getCurrentLeague()}/${props.team1}.png`"
             spinner-color="white"
             width="22px"
             height="22px"
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          teamsSpain1[props.team1].name
+          getCurrentLeague() === Leagues.LaLigaPrimeraDivision
+            ? teamsSpain1[props.team1].name
+            : getCurrentLeague() === Leagues.PremierLeague
+            ? teamsEngland1[props.team1].name
+            : 'No team'
         }}</q-item-section>
         <q-item-section class="section-score"
           >{{ matchRef.score1 }}
@@ -129,14 +133,18 @@ const onPlayMatch = () => {
         }}</q-item-section>
         <q-item-section style="padding-left: 7px">
           <q-img
-            :src="`/images/teams-spain-1/${props.team2}.png`"
+            :src="`/images/teams-${getCurrentLeague()}/${props.team2}.png`"
             spinner-color="white"
             width="22px"
             height="22px"
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          teamsSpain1[props.team2].name
+          getCurrentLeague() === Leagues.LaLigaPrimeraDivision
+            ? teamsSpain1[props.team2].name
+            : getCurrentLeague() === Leagues.PremierLeague
+            ? teamsEngland1[props.team2].name
+            : 'No team'
         }}</q-item-section>
         <q-item-section
           class="section-sim"

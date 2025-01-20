@@ -3,7 +3,12 @@ import { useSoccerStore } from 'src/stores/soccer';
 
 const useSoccer = () => {
   const { roundMatches } = storeToRefs(useSoccerStore());
-  const { getCurrentRound, setCurrentRound } = useSoccerStore();
+  const {
+    getCurrentLeague,
+    setCurrentLeague,
+    getCurrentRound,
+    setCurrentRound,
+  } = useSoccerStore();
 
   return {
     // State
@@ -11,9 +16,11 @@ const useSoccer = () => {
     roundMatches,
 
     // Getters
+    getCurrentLeague,
     getCurrentRound,
 
     // Actions
+    setCurrentLeague,
     setCurrentRound,
   };
 };

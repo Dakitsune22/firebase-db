@@ -16,9 +16,16 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/FruitsPage.vue'),
       },
       {
-        name: 'soccer',
-        path: '/soccer',
-        component: () => import('pages/SoccerPage.vue'),
+        name: 'soccer-spain1',
+        // path: '/soccer/:leagueId',
+        path: '/soccer-spain1',
+        component: () => import('pages/SoccerPageSpain1.vue'),
+      },
+      {
+        name: 'soccer-england1',
+        // path: '/soccer-test/:leagueId',
+        path: '/soccer-england1',
+        component: () => import('pages/SoccerPageEngland1.vue'),
       },
       {
         name: 'addPlayer',

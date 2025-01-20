@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
-import { SeasonRound } from 'src/models';
-import { teamsSpain1 } from 'src/data/teams';
+import { Leagues, SeasonRound } from 'src/models';
+import { teamsEngland1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
@@ -15,10 +15,15 @@ import SoccerTeam from 'src/components/SoccerTeam.vue';
 import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
 
 defineOptions({
-  name: 'SoccerPage',
+  name: 'SoccerPageEngland1',
 });
 
 const $q = useQuasar();
+
+const { setCurrentLeague, getCurrentLeague, getCurrentRound, setCurrentRound } =
+  useSoccer();
+
+setCurrentLeague(Leagues.PremierLeague);
 
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
@@ -27,27 +32,23 @@ const { queryTeams } = useTeams();
 const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
 
-const { getCurrentRound, setCurrentRound } = useSoccer();
-
 const roundKey = ref<number>(0);
+// const leagueKey = ref<number>(0);
 
 const forceRender = (): void => {
+  // leagueKey.value++;
   roundKey.value++;
 };
 
-// watch(() => currentRound.value,
-//       (newId, oldId) => {
-//         console.log({oldId}, {newId})
-//         if (newId !== oldId) {
-//             forceRender();
-//         }
-//       }
-// );
+onBeforeUnmount(async () => {
+  // Refrescamos query antes de desmontar, para que esté actualizada a la vuelta:
+  await queryRound.refetch();
+});
 
 const restartLeague = async () => {
   // Rounds:
-  // const rounds = generateLeagueCalendar(teamsSpain1);
-  const rounds = createCalendar(teamsSpain1.length);
+  // const rounds = generateLeagueCalendar(teamsEngland1);
+  const rounds = createCalendar(teamsEngland1.length);
   console.log(rounds);
   rounds.forEach((r, index) => {
     const sr: SeasonRound = {
@@ -72,8 +73,11 @@ const restartLeague = async () => {
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  teamsSpain1.forEach((team) => {
-    mutateTeamAdd.mutate({ league: 'teams-spain-1', id: team.id });
+  teamsEngland1.forEach((team) => {
+    mutateTeamAdd.mutate({
+      league: getCurrentLeague(),
+      id: team.id,
+    });
   });
 
   // Inicializamos ronda a 1 y refrescamos query:
@@ -87,7 +91,7 @@ const restartLeague = async () => {
 const onRestartLeague = () => {
   $q.dialog({
     html: true,
-    title: '<span class="text-primary">Reiniciar liga</span',
+    title: '<span class="text-primary">Reiniciar Premier League</span>',
     message:
       'Todos los datos actuales (clasificación, resultados, etc.) se eliminarán. <strong>¿Estás seguro de continuar?</strong>',
     cancel: { label: 'Volver', flat: true },
@@ -130,14 +134,6 @@ const onNextRound = async () => {
     forceRender();
   }
 };
-
-// const onSaveRound = () => {
-//   console.log('save round');
-//   if (queryRound.data.value) {
-//     // console.log(queryRound.data.value);
-//     mutateRoundPlay.mutate(queryRound.data.value);
-//   }
-// };
 </script>
 
 <template>
@@ -196,19 +192,10 @@ const onNextRound = async () => {
           color="primary"
           @click="onNextRound"
         />
-        <!-- <q-btn
-          label="Guardar jornada"
-          color="primary"
-          icon="save"
-          class="round-header-savebtn q-pl-sm"
-          @click="onSaveRound"
-        /> -->
       </div>
       <div v-if="queryRound.isLoading.value">CARGANDO...</div>
       <div v-else class="round-matches">
         <div v-for="match in queryRound.data.value?.matches" :key="match.id">
-          <!-- {{ teamsSpain1[match.team1] }} {{ match.score1 }} -
-          {{ match.score2 }} {{ teamsSpain1[match.team2] }} -->
           <soccer-match
             :key="roundKey"
             :id="match.id"
@@ -241,6 +228,7 @@ const onNextRound = async () => {
       </div>
     </div>
   </q-page>
+  {{ getCurrentLeague() }}
 </template>
 
 <style lang="scss" scoped>

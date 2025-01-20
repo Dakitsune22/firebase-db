@@ -2,9 +2,12 @@ import { useQuery } from '@tanstack/vue-query';
 import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { Player, Team } from 'src/models';
+import useSoccer from './storeWrappers/useSoccer';
+
+const { getCurrentLeague } = useSoccer();
 
 const getPlayersByGoalsScored = async (): Promise<Player[]> => {
-  const q = query(collection(db, 'teams-spain-1'));
+  const q = query(collection(db, `teams-${getCurrentLeague()}`));
   const docs = await getDocs(q);
   const teams: Team[] = [];
   const players: Player[] = [];
@@ -55,7 +58,7 @@ const getPlayersByGoalsScored = async (): Promise<Player[]> => {
 
 const usePlayers = () => {
   const queryTopScorers = useQuery({
-    queryKey: ['spain-1-top-scorers'],
+    queryKey: [`top-scorers-${getCurrentLeague()}`],
     queryFn: getPlayersByGoalsScored,
   });
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // import { teamsSpain1 } from 'src/data/teams';
+import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import { Team } from 'src/models/team';
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
   iKey: number;
 }
 const props = defineProps<Props>();
+
+const { getCurrentLeague } = useSoccer();
 </script>
 
 <template>
@@ -49,7 +52,7 @@ const props = defineProps<Props>();
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-img">
           <q-img
-            :src="`/images/teams-spain-1/${props.team.id}.png`"
+            :src="`/images/teams-${getCurrentLeague()}/${props.team.id}.png`"
             spinner-color="white"
             width="30px"
             height="30px"
