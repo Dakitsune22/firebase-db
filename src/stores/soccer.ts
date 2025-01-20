@@ -28,6 +28,9 @@ export const useSoccerStore = defineStore('soccerStore', () => {
   if (localStorage.getItem(`current-round-${Leagues.PremierLeague}`) === null) {
     localStorage.setItem(`current-round-${Leagues.PremierLeague}`, '1');
   }
+  if (localStorage.getItem(`current-round-${Leagues.Bundesliga}`) === null) {
+    localStorage.setItem(`current-round-${Leagues.Bundesliga}`, '1');
+  }
 
   // Recuperamos de local store la jornada correspondiente a la liga actual:
   const currentRound = ref<number>(

@@ -1,7 +1,7 @@
 import { Team, Tactic } from 'src/models';
 import { TacticList } from 'src/models/tactic';
 import { tactics } from './tactics';
-import { playersSpain1, playersEngland1 } from './players';
+import { playersSpain1, playersEngland1, playersGermany1 } from './players';
 
 const initTeamData: Team = {
   id: 0,
@@ -303,5 +303,135 @@ export const teamsEngland1: Team[] = [
     name: 'Wolves',
     tactic: tactics.find((t) => t.name === TacticList['5-4-1-OF']) as Tactic,
     players: playersEngland1[i++],
+  },
+];
+
+i = 0;
+
+export const teamsGermany1: Team[] = [
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-3-3-DEF']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-5-1-OF']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1-OF']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-3-3-DEF']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-5-1-OF']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    name: 'Germany',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: playersGermany1[i++],
   },
 ];

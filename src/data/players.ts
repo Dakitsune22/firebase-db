@@ -40,6 +40,24 @@ import {
   england1PlayersData17,
   england1PlayersData18,
   england1PlayersData19,
+  germany1PlayersData0,
+  germany1PlayersData1,
+  germany1PlayersData2,
+  germany1PlayersData3,
+  germany1PlayersData4,
+  germany1PlayersData5,
+  germany1PlayersData6,
+  germany1PlayersData7,
+  germany1PlayersData8,
+  germany1PlayersData9,
+  germany1PlayersData10,
+  germany1PlayersData11,
+  germany1PlayersData12,
+  germany1PlayersData13,
+  germany1PlayersData14,
+  germany1PlayersData15,
+  germany1PlayersData16,
+  germany1PlayersData17,
 } from './players-data';
 
 export const playersSpain1: Player[][] = [
@@ -86,6 +104,27 @@ export const playersEngland1: Player[][] = [
   england1PlayersData17,
   england1PlayersData18,
   england1PlayersData19,
+];
+
+export const playersGermany1: Player[][] = [
+  germany1PlayersData0,
+  germany1PlayersData1,
+  germany1PlayersData2,
+  germany1PlayersData3,
+  germany1PlayersData4,
+  germany1PlayersData5,
+  germany1PlayersData6,
+  germany1PlayersData7,
+  germany1PlayersData8,
+  germany1PlayersData9,
+  germany1PlayersData10,
+  germany1PlayersData11,
+  germany1PlayersData12,
+  germany1PlayersData13,
+  germany1PlayersData14,
+  germany1PlayersData15,
+  germany1PlayersData16,
+  germany1PlayersData17,
 ];
 
 // export default playersSpain1;

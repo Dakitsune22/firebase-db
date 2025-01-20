@@ -3,7 +3,7 @@ import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { Leagues, Team } from 'src/models';
 // import players from 'src/data/players';
-import { teamsEngland1, teamsSpain1 } from 'src/data/teams';
+import { teamsEngland1, teamsSpain1, teamsGermany1 } from 'src/data/teams';
 import useSoccer from './storeWrappers/useSoccer';
 
 // let numTeam = 0;
@@ -45,6 +45,10 @@ const addTeam = async (league: Leagues, id: number): Promise<void> => {
 
     case Leagues.PremierLeague:
       t = teamsEngland1[id];
+      break;
+
+    case Leagues.Bundesliga:
+      t = teamsGermany1[id];
       break;
 
     default:

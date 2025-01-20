@@ -40,4 +40,11 @@ export const linksList: EssentialLinkProps[] = [
     // link: `/soccer-test/${Leagues.PremierLeague}`,
     link: '/soccer-england1',
   },
+  {
+    title: 'Bundesliga',
+    caption: 'Alemania',
+    icon: 'sports_soccer',
+    // link: `/soccer-test/${Leagues.Bundesliga}`,
+    link: '/soccer-germany1',
+  },
 ];
