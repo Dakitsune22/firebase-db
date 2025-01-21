@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
-import { teamsSpain1, teamsEngland1, teamsGermany1 } from 'src/data/teams';
+import {
+  teamsSpain1,
+  teamsEngland1,
+  teamsGermany1,
+  teamsItaly1,
+  teamsFrance1,
+} from 'src/data/teams';
 import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
@@ -125,6 +131,10 @@ const onPlayMatch = () => {
             ? teamsEngland1[props.team1].name
             : getCurrentLeague() === Leagues.Bundesliga
             ? teamsGermany1[props.team1].name
+            : getCurrentLeague() === Leagues.SerieA
+            ? teamsItaly1[props.team1].name
+            : getCurrentLeague() === Leagues.Ligue1
+            ? teamsFrance1[props.team1].name
             : 'No team'
         }}</q-item-section>
         <q-item-section class="section-score"
@@ -148,6 +158,10 @@ const onPlayMatch = () => {
             ? teamsEngland1[props.team2].name
             : getCurrentLeague() === Leagues.Bundesliga
             ? teamsGermany1[props.team2].name
+            : getCurrentLeague() === Leagues.SerieA
+            ? teamsItaly1[props.team2].name
+            : getCurrentLeague() === Leagues.Ligue1
+            ? teamsFrance1[props.team2].name
             : 'No team'
         }}</q-item-section>
         <q-item-section
