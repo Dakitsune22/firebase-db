@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // import { teamsSpain1 } from 'src/data/teams';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
+import { Leagues } from 'src/models';
 import { Team } from 'src/models/team';
 
 interface Props {
@@ -10,6 +11,31 @@ interface Props {
 const props = defineProps<Props>();
 
 const { getCurrentLeague } = useSoccer();
+
+const getRankClass = (iKey: number) => {
+  if (iKey === 1) {
+    return 'best';
+  } else if (iKey >= 2 && iKey <= 4) {
+    return 'champions';
+  } else if (iKey === 5) {
+    return 'uefa';
+  } else if (iKey === 6) {
+    return 'conference';
+  } else if (
+    (iKey === 16 && getCurrentLeague() === Leagues.Bundesliga) ||
+    (iKey === 18 && getCurrentLeague() === Leagues.Ligue1)
+  ) {
+    return 'relegation-playoff';
+  } else if (
+    (iKey >= 18 &&
+      getCurrentLeague() !== Leagues.Bundesliga &&
+      getCurrentLeague() !== Leagues.Ligue1) ||
+    (iKey >= 17 && getCurrentLeague() === Leagues.Bundesliga) ||
+    (iKey >= 19 && getCurrentLeague() === Leagues.Ligue1)
+  ) {
+    return 'relegation';
+  }
+};
 </script>
 
 <template>
@@ -19,36 +45,9 @@ const { getCurrentLeague } = useSoccer();
       separator
       dense
       class="list"
-      :class="
-        props.iKey === 1
-          ? 'list-rank-best'
-          : props.iKey >= 2 && props.iKey <= 4
-          ? 'list-rank-champions'
-          : props.iKey === 5 || props.iKey === 6
-          ? 'list-rank-uefa'
-          : props.iKey === 7
-          ? 'list-rank-conference'
-          : props.iKey >= 18
-          ? 'list-rank-relegation'
-          : ''
-      "
+      :class="`list-rank-${getRankClass(iKey)}`"
     >
-      <q-item
-        class="item"
-        :class="
-          props.iKey === 1
-            ? 'item-rank-best'
-            : props.iKey >= 2 && props.iKey <= 4
-            ? 'item-rank-champions'
-            : props.iKey === 5 || props.iKey === 6
-            ? 'item-rank-uefa'
-            : props.iKey === 7
-            ? 'item-rank-conference'
-            : props.iKey >= 18
-            ? 'item-rank-relegation'
-            : ''
-        "
-      >
+      <q-item class="item" :class="`item-rank-${getRankClass(iKey)}`">
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-img">
           <q-img
@@ -115,6 +114,9 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     &-relegation {
       border-color: rgb(201, 61, 61);
     }
+    &-relegation-playoff {
+      border-color: rgb(212, 99, 99);
+    }
   }
 }
 
@@ -143,6 +145,9 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     }
     &-relegation {
       background-color: rgb(241, 169, 169);
+    }
+    &-relegation-playoff {
+      background-color: rgb(243, 194, 194);
     }
   }
 }
