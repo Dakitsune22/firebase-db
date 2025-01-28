@@ -22,16 +22,18 @@ const getRankClass = (iKey: number) => {
   } else if (iKey === 6) {
     return 'conference';
   } else if (
-    (iKey === 16 && getCurrentLeague() === Leagues.Bundesliga) ||
-    (iKey === 18 && getCurrentLeague() === Leagues.Ligue1)
+    iKey === 16 &&
+    (getCurrentLeague() === Leagues.Bundesliga ||
+      getCurrentLeague() === Leagues.Ligue1)
   ) {
     return 'relegation-playoff';
   } else if (
     (iKey >= 18 &&
       getCurrentLeague() !== Leagues.Bundesliga &&
       getCurrentLeague() !== Leagues.Ligue1) ||
-    (iKey >= 17 && getCurrentLeague() === Leagues.Bundesliga) ||
-    (iKey >= 19 && getCurrentLeague() === Leagues.Ligue1)
+    (iKey >= 17 &&
+      (getCurrentLeague() === Leagues.Bundesliga ||
+        getCurrentLeague() === Leagues.Ligue1))
   ) {
     return 'relegation';
   }

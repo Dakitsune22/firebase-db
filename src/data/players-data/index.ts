@@ -98,5 +98,3 @@ export { playersData as france1PlayersData14 } from './france1-14';
 export { playersData as france1PlayersData15 } from './france1-15';
 export { playersData as france1PlayersData16 } from './france1-16';
 export { playersData as france1PlayersData17 } from './france1-17';
-export { playersData as france1PlayersData18 } from './france1-18';
-export { playersData as france1PlayersData19 } from './france1-19';
