@@ -9,6 +9,9 @@
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
+    <q-item-section v-if="img" avatar>
+      <q-img :src="img" spinner-color="white" width="32px" height="32px" />
+    </q-item-section>
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
@@ -27,11 +30,13 @@ export interface EssentialLinkProps {
   caption?: string;
   link?: string;
   icon?: string;
+  img?: string;
 }
 
 withDefaults(defineProps<EssentialLinkProps>(), {
   caption: '',
   link: '#',
   icon: '',
+  img: '',
 });
 </script>

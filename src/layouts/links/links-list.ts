@@ -23,31 +23,31 @@ export const linksList: EssentialLinkProps[] = [
   {
     title: 'La Liga: Primera División',
     caption: 'España',
-    icon: 'sports_soccer',
+    img: '/images/leagues/spain1.png',
     link: `/soccer-${Leagues.LaLigaPrimeraDivision}`,
   },
   {
     title: 'Premier League',
     caption: 'Inglaterra',
-    icon: 'sports_soccer',
+    img: '/images/leagues/england1.png',
     link: `/soccer-${Leagues.PremierLeague}`,
   },
   {
     title: 'Serie A',
     caption: 'Italia',
-    icon: 'sports_soccer',
+    img: '/images/leagues/italy1.png',
     link: `/soccer-${Leagues.SerieA}`,
   },
   {
     title: 'Bundesliga',
     caption: 'Alemania',
-    icon: 'sports_soccer',
+    img: '/images/leagues/germany1.png',
     link: `/soccer-${Leagues.Bundesliga}`,
   },
   {
     title: 'Ligue 1',
     caption: 'Francia',
-    icon: 'sports_soccer',
+    img: '/images/leagues/france1.png',
     link: `/soccer-${Leagues.Ligue1}`,
   },
 ];

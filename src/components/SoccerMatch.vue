@@ -19,6 +19,7 @@ import {
   getMatchResult,
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
+import usePlayers from 'src/composables/usePlayers';
 
 const props = defineProps<Match>();
 
@@ -38,6 +39,7 @@ const matchRef = ref<Match>({
 const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
 const { mutateTeamUpdate } = useTeamMutation();
+const { queryTopScorers } = usePlayers();
 
 const { queryTeamById: qt1 } = useTeams(matchRef.value.team1);
 const { queryTeamById: qt2 } = useTeams(matchRef.value.team2);
@@ -109,6 +111,9 @@ const onPlayMatch = () => {
     scorers: matchRef.value.scorers2,
     team: qt2.data.value ? qt2.data.value : ({} as Team),
   });
+
+  // Actualizamos query de goleadores, para que se refresquen en pantalla:
+  queryTopScorers.refetch();
 };
 </script>
 

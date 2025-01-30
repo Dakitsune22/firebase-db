@@ -121,6 +121,7 @@ export enum Flag {
   Ukraine = 'ua',
   UnitedStates = 'us',
   Uruguay = 'uy',
+  Uzbekistan = 'uz',
   Venezuela = 've',
   Wales = 'gb-wls',
   Zambia = 'zm',

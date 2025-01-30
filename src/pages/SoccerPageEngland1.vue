@@ -7,7 +7,7 @@ import { teamsEngland1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import usePlayers from 'src/composables/UsePlayers';
+import usePlayers from 'src/composables/usePlayers';
 import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
@@ -134,20 +134,23 @@ const onNextRound = async () => {
     forceRender();
   }
 };
+
+const onFirstRound = async () => {
+  setCurrentRound(1);
+  await queryRound.refetch();
+  forceRender();
+};
+
+const onLastRound = async () => {
+  if (queryCountRounds.data.value) {
+    setCurrentRound(queryCountRounds.data.value);
+    await queryRound.refetch();
+    forceRender();
+  }
+};
 </script>
 
 <template>
-  <div class="page-bar">
-    <div>
-      <q-btn
-        label="Reiniciar liga"
-        color="negative"
-        icon="restart_alt"
-        class="q-pl-sm"
-        @click="onRestartLeague"
-      />
-    </div>
-  </div>
   <!-- <q-page class="row items-center justify-evenly"> -->
   <q-page class="page-body">
     <div>
@@ -168,6 +171,14 @@ const onNextRound = async () => {
           {{ team.goalsConceded }} -->
           <soccer-team :team="team" :i-key="idx + 1" />
         </div>
+        <div class="restart-league">
+          <q-btn
+            label="Reiniciar liga"
+            color="negative"
+            icon="restart_alt"
+            @click="onRestartLeague"
+          />
+        </div>
       </div>
     </div>
     <div class="round">
@@ -176,21 +187,46 @@ const onNextRound = async () => {
       </div> -->
       <div class="round-header">
         <q-btn
-          icon="arrow_back"
+          icon="keyboard_double_arrow_left"
           size="sm"
           color="primary"
+          class="q-mr-xs"
+          :disable="getCurrentRound() === 1"
+          @click="onFirstRound"
+        />
+        <q-btn
+          icon="chevron_left"
+          size="sm"
+          color="primary"
+          :disable="getCurrentRound() === 1"
           @click="onPreviousRound"
         />
-        <span class="text-primary">····························· [</span>
-        <span class="q-ma-md text-bold text-primary"
+        <span class="text-primary">················· [</span>
+        <q-img
+          src="/images/leagues/england1.png"
+          spinner-color="white"
+          width="30px"
+          height="30px"
+          class="q-ma-sm"
+        />
+        <span class="q-mr-sm text-bold text-primary"
           >JORNADA {{ getCurrentRound() }}</span
         >
-        <span class="text-primary">] ·····························</span>
+        <span class="text-primary">] ·················</span>
         <q-btn
-          icon="arrow_forward"
+          icon="chevron_right"
           size="sm"
           color="primary"
+          :disable="getCurrentRound() === queryCountRounds.data.value"
           @click="onNextRound"
+        />
+        <q-btn
+          icon="keyboard_double_arrow_right"
+          size="sm"
+          color="primary"
+          class="q-ml-xs"
+          :disable="getCurrentRound() === queryCountRounds.data.value"
+          @click="onLastRound"
         />
       </div>
       <div v-if="queryRound.isLoading.value">CARGANDO...</div>
@@ -213,7 +249,7 @@ const onNextRound = async () => {
       </div>
     </div>
     <div>
-      <div v-if="queryTopScorers.isLoading.value">LOADING TOP SCORERS...</div>
+      <div v-if="queryTopScorers.isLoading.value">CARGANDO...</div>
       <div v-else>
         <div class="scorers-header q-ml-md">Máximos goleadores:</div>
         <div
@@ -225,26 +261,25 @@ const onNextRound = async () => {
           <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
           <soccer-player-scorer :player="player" :i-key="idx + 1" />
         </div>
+        <div v-if="queryTopScorers.data.value!.length < 1">
+          <q-icon
+            name="hourglass_top"
+            size="lg"
+            class="q-ml-sm"
+            color="primary"
+          />
+        </div>
       </div>
     </div>
   </q-page>
-  {{ getCurrentLeague() }}
 </template>
 
 <style lang="scss" scoped>
-.page-bar {
-  @include flexPosition(end, center);
-  width: 100%;
-  padding-top: 6px;
-  padding-right: 4px;
-  // padding: 0 16px;
-  // margin-bottom: 16px;
-  // background-color: aqua;
-}
 .page-body {
   @include flexPosition(center, start);
   flex-wrap: wrap;
   gap: 34px;
+  top: 20px;
   padding-bottom: 10px;
   // padding: 16px;
   // padding-top: 0;
@@ -294,5 +329,9 @@ const onNextRound = async () => {
   color: $primary;
   font-weight: 500;
   font-size: small;
+}
+.restart-league {
+  @include flexPosition(center, center);
+  padding-top: 10px;
 }
 </style>
