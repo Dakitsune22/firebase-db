@@ -59,7 +59,7 @@ export const playersData: Player[] = [
     shirtNumber: 18,
     name: 'Ladislav',
     surname: 'Krejci',
-    nationality: Nationality.Spain,
+    nationality: Nationality.CzechRepublic,
     position: Position.DF,
     overall: 78,
     seasonStats: initialSeasonStats,
