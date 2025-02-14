@@ -97,6 +97,7 @@ export enum Flag {
   Netherlands = 'nl',
   NewZealand = 'nz',
   Nigeria = 'ng',
+  NorthIreland = 'gb-nir',
   Norway = 'no',
   Panama = 'pa',
   Paraguay = 'py',
