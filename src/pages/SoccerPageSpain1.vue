@@ -14,6 +14,7 @@ import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
 import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
+import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 
 defineOptions({
   name: 'SoccerPage',
@@ -39,6 +40,9 @@ const forceRender = (): void => {
   // leagueKey.value++;
   roundKey.value++;
 };
+
+const { mutateUserInfo } = useUserInfoMutation();
+mutateUserInfo.mutate();
 
 onBeforeUnmount(async () => {
   // Refrescamos query antes de desmontar, para que esté actualizada a la vuelta:
@@ -317,8 +321,7 @@ const onLastRound = async () => {
   </q-page>
 </template>
 
-<!-- <style lang="scss" scoped> -->
-<style lang="scss">
+<style lang="scss" scoped>
 .page-body {
   @include flexPosition(center, start);
   flex-wrap: wrap;
