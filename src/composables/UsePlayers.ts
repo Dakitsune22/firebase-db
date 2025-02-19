@@ -3,11 +3,15 @@ import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { Player, Team } from 'src/models';
 import useSoccer from './storeWrappers/useSoccer';
+import useUI from './storeWrappers/useUI';
 
+const { userId } = useUI();
 const { getCurrentLeague } = useSoccer();
 
 const getPlayersByGoalsScored = async (): Promise<Player[]> => {
-  const q = query(collection(db, `teams-${getCurrentLeague()}`));
+  const q = query(
+    collection(db, `${userId.value}-teams-${getCurrentLeague()}`)
+  );
   const docs = await getDocs(q);
   const teams: Team[] = [];
   const players: Player[] = [];

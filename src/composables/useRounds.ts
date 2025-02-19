@@ -8,7 +8,9 @@ import {
 import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
 import useSoccer from './storeWrappers/useSoccer';
+import useUI from './storeWrappers/useUI';
 
+const { userId } = useUI();
 const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 
 //const getRound = async (roundNumber: number): Promise<SeasonRound> => {
@@ -16,7 +18,7 @@ const getRound = async (): Promise<SeasonRound> => {
   // console.log('current round:', currentRound.value.toString());
   const docRef = doc(
     db,
-    `season-rounds-${getCurrentLeague()}`,
+    `${userId.value}-season-rounds-${getCurrentLeague()}`,
     getCurrentRound().toString()
   );
   const docSnap = await getDoc(docRef);
@@ -35,7 +37,7 @@ const getRound = async (): Promise<SeasonRound> => {
 
 const countTotalRounds = async (): Promise<number> => {
   const docs = await getCountFromServer(
-    collection(db, `season-rounds-${getCurrentLeague()}`)
+    collection(db, `${userId.value}-season-rounds-${getCurrentLeague()}`)
   );
   return docs.data().count;
 };

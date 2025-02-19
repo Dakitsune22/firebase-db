@@ -10,12 +10,14 @@ import {
 import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
 import useSoccer from './storeWrappers/useSoccer';
+import useUI from './storeWrappers/useUI';
 
+const { userId } = useUI();
 const { getCurrentLeague } = useSoccer();
 
 const getTeamsByPoints = async (): Promise<Team[]> => {
   const q = query(
-    collection(db, `teams-${getCurrentLeague()}`),
+    collection(db, `${userId.value}-teams-${getCurrentLeague()}`),
     orderBy('points', 'desc')
     // orderBy('goalDifference', 'desc')
   );
@@ -48,7 +50,11 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
 };
 
 const getTeamById = async (teamId: number): Promise<Team> => {
-  const docRef = doc(db, `teams-${getCurrentLeague()}`, teamId.toString());
+  const docRef = doc(
+    db,
+    `${userId.value}-teams-${getCurrentLeague()}`,
+    teamId.toString()
+  );
   const docSnap = await getDoc(docRef);
 
   let t: Team;

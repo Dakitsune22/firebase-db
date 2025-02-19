@@ -11,6 +11,7 @@ import {
   teamsFrance1,
 } from 'src/data/teams';
 import useSoccer from './storeWrappers/useSoccer';
+import useUI from './storeWrappers/useUI';
 
 // let numTeam = 0;
 
@@ -23,6 +24,7 @@ interface teamUpdateData {
   team: Team;
 }
 
+const { userId } = useUI();
 const { getCurrentLeague } = useSoccer();
 
 const addTeam = async (league: Leagues, id: number): Promise<void> => {
@@ -70,7 +72,7 @@ const addTeam = async (league: Leagues, id: number): Promise<void> => {
       break;
   }
 
-  await setDoc(doc(db, `teams-${league}`, id.toString()), t);
+  await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t);
 };
 
 const updateTeam = async (t: teamUpdateData): Promise<void> => {
@@ -114,9 +116,12 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
 
   console.log('after update', ut);
 
-  await updateDoc(doc(db, `teams-${t.league}`, t.id.toString()), {
-    ...ut,
-  });
+  await updateDoc(
+    doc(db, `${userId.value}-teams-${t.league}`, t.id.toString()),
+    {
+      ...ut,
+    }
+  );
 };
 
 const useTeamMutation = () => {
