@@ -193,11 +193,13 @@ const onLastRound = async () => {
       </div>
       <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
       <div v-else>
-        <div v-for="(team, idx) in queryTeams.data.value" :key="team.id">
-          <!-- {{ team.name }} {{ team.points }} {{ team.goalDifference }}
-          {{ team.goalsConceded }} -->
-          <soccer-team :team="team" :i-key="idx + 1" />
-        </div>
+        <TransitionGroup name="rank">
+          <div v-for="(team, idx) in queryTeams.data.value" :key="team.id">
+            <!-- {{ team.name }} {{ team.points }} {{ team.goalDifference }}
+            {{ team.goalsConceded }} -->
+            <soccer-team :team="team" :i-key="idx + 1" />
+          </div>
+        </TransitionGroup>
         <div class="restart-league">
           <q-btn
             label="Reiniciar liga"
@@ -288,15 +290,20 @@ const onLastRound = async () => {
       <div v-if="queryTopScorers.isLoading.value">CARGANDO...</div>
       <div v-else>
         <div class="scorers-header q-ml-md">Máximos goleadores:</div>
-        <div
-          v-for="(player, idx) in queryTopScorers.data.value"
-          :key="
-            player.name + player.surname + player.position + player.shirtNumber
-          "
-        >
-          <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
-          <soccer-player-scorer :player="player" :i-key="idx + 1" />
-        </div>
+        <TransitionGroup name="scorer">
+          <div
+            v-for="(player, idx) in queryTopScorers.data.value"
+            :key="
+              player.name +
+              player.surname +
+              player.position +
+              player.shirtNumber
+            "
+          >
+            <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
+            <soccer-player-scorer :player="player" :i-key="idx + 1" />
+          </div>
+        </TransitionGroup>
         <div v-if="queryTopScorers.data.value!.length < 1">
           <q-icon
             name="hourglass_top"
@@ -310,7 +317,8 @@ const onLastRound = async () => {
   </q-page>
 </template>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped> -->
+<style lang="scss">
 .page-body {
   @include flexPosition(center, start);
   flex-wrap: wrap;
@@ -369,5 +377,22 @@ const onLastRound = async () => {
 .restart-league {
   @include flexPosition(center, center);
   padding-top: 10px;
+}
+/* Transition Group */
+.rank-move {
+  transition: all 1s ease;
+}
+.scorer-enter-active,
+.scorer-leave-active {
+  transition: all 1s ease;
+}
+.scorer-enter-from,
+.scorer-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 1s ease;
+}
+.scorer-move {
+  transition: all 1s ease;
 }
 </style>
