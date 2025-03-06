@@ -10,7 +10,7 @@ import {
   teamsSpain1,
 } from 'src/data/teams';
 import { Leagues, Team, Player } from 'src/models';
-import { Flag } from 'src/models/player';
+import { Flag, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import { computed, ref } from 'vue';
 
@@ -43,6 +43,7 @@ const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
 const { mutateTeamAdd, mutateTeamUpdate } = useDefaultTeamsMutation();
 
 const nationalityOptions = Object.values(Flag);
+const positionOptions = Object.values(Position);
 
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
@@ -476,16 +477,6 @@ const onReset = () => {
                 label-cancel="Close"
                 v-slot="scope"
               >
-                <!-- <q-input
-                  type="text"
-                  v-model.number="scope.value"
-                  hint="Introduce un valor del 50 al 99"
-                  :error="errorOverall"
-                  :error-message="errorOverallMessage"
-                  dense
-                  autofocus
-                  @keyup.enter="scope.set"
-                /> -->
                 <q-select
                   filled
                   v-model="props.row.nationality"
@@ -495,7 +486,6 @@ const onReset = () => {
                 >
                   <template v-slot:option="scope">
                     <q-item v-bind="scope.itemProps">
-                      <!-- <q-item-section avatar> -->
                       <q-img
                         :src="`/images/flags/h24/${scope.opt}.png`"
                         spinner-color="white"
@@ -505,7 +495,6 @@ const onReset = () => {
                         class="q-mr-md"
                       />
                       {{ scope.opt }}
-                      <!-- </q-item-section> -->
                     </q-item>
                   </template>
                 </q-select>
@@ -513,6 +502,22 @@ const onReset = () => {
             </q-td>
             <q-td key="position" :props="props">
               {{ props.row.position }}
+              <q-popup-edit
+                v-model.number="props.row.position"
+                buttons
+                label-set="Save"
+                label-cancel="Close"
+                v-slot="scope"
+              >
+                <q-select
+                  filled
+                  v-model="props.row.position"
+                  :options="positionOptions"
+                  options-dense
+                  label="Posición"
+                  @keyup.enter="scope.set"
+                />
+              </q-popup-edit>
             </q-td>
             <q-td key="overall" :props="props">
               {{ props.row.overall }}
