@@ -49,6 +49,7 @@ export enum Flag {
   Chile = 'cl',
   China = 'cn',
   Colombia = 'co',
+  Congo = 'cg',
   CongoDR = 'cd',
   CostaRica = 'cr',
   Croatia = 'hr',

@@ -21,6 +21,12 @@ export const linksList: EssentialLinkProps[] = [
     link: '/add-player',
   },
   {
+    title: 'Gestión de equipos',
+    caption: 'BD original',
+    icon: 'person_add',
+    link: '/teams-db',
+  },
+  {
     title: 'La Liga: Primera División',
     caption: 'España',
     img: '/images/leagues/spain1.png',

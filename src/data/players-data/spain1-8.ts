@@ -24,7 +24,7 @@ export const playersData: Player[] = [
     teamId: 8,
   },
   {
-    shirtNumber: 3,
+    shirtNumber: 15,
     name: '',
     surname: '',
     nickname: 'Juanpe',

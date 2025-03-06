@@ -47,6 +47,11 @@ const routes: RouteRecordRaw[] = [
         path: '/add-player',
         component: () => import('pages/AddPlayerPage.vue'),
       },
+      {
+        name: 'teamsDB',
+        path: '/teams-db',
+        component: () => import('pages/DefaultTeamsPage.vue'),
+      },
     ],
   },
 
