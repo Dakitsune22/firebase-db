@@ -10,6 +10,7 @@ import {
   teamsSpain1,
 } from 'src/data/teams';
 import { Leagues, Team, Player } from 'src/models';
+import { Flag } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import { computed, ref } from 'vue';
 
@@ -40,6 +41,8 @@ const { queryTeams: queryTeamsGermany1 } = useDefaultTeams(Leagues.Bundesliga);
 const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
 const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
 const { mutateTeamAdd, mutateTeamUpdate } = useDefaultTeamsMutation();
+
+const nationalityOptions = Object.values(Flag);
 
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
@@ -117,9 +120,27 @@ const options = ref([
 // ];
 
 const columns = [
-  { name: 'shirtNumber', label: '#', align: 'center', field: 'shirtNumber' },
-  { name: 'name', label: 'Nombre', align: 'center', field: 'name' },
-  { name: 'surname', label: 'Apellido', align: 'center', field: 'surname' },
+  {
+    name: 'shirtNumber',
+    label: '#',
+    align: 'center',
+    field: 'shirtNumber',
+    sortable: true,
+  },
+  {
+    name: 'name',
+    label: 'Nombre',
+    align: 'center',
+    field: 'name',
+    sortable: true,
+  },
+  {
+    name: 'surname',
+    label: 'Apellido',
+    align: 'center',
+    field: 'surname',
+    sortable: true,
+  },
   { name: 'nickname', label: 'Apodo', align: 'center', field: 'nickname' },
   {
     name: 'nationality',
@@ -127,8 +148,20 @@ const columns = [
     align: 'center',
     field: 'nationality',
   },
-  { name: 'position', label: 'Pos.', align: 'center', field: 'position' },
-  { name: 'overall', label: 'Pot.', align: 'center', field: 'overall' },
+  {
+    name: 'position',
+    label: 'Pos.',
+    align: 'center',
+    field: 'position',
+    sortable: true,
+  },
+  {
+    name: 'overall',
+    label: 'Pot.',
+    align: 'center',
+    field: 'overall',
+    sortable: true,
+  },
 ];
 
 const errorShirtNumber = ref(false);
@@ -386,9 +419,12 @@ const onReset = () => {
       <q-table
         :rows="selectedTeamData.players"
         :columns="columns"
-        title="QDataTable with QPopupEdit"
-        :rows-per-page-options="[]"
+        :title="`Plantilla del ${selectedTeamData.name}`"
         row-key="shirtNumber"
+        dense
+        bordered
+        rows-per-page-label="Número de jugadores por página"
+        :rows-per-page-options="[10, 20, 0]"
       >
         <template v-slot:body="props">
           <q-tr :props="props">
@@ -425,7 +461,55 @@ const onReset = () => {
               {{ props.row.nickname }}
             </q-td>
             <q-td key="nationality" :props="props">
-              {{ props.row.nationality }}
+              <!-- {{ props.row.nationality }} -->
+              <q-img
+                :src="`/images/flags/h20/${props.row.nationality}.png`"
+                spinner-color="white"
+                width="27px"
+                height="17px"
+                style="border: 1px solid rgba(0, 0, 0, 65%); cursor: pointer"
+              />
+              <q-popup-edit
+                v-model.number="props.row.nationality"
+                buttons
+                label-set="Save"
+                label-cancel="Close"
+                v-slot="scope"
+              >
+                <!-- <q-input
+                  type="text"
+                  v-model.number="scope.value"
+                  hint="Introduce un valor del 50 al 99"
+                  :error="errorOverall"
+                  :error-message="errorOverallMessage"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                /> -->
+                <q-select
+                  filled
+                  v-model="props.row.nationality"
+                  :options="nationalityOptions"
+                  options-dense
+                  @keyup.enter="scope.set"
+                >
+                  <template v-slot:option="scope">
+                    <q-item v-bind="scope.itemProps">
+                      <!-- <q-item-section avatar> -->
+                      <q-img
+                        :src="`/images/flags/h24/${scope.opt}.png`"
+                        spinner-color="white"
+                        height="24px"
+                        width="36px"
+                        fit="contain"
+                        class="q-mr-md"
+                      />
+                      {{ scope.opt }}
+                      <!-- </q-item-section> -->
+                    </q-item>
+                  </template>
+                </q-select>
+              </q-popup-edit>
             </q-td>
             <q-td key="position" :props="props">
               {{ props.row.position }}
@@ -453,9 +537,9 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="position" :props="props">
+            <q-td key="position" :props="props" auto-width>
               <q-btn
-                label="Borrar"
+                icon="delete"
                 color="primary"
                 flat
                 @click="console.log(props.rowIndex)"
