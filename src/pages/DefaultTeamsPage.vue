@@ -10,7 +10,7 @@ import {
   teamsSpain1,
 } from 'src/data/teams';
 import { Leagues, Team, Player } from 'src/models';
-import { Flag, Position } from 'src/models/player';
+import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import { computed, ref } from 'vue';
 
@@ -42,7 +42,20 @@ const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
 const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
 const { mutateTeamAdd, mutateTeamUpdate } = useDefaultTeamsMutation();
 
-const nationalityOptions = Object.values(Flag);
+// const nationalityOptions = Object.values(Flag);
+// interface nacOptions {
+//   value: string;
+//   label: string;
+// }
+const nationalityOptions: string[] = [];
+flagMap.keys().forEach((k) => nationalityOptions.push(k));
+// console.log(nationalityOptions);
+// const nationalityOptions: nacOptions[] = [];
+// flagMap
+//   .entries()
+//   .forEach((e) => nationalityOptions.push({ value: e[0], label: e[1] }));
+// console.log(nationalityOptions);
+
 const positionOptions = Object.values(Position);
 
 const currentTeams = computed(() => {
@@ -174,19 +187,23 @@ const shirtNumberRangeValidation = (val: number): boolean => {
     selectedTeamData.value.players.findIndex((p) => p.shirtNumber === val) >= 0
   ) {
     errorShirtNumber.value = true;
-    errorShirtNumberMessage.value = 'Este dorsal ya está asignado';
+    errorShirtNumberMessage.value = `El dorsal (${val}) ya está asignado`;
     return false;
-  }
-  if (val < 1 || val >= 100) {
+  } else if (val < 1 || val >= 100) {
     errorShirtNumber.value = true;
     errorShirtNumberMessage.value =
-      'El dorsal ha de estar comprendido entre 1 y 99';
+      'El dorsal debe estar comprendido entre 1 y 99';
     return false;
   } else {
     errorShirtNumber.value = false;
     errorShirtNumberMessage.value = '';
     return true;
   }
+};
+
+const shirtNumberErrorReset = (): void => {
+  errorShirtNumber.value = false;
+  errorShirtNumberMessage.value = '';
 };
 
 const errorOverall = ref(false);
@@ -406,7 +423,11 @@ const onReset = () => {
           ' ' +
           player.surname +
           ' ' +
-          player.overall
+          player.overall +
+          ' ' +
+          player.nationality +
+          ' ' +
+          player.position
         }}
         <q-btn
           label="Change name"
@@ -437,15 +458,22 @@ const onReset = () => {
                 label-set="Guardar"
                 label-cancel="Cerrar"
                 :validate="shirtNumberRangeValidation"
-                @hide="shirtNumberRangeValidation(props.row.shirtNumber)"
+                @before-show="shirtNumberErrorReset"
+                @update:model-value="shirtNumberRangeValidation"
                 v-slot="scope"
               >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Dorsal
+                </q-badge>
                 <q-input
                   type="number"
                   v-model.number="scope.value"
-                  hint="Introduce un valor del 1 al 99"
+                  hint="Introduce el dorsal del jugador. (Valores permitidos: del 1 al 99)"
+                  bottom-slots
                   :error="errorShirtNumber"
-                  :error-message="errorShirtNumberMessage"
+                  :error-message="
+                    errorShirtNumber ? errorShirtNumberMessage : ''
+                  "
                   dense
                   autofocus
                   @keyup.enter="scope.set"
@@ -454,12 +482,69 @@ const onReset = () => {
             </q-td>
             <q-td key="name" :props="props">
               {{ props.row.name }}
+              <q-popup-edit
+                v-model.number="props.row.name"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Nombre
+                </q-badge>
+                <q-input
+                  type="text"
+                  v-model.number="scope.value"
+                  hint="Introduce el nombre del jugador"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                />
+              </q-popup-edit>
             </q-td>
             <q-td key="surname" :props="props">
               {{ props.row.surname }}
+              <q-popup-edit
+                v-model.number="props.row.surname"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Apellido
+                </q-badge>
+                <q-input
+                  type="text"
+                  v-model.number="scope.value"
+                  hint="Introduce el apellido del jugador"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                />
+              </q-popup-edit>
             </q-td>
             <q-td key="nickname" :props="props">
               {{ props.row.nickname }}
+              <q-popup-edit
+                v-model.number="props.row.nickname"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Apodo
+                </q-badge>
+                <q-input
+                  type="text"
+                  v-model.number="scope.value"
+                  hint="Introduce el apodo del jugador (opcional)"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                />
+              </q-popup-edit>
             </q-td>
             <q-td key="nationality" :props="props">
               <!-- {{ props.row.nationality }} -->
@@ -472,17 +557,17 @@ const onReset = () => {
               />
               <q-popup-edit
                 v-model.number="props.row.nationality"
-                buttons
-                label-set="Save"
-                label-cancel="Close"
                 v-slot="scope"
               >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Nacionalidad
+                </q-badge>
                 <q-select
-                  filled
                   v-model="props.row.nationality"
                   :options="nationalityOptions"
                   options-dense
-                  @keyup.enter="scope.set"
+                  dense
+                  @update:model-value="scope.set"
                 >
                   <template v-slot:option="scope">
                     <q-item v-bind="scope.itemProps">
@@ -490,11 +575,12 @@ const onReset = () => {
                         :src="`/images/flags/h24/${scope.opt}.png`"
                         spinner-color="white"
                         height="24px"
-                        width="36px"
-                        fit="contain"
-                        class="q-mr-md"
+                        width="42px"
+                        class="q-mr-sm"
+                        style="border: 1px solid rgba(0, 0, 0, 65%)"
                       />
-                      {{ scope.opt }}
+                      <!-- {{ Object.values(scope.opt)[1] }} -->
+                      {{ flagMap.get(scope.opt) }}
                     </q-item>
                   </template>
                 </q-select>
@@ -502,20 +588,16 @@ const onReset = () => {
             </q-td>
             <q-td key="position" :props="props">
               {{ props.row.position }}
-              <q-popup-edit
-                v-model.number="props.row.position"
-                buttons
-                label-set="Save"
-                label-cancel="Close"
-                v-slot="scope"
-              >
+              <q-popup-edit v-model.number="props.row.position" v-slot="scope">
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Posición
+                </q-badge>
                 <q-select
-                  filled
                   v-model="props.row.position"
                   :options="positionOptions"
+                  dense
                   options-dense
-                  label="Posición"
-                  @keyup.enter="scope.set"
+                  @update:model-value="scope.set"
                 />
               </q-popup-edit>
             </q-td>
@@ -524,21 +606,57 @@ const onReset = () => {
               <q-popup-edit
                 v-model.number="props.row.overall"
                 buttons
-                label-set="Save"
-                label-cancel="Close"
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                style="width: 260px"
                 :validate="overallRangeValidation"
-                @hide="overallRangeValidation(props.row.overall)"
                 v-slot="scope"
               >
-                <q-input
+                <!-- <q-input
                   type="number"
                   v-model.number="scope.value"
-                  hint="Introduce un valor del 50 al 99"
+                  hint="Introduce el potencial del jugador. (Rango: del 50 al 99)"
+                  bottom-slots
                   :error="errorOverall"
                   :error-message="errorOverallMessage"
                   dense
                   autofocus
                   @keyup.enter="scope.set"
+                /> -->
+                <q-badge outline color="primary" class="q-mt-sm q-mb-sm">
+                  Potencial
+                </q-badge>
+                <q-slider
+                  v-model="scope.value"
+                  :min="50"
+                  :max="99"
+                  :color="
+                    scope.value < 55
+                      ? 'red-10'
+                      : scope.value < 60
+                      ? 'red-8'
+                      : scope.value < 65
+                      ? 'red'
+                      : scope.value < 70
+                      ? 'yellow-10'
+                      : scope.value < 75
+                      ? 'yellow-9'
+                      : scope.value < 80
+                      ? 'yellow-8'
+                      : scope.value < 85
+                      ? 'green-6'
+                      : scope.value < 90
+                      ? 'green-7'
+                      : scope.value < 95
+                      ? 'green-8'
+                      : 'green-9'
+                  "
+                  label-always
+                  :switch-label-side="scope.value < 70 ? true : false"
+                  :markers="5"
+                  thumb-size="30px"
+                  track-size="8px"
+                  class="q-pl-sm q-pr-sm q-mb-lg"
                 />
               </q-popup-edit>
             </q-td>
