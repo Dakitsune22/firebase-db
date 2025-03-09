@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import { tactics } from 'src/data/tactics';
@@ -14,14 +15,14 @@ import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import { computed, ref } from 'vue';
 
-const selectedLeague = ref<Leagues>(Leagues.PremierLeague);
-const selectedTeamId = ref<number>(0);
-const selectedTeamData = ref<Team>({
+const $q = useQuasar();
+
+const initialTeamData: Team = {
   draws: 0,
   goalDifference: 0,
   goalsConceded: 0,
   goalsScored: 0,
-  id: 0,
+  id: -1,
   losses: 0,
   matchesPlayed: 0,
   name: '',
@@ -29,7 +30,11 @@ const selectedTeamData = ref<Team>({
   wins: 0,
   tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
   players: [],
-});
+};
+
+const selectedLeague = ref<Leagues>();
+const selectedTeamId = ref<number>();
+const selectedTeamData = ref<Team>(initialTeamData);
 
 const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
   Leagues.LaLigaPrimeraDivision
@@ -136,7 +141,7 @@ const options = ref([
 const columns = [
   {
     name: 'shirtNumber',
-    label: '#',
+    label: 'Dorsal',
     align: 'center',
     field: 'shirtNumber',
     sortable: true,
@@ -175,6 +180,12 @@ const columns = [
     align: 'center',
     field: 'overall',
     sortable: true,
+  },
+  {
+    name: 'delete',
+    label: 'Eliminar',
+    align: 'center',
+    field: 'delete',
   },
 ];
 
@@ -222,6 +233,37 @@ const overallRangeValidation = (val: number): boolean => {
   }
 };
 
+const getNextAvailableShirtNumber = (): number => {
+  let shirtNumber = 0;
+  for (let i = 1; i < 100; i++) {
+    if (
+      selectedTeamData.value.players.findIndex((p) => p.shirtNumber === i) < 0
+    ) {
+      shirtNumber = i;
+      break;
+    }
+  }
+  return shirtNumber;
+};
+
+const onAddPlayer = (): void => {
+  selectedTeamData.value.players.push({
+    teamId: selectedTeamData.value.id,
+    shirtNumber: getNextAvailableShirtNumber(),
+    name: '',
+    surname: '',
+    nickname: '',
+    overall: 75,
+    position: Position.POR,
+    nationality: Flag.Spain,
+    seasonStats: {
+      assists: 0,
+      goals: 0,
+      injured: 0,
+    },
+  });
+};
+
 const onRestoreTeams = () => {
   console.log(selectedLeague.value);
 
@@ -229,7 +271,7 @@ const onRestoreTeams = () => {
     case Leagues.LaLigaPrimeraDivision:
       teamsSpain1.forEach((team) => {
         mutateTeamAdd.mutate({
-          league: selectedLeague.value,
+          league: Leagues.LaLigaPrimeraDivision,
           id: team.id,
         });
       });
@@ -238,7 +280,7 @@ const onRestoreTeams = () => {
     case Leagues.PremierLeague:
       teamsEngland1.forEach((team) => {
         mutateTeamAdd.mutate({
-          league: selectedLeague.value,
+          league: Leagues.PremierLeague,
           id: team.id,
         });
       });
@@ -247,7 +289,7 @@ const onRestoreTeams = () => {
     case Leagues.Bundesliga:
       teamsGermany1.forEach((team) => {
         mutateTeamAdd.mutate({
-          league: selectedLeague.value,
+          league: Leagues.Bundesliga,
           id: team.id,
         });
       });
@@ -256,7 +298,7 @@ const onRestoreTeams = () => {
     case Leagues.SerieA:
       teamsItaly1.forEach((team) => {
         mutateTeamAdd.mutate({
-          league: selectedLeague.value,
+          league: Leagues.SerieA,
           id: team.id,
         });
       });
@@ -265,7 +307,7 @@ const onRestoreTeams = () => {
     case Leagues.Ligue1:
       teamsFrance1.forEach((team) => {
         mutateTeamAdd.mutate({
-          league: selectedLeague.value,
+          league: Leagues.Ligue1,
           id: team.id,
         });
       });
@@ -294,51 +336,62 @@ const updateSelectedTeamData = (): void => {
   }
 };
 
-const onChangeNameClick = (playerIdx: number) => {
-  // selectedTeamData.value.players[playerIdx] = {
-  //   name: 'xxx',
-  //   nationality: selectedTeamData.value.players[playerIdx].nationality,
-  //   overall: selectedTeamData.value.players[playerIdx].overall,
-  //   position: selectedTeamData.value.players[playerIdx].position,
-  //   seasonStats: selectedTeamData.value.players[playerIdx].seasonStats,
-  //   shirtNumber: selectedTeamData.value.players[playerIdx].shirtNumber,
-  //   surname: selectedTeamData.value.players[playerIdx].surname,
-  //   teamId: selectedTeamData.value.players[playerIdx].teamId,
-  //   nickname: selectedTeamData.value.players[playerIdx].nickname,
-  // };
+// const onChangeNameClick = (playerIdx: number) => {
+//   const playerToUpdate: Player = {
+//     ...selectedTeamData.value.players[playerIdx],
+//     name: 'Updated-Name',
+//   };
 
-  const playerToUpdate: Player = {
-    ...selectedTeamData.value.players[playerIdx],
-    name: 'Updated-Name',
-  };
+//   const updatedPlayers = selectedTeamData.value.players.map((p) =>
+//     p.shirtNumber !== playerToUpdate.shirtNumber ? p : playerToUpdate
+//   );
 
-  const updatedPlayers = selectedTeamData.value.players.map((p) =>
-    p.shirtNumber !== playerToUpdate.shirtNumber ? p : playerToUpdate
-  );
+//   // console.log(updatedPlayers);
 
-  // console.log(updatedPlayers);
-
-  selectedTeamData.value = {
-    ...selectedTeamData.value,
-    players: updatedPlayers,
-  };
-  console.log(selectedTeamData.value);
-
-  // selectedTeamData.value.players[playerIdx].name = 'ZzZzZ';
-  // console.log(selectedTeamData.value.players[playerIdx].name);
-
-  // selectedTeamData.value.players.splice(playerIdx, 1, xxx);
-
-  // console.log(selectedTeamData.value.players[playerIdx]);
-};
+//   selectedTeamData.value = {
+//     ...selectedTeamData.value,
+//     players: updatedPlayers,
+//   };
+//   console.log(selectedTeamData.value);
+// };
 
 const onSubmit = () => {
   console.log('To Do: On submit');
-  mutateTeamUpdate.mutate({
-    league: selectedLeague.value,
-    id: selectedTeamId.value,
-    team: selectedTeamData.value,
-  });
+  let error = false;
+  if (selectedLeague.value && selectedTeamId.value) {
+    selectedTeamData.value.players.forEach((p) => {
+      if (
+        (p.name.trim().length === 0 || p.surname.trim().length === 0) &&
+        p.nickname?.trim().length === 0
+      ) {
+        $q.notify({
+          type: 'negative',
+          message: `El jugador #${p.shirtNumber} debe tener nombre y apellido o bien apodo`,
+        });
+        error = true;
+      }
+    });
+
+    if (error) return;
+
+    mutateTeamUpdate.mutate({
+      league: selectedLeague.value,
+      id: selectedTeamId.value,
+      team: selectedTeamData.value,
+    });
+    switch (selectedLeague.value) {
+      case Leagues.LaLigaPrimeraDivision:
+        queryTeamsSpain1.refetch();
+      case Leagues.PremierLeague:
+        queryTeamsEngland1.refetch();
+      case Leagues.Bundesliga:
+        queryTeamsGermany1.refetch();
+      case Leagues.SerieA:
+        queryTeamsItaly1.refetch();
+      case Leagues.Ligue1:
+        queryTeamsFrance1.refetch();
+    }
+  }
 };
 
 const onReset = () => {
@@ -347,11 +400,11 @@ const onReset = () => {
 </script>
 
 <template>
-  <div class="header">
+  <div class="team-header">
     <q-btn label="Restore teams" color="primary" flat @click="onRestoreTeams" />
   </div>
-  <div>
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+  <div class="team-body">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
       <q-select
         filled
         v-model="selectedLeague"
@@ -359,12 +412,13 @@ const onReset = () => {
         option-value="value"
         option-label="label"
         options-dense
-        label="Equipo"
+        label="Liga"
         emit-value
         map-options
         @update:model-value="
           (value) => {
-            console.log(value);
+            selectedTeamId = undefined;
+            selectedTeamData = initialTeamData;
           }
         "
       />
@@ -394,24 +448,12 @@ const onReset = () => {
         "
       />
       <div class="btn-container">
+        <q-btn label="Add" color="primary" flat @click="onAddPlayer" />
         <q-btn label="Reset" type="reset" color="primary" flat />
         <q-btn label="Submit" type="submit" color="primary" class="q-ml-sm" />
       </div>
     </q-form>
-    <!-- <div v-for="team in currentTeams.data.value" :key="team.id">
-      <div v-for="player in team.players" :key="player.shirtNumber">
-        {{ player.name + player.surname }}
-      </div>
-    </div> -->
-    <div v-if="currentTeams.data.value">
-      <!-- <div
-        v-for="player in currentTeams.data.value[
-          currentTeams.data.value.findIndex((t) => t.id === selectedTeamId)
-        ].players"
-        :key="player.shirtNumber"
-      >
-        {{ player.name + player.surname }}
-      </div> -->
+    <!-- <div v-if="currentTeams.data.value">
       <div
         v-for="(player, idx) in selectedTeamData?.players"
         :key="player.shirtNumber"
@@ -436,8 +478,8 @@ const onReset = () => {
           flat
         />
       </div>
-    </div>
-    <div>
+    </div> -->
+    <div v-if="selectedTeamData.id >= 0">
       <q-table
         :rows="selectedTeamData.players"
         :columns="columns"
@@ -445,7 +487,7 @@ const onReset = () => {
         row-key="shirtNumber"
         dense
         bordered
-        rows-per-page-label="Número de jugadores por página"
+        rows-per-page-label="Jugadores por página: "
         :rows-per-page-options="[10, 20, 0]"
       >
         <template v-slot:body="props">
@@ -665,7 +707,7 @@ const onReset = () => {
                 icon="delete"
                 color="primary"
                 flat
-                @click="console.log(props.rowIndex)"
+                @click="selectedTeamData.players.splice(props.rowIndex, 1)"
               />
             </q-td>
           </q-tr>
@@ -675,4 +717,13 @@ const onReset = () => {
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.team {
+  &-header {
+    margin: 20px;
+  }
+  &-body {
+    margin: 20px;
+  }
+}
+</style>
