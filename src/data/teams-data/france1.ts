@@ -45,14 +45,18 @@ export const teamsFrance1: Team[] = [
     ...initTeamData,
     id: i,
     name: 'LOSC Lille',
-    tactic: tactics.find((t) => t.name === TacticList['4-3-3-DEF']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-3-3-Defensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {
     ...initTeamData,
     id: i,
     name: 'PSG',
-    tactic: tactics.find((t) => t.name === TacticList['4-5-1-OF']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-5-1-Ofensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -66,14 +70,18 @@ export const teamsFrance1: Team[] = [
     ...initTeamData,
     id: i,
     name: 'Le Havre',
-    tactic: tactics.find((t) => t.name === TacticList['5-4-1-OF']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-5-1-Ofensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {
     ...initTeamData,
     id: i,
     name: 'Stade Brest',
-    tactic: tactics.find((t) => t.name === TacticList['4-3-3-DEF']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-3-3-Defensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -94,7 +102,9 @@ export const teamsFrance1: Team[] = [
     ...initTeamData,
     id: i,
     name: 'Toulouse',
-    tactic: tactics.find((t) => t.name === TacticList['4-5-1-OF']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-5-1-Ofensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {

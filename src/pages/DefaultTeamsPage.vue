@@ -62,6 +62,7 @@ flagMap.keys().forEach((k) => nationalityOptions.push(k));
 // console.log(nationalityOptions);
 
 const positionOptions = Object.values(Position);
+const tacticOptions = Object.values(TacticList);
 
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
@@ -329,9 +330,18 @@ const updateSelectedTeamData = (): void => {
       playersToUpdate.push({ ...player });
     });
 
+    const tacticPositionsToUpdate: Position[] = [];
+    selectedTeamData.value.tactic.formation.forEach((position) => {
+      tacticPositionsToUpdate.push(position);
+    });
+
     selectedTeamData.value = {
       ...selectedTeamData.value,
       players: playersToUpdate,
+      tactic: {
+        name: selectedTeamData.value.tactic.name,
+        formation: tacticPositionsToUpdate,
+      },
     };
   }
 };
@@ -480,10 +490,45 @@ const onReset = () => {
       </div>
     </div> -->
     <div v-if="selectedTeamData.id >= 0">
+      <div class="team-body-info">
+        <div class="team-body-info-left">
+          <q-img
+            :src="`/images/teams-${selectedLeague}/${selectedTeamId}.png`"
+            spinner-color="white"
+            width="40px"
+            height="40px"
+            style="margin-right: 10px"
+          />
+          Plantilla del
+          <span style="font-weight: bold; margin-left: 7px">{{
+            selectedTeamData.name
+          }}</span>
+          <q-btn icon="person_add" color="primary" round class="q-ml-lg" />
+        </div>
+        <div class="team-body-info-right">
+          <q-select
+            filled
+            v-model="selectedTeamData.tactic.name"
+            :options="tacticOptions"
+            options-dense
+            label="Táctica actual"
+            emit-value
+            @update:model-value="
+              (value: TacticList) => {
+                console.log('selected value: ', value)
+                const tempTactic = tactics.find((t) => t.name === value) as Tactic;
+                selectedTeamData.tactic = {
+                  name: value,
+                  formation: {...tempTactic.formation}
+                }
+              }
+            "
+          />
+        </div>
+      </div>
       <q-table
         :rows="selectedTeamData.players"
         :columns="columns"
-        :title="`Plantilla del ${selectedTeamData.name}`"
         row-key="shirtNumber"
         dense
         bordered
@@ -724,6 +769,24 @@ const onReset = () => {
   }
   &-body {
     margin: 20px;
+
+    &-info {
+      @include flexPosition(center, center);
+      font-size: 24px;
+      margin-bottom: 10px;
+      // background-color: aqua;
+
+      &-left {
+        @include flexPosition(start, end);
+        width: 75%;
+        // background-color: bisque;
+      }
+      &-right {
+        width: 25%;
+        // padding-bottom: 5px;
+        // background-color: burlywood;
+      }
+    }
   }
 }
 </style>

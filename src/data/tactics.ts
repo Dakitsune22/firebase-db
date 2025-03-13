@@ -68,7 +68,7 @@ export const tactics: Tactic[] = [
     ],
   },
   {
-    name: TacticList['4-3-3-DEF'],
+    name: TacticList['4-3-3-Defensivo'],
     formation: [
       Position.POR,
       Position.LD,
@@ -116,7 +116,7 @@ export const tactics: Tactic[] = [
     ],
   },
   {
-    name: TacticList['4-5-1-OF'],
+    name: TacticList['4-5-1-Ofensivo'],
     formation: [
       Position.POR,
       Position.LD,
@@ -164,7 +164,7 @@ export const tactics: Tactic[] = [
     ],
   },
   {
-    name: TacticList['5-4-1-OF'],
+    name: TacticList['5-4-1-Ofensivo'],
     formation: [
       Position.POR,
       Position.LD,

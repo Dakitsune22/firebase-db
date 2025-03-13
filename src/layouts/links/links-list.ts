@@ -23,7 +23,7 @@ export const linksList: EssentialLinkProps[] = [
   {
     title: 'Gestión de equipos',
     caption: 'BD original',
-    icon: 'person_add',
+    icon: 'groups',
     link: '/teams-db',
   },
   {
