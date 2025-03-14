@@ -94,7 +94,7 @@ const currentTeams = computed(() => {
 //   return team;
 // })
 
-const options = ref([
+const leagueOptions = ref([
   {
     label: 'La Liga Primera Division',
     value: Leagues.LaLigaPrimeraDivision,
@@ -266,54 +266,79 @@ const onAddPlayer = (): void => {
 };
 
 const onRestoreTeams = () => {
-  console.log(selectedLeague.value);
+  const labelLeague = Object.values(leagueOptions.value).find(
+    (league) => league.value === selectedLeague.value
+  )?.label;
 
-  switch (selectedLeague.value) {
-    case Leagues.LaLigaPrimeraDivision:
-      teamsSpain1.forEach((team) => {
-        mutateTeamAdd.mutate({
-          league: Leagues.LaLigaPrimeraDivision,
-          id: team.id,
-        });
-      });
-      break;
+  $q.dialog({
+    html: true,
+    title: `<span class="text-primary">Reiniciar ${labelLeague}</span>`,
+    message: `Se van a reiniciar los datos de todos los equipos de <strong>${labelLeague}</strong>, recuperando los valores por defecto y perdiendo, por lo tanto, cualquier cambio que se haya realizado (nombre, táctica, jugadores...)<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    cancel: { label: 'Volver', flat: true },
+    ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
+    persistent: true,
+  })
+    .onOk(() => {
+      switch (selectedLeague.value) {
+        case Leagues.LaLigaPrimeraDivision:
+          teamsSpain1.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.LaLigaPrimeraDivision,
+              id: team.id,
+            });
+          });
+          break;
 
-    case Leagues.PremierLeague:
-      teamsEngland1.forEach((team) => {
-        mutateTeamAdd.mutate({
-          league: Leagues.PremierLeague,
-          id: team.id,
-        });
-      });
-      break;
+        case Leagues.PremierLeague:
+          teamsEngland1.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.PremierLeague,
+              id: team.id,
+            });
+          });
+          break;
 
-    case Leagues.Bundesliga:
-      teamsGermany1.forEach((team) => {
-        mutateTeamAdd.mutate({
-          league: Leagues.Bundesliga,
-          id: team.id,
-        });
-      });
-      break;
+        case Leagues.Bundesliga:
+          teamsGermany1.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.Bundesliga,
+              id: team.id,
+            });
+          });
+          break;
 
-    case Leagues.SerieA:
-      teamsItaly1.forEach((team) => {
-        mutateTeamAdd.mutate({
-          league: Leagues.SerieA,
-          id: team.id,
-        });
-      });
-      break;
+        case Leagues.SerieA:
+          teamsItaly1.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.SerieA,
+              id: team.id,
+            });
+          });
+          break;
 
-    case Leagues.Ligue1:
-      teamsFrance1.forEach((team) => {
-        mutateTeamAdd.mutate({
-          league: Leagues.Ligue1,
-          id: team.id,
-        });
-      });
-      break;
-  }
+        case Leagues.Ligue1:
+          teamsFrance1.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.Ligue1,
+              id: team.id,
+            });
+          });
+          break;
+      }
+    })
+    .onOk(() => {
+      selectedTeamId.value = undefined;
+      selectedTeamData.value = initialTeamData;
+      if (selectedLeague.value) {
+        refetchQueryLeague(selectedLeague.value);
+      }
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
 };
 
 const updateSelectedTeamData = (): void => {
@@ -365,6 +390,21 @@ const updateSelectedTeamData = (): void => {
 //   console.log(selectedTeamData.value);
 // };
 
+const refetchQueryLeague = (league: Leagues): void => {
+  switch (league) {
+    case Leagues.LaLigaPrimeraDivision:
+      queryTeamsSpain1.refetch();
+    case Leagues.PremierLeague:
+      queryTeamsEngland1.refetch();
+    case Leagues.Bundesliga:
+      queryTeamsGermany1.refetch();
+    case Leagues.SerieA:
+      queryTeamsItaly1.refetch();
+    case Leagues.Ligue1:
+      queryTeamsFrance1.refetch();
+  }
+};
+
 const onSubmit = () => {
   console.log('To Do: On submit');
   let error = false;
@@ -389,49 +429,51 @@ const onSubmit = () => {
       id: selectedTeamId.value,
       team: selectedTeamData.value,
     });
-    switch (selectedLeague.value) {
-      case Leagues.LaLigaPrimeraDivision:
-        queryTeamsSpain1.refetch();
-      case Leagues.PremierLeague:
-        queryTeamsEngland1.refetch();
-      case Leagues.Bundesliga:
-        queryTeamsGermany1.refetch();
-      case Leagues.SerieA:
-        queryTeamsItaly1.refetch();
-      case Leagues.Ligue1:
-        queryTeamsFrance1.refetch();
-    }
+    refetchQueryLeague(selectedLeague.value);
   }
 };
 
 const onReset = () => {
-  console.log('To Do: On reset');
+  selectedLeague.value = undefined;
+  selectedTeamId.value = undefined;
+  selectedTeamData.value = initialTeamData;
 };
 </script>
 
 <template>
-  <div class="team-header">
+  <!-- <div class="team-header">
     <q-btn label="Restore teams" color="primary" flat @click="onRestoreTeams" />
-  </div>
+  </div> -->
   <div class="team-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
-      <q-select
-        filled
-        v-model="selectedLeague"
-        :options="options"
-        option-value="value"
-        option-label="label"
-        options-dense
-        label="Liga"
-        emit-value
-        map-options
-        @update:model-value="
-          (value) => {
-            selectedTeamId = undefined;
-            selectedTeamData = initialTeamData;
-          }
-        "
-      />
+      <div class="team-body-league">
+        <q-select
+          class="team-body-league-left"
+          filled
+          v-model="selectedLeague"
+          :options="leagueOptions"
+          option-value="value"
+          option-label="label"
+          options-dense
+          label="Liga"
+          emit-value
+          map-options
+          @update:model-value="
+            (value) => {
+              selectedTeamId = undefined;
+              selectedTeamData = initialTeamData;
+            }
+          "
+        />
+        <q-btn
+          class="team-body-league-right"
+          color="negative"
+          icon="restart_alt"
+          flat
+          @click="onRestoreTeams"
+          :disable="!selectedLeague"
+        />
+      </div>
       <q-select
         filled
         v-model="selectedTeamId"
@@ -442,6 +484,7 @@ const onReset = () => {
         label="Equipo"
         emit-value
         map-options
+        :disable="!selectedLeague"
         @update:model-value="
           (value) => {
             console.log(value);
@@ -458,9 +501,22 @@ const onReset = () => {
         "
       />
       <div class="btn-container">
-        <q-btn label="Add" color="primary" flat @click="onAddPlayer" />
-        <q-btn label="Reset" type="reset" color="primary" flat />
-        <q-btn label="Submit" type="submit" color="primary" class="q-ml-sm" />
+        <!-- <q-btn
+          label="Reiniciar Liga"
+          color="negative"
+          icon="restart_alt"
+          flat
+          @click="onAddPlayer"
+        /> -->
+        <q-btn type="reset" color="primary" icon="clear_all" flat />
+        <q-btn
+          type="submit"
+          color="primary"
+          icon="save"
+          flat
+          class="q-ml-sm"
+          :disable="selectedTeamId == undefined"
+        />
       </div>
     </q-form>
     <!-- <div v-if="currentTeams.data.value">
@@ -503,7 +559,13 @@ const onReset = () => {
           <span style="font-weight: bold; margin-left: 7px">{{
             selectedTeamData.name
           }}</span>
-          <q-btn icon="person_add" color="primary" round class="q-ml-lg" />
+          <q-btn
+            icon="person_add"
+            color="primary"
+            round
+            class="q-ml-lg"
+            @click="onAddPlayer"
+          />
         </div>
         <div class="team-body-info-right">
           <q-select
@@ -534,10 +596,15 @@ const onReset = () => {
         bordered
         rows-per-page-label="Jugadores por página: "
         :rows-per-page-options="[10, 20, 0]"
+        class="table-header"
       >
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td key="shirtNumber" :props="props">
+            <q-td
+              key="shirtNumber"
+              :props="props"
+              class="table table-value table-col1"
+            >
               {{ props.row.shirtNumber }}
               <q-popup-edit
                 v-model.number="props.row.shirtNumber"
@@ -567,7 +634,11 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="name" :props="props">
+            <q-td
+              key="name"
+              :props="props"
+              class="table table-value table-col2"
+            >
               {{ props.row.name }}
               <q-popup-edit
                 v-model.number="props.row.name"
@@ -589,7 +660,11 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="surname" :props="props">
+            <q-td
+              key="surname"
+              :props="props"
+              class="table table-value table-col3"
+            >
               {{ props.row.surname }}
               <q-popup-edit
                 v-model.number="props.row.surname"
@@ -611,7 +686,11 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="nickname" :props="props">
+            <q-td
+              key="nickname"
+              :props="props"
+              class="table table-value table-col4"
+            >
               {{ props.row.nickname }}
               <q-popup-edit
                 v-model.number="props.row.nickname"
@@ -633,7 +712,7 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="nationality" :props="props">
+            <q-td key="nationality" :props="props" class="table table-col5">
               <!-- {{ props.row.nationality }} -->
               <q-img
                 :src="`/images/flags/h20/${props.row.nationality}.png`"
@@ -673,7 +752,11 @@ const onReset = () => {
                 </q-select>
               </q-popup-edit>
             </q-td>
-            <q-td key="position" :props="props">
+            <q-td
+              key="position"
+              :props="props"
+              class="table table-value table-col6"
+            >
               {{ props.row.position }}
               <q-popup-edit v-model.number="props.row.position" v-slot="scope">
                 <q-badge outline color="primary" class="q-mt-sm">
@@ -688,7 +771,11 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="overall" :props="props">
+            <q-td
+              key="overall"
+              :props="props"
+              class="table table-value table-col7"
+            >
               {{ props.row.overall }}
               <q-popup-edit
                 v-model.number="props.row.overall"
@@ -747,7 +834,7 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
-            <q-td key="position" :props="props" auto-width>
+            <q-td key="delete" :props="props" class="table table-col8">
               <q-btn
                 icon="delete"
                 color="primary"
@@ -769,6 +856,23 @@ const onReset = () => {
   }
   &-body {
     margin: 20px;
+    margin-top: 40px;
+    min-width: 600px;
+    max-width: 900px;
+
+    &-league {
+      @include flexPosition(center, center);
+
+      &-left {
+        // @include flexPosition(start, end);
+        width: 95%;
+        // background-color: bisque;
+      }
+      &-right {
+        width: 5%;
+        // background-color: burlywood;
+      }
+    }
 
     &-info {
       @include flexPosition(center, center);
@@ -787,6 +891,44 @@ const onReset = () => {
         // background-color: burlywood;
       }
     }
+  }
+}
+.table {
+  background-color: darken(whitesmoke, $amount: 0.5);
+  &-header {
+    background-color: darken(whitesmoke, $amount: 5.5);
+  }
+  &-value {
+    &:hover {
+      color: $primary;
+      font-size: 18px;
+      font-weight: 500;
+      transition: 0.2s all;
+    }
+  }
+  &-col1 {
+    width: 6%;
+  }
+  &-col2 {
+    width: 25%;
+  }
+  &-col3 {
+    width: 25%;
+  }
+  &-col4 {
+    width: 15%;
+  }
+  &-col5 {
+    width: 8%;
+  }
+  &-col6 {
+    width: 8%;
+  }
+  &-col7 {
+    width: 8%;
+  }
+  &-col8 {
+    width: 5%;
   }
 }
 </style>

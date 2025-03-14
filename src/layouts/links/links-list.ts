@@ -3,8 +3,8 @@ import { Leagues } from 'src/models';
 
 export const linksList: EssentialLinkProps[] = [
   {
-    title: 'Index',
-    caption: 'Go to index page',
+    title: 'Inicio',
+    caption: 'Página de inicio',
     icon: 'home',
     link: '/',
   },
@@ -22,7 +22,7 @@ export const linksList: EssentialLinkProps[] = [
   },
   {
     title: 'Gestión de equipos',
-    caption: 'BD original',
+    caption: 'Cambios en BD maestra',
     icon: 'groups',
     link: '/teams-db',
   },

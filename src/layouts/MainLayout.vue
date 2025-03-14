@@ -35,22 +35,26 @@ const pageKey = ref<number>(0);
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title> My Leagues </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
-        <div>User ID: {{ userId }}</div>
+        <div>ID Usuario: {{ userId }}</div>
       </q-toolbar>
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+        <q-item-label header> Menú </q-item-label>
 
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
+
+        <q-item-label header style="font-size: 80%; margin-top: 40px">
+          ® ~by Dakitsune22, 2025
+        </q-item-label>
       </q-list>
     </q-drawer>
 
