@@ -1,3 +1,10 @@
+import {
+  teamsEngland1,
+  teamsFrance1,
+  teamsGermany1,
+  teamsItaly1,
+  teamsSpain1,
+} from 'src/data/teams';
 import { Player } from './player';
 import { Tactic } from './tactic';
 
@@ -15,4 +22,64 @@ export interface Team {
   wins: number;
   tactic: Tactic;
   players: Player[];
+}
+
+// export const crestMapSpain = new Map();
+// export const crestMapEngland = new Map();
+// export const crestMapItaly = new Map();
+// export const crestMapGermany = new Map();
+// export const crestMapFrance = new Map();
+
+// teamsSpain1.forEach((t) => {
+//   crestMapSpain.set(t.shortName, t.name);
+// });
+// teamsEngland1.forEach((t) => {
+//   crestMapEngland.set(t.shortName, t.name);
+// });
+// teamsItaly1.forEach((t) => {
+//   crestMapItaly.set(t.shortName, t.name);
+// });
+// teamsGermany1.forEach((t) => {
+//   crestMapGermany.set(t.shortName, t.name);
+// });
+// teamsFrance1.forEach((t) => {
+//   crestMapFrance.set(t.shortName, t.name);
+// });
+// // * En caso de añadir más ligas por país en un futuro, setearlas al crestMap del país correspondiente.
+
+let files = import.meta.glob('/public/images/teams-spain/*.png');
+export const teamCrestOptionsSpain: string[] = [];
+export const teamCrestOptionsEngland: string[] = [];
+export const teamCrestOptionsItaly: string[] = [];
+export const teamCrestOptionsGermany: string[] = [];
+export const teamCrestOptionsFrance: string[] = [];
+
+for (const path in files) {
+  teamCrestOptionsSpain.push(
+    path.slice(0, path.length - 4).replace('/public/images/teams-spain/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-england/*.png');
+for (const path in files) {
+  teamCrestOptionsEngland.push(
+    path.slice(0, path.length - 4).replace('/public/images/teams-england/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-italy/*.png');
+for (const path in files) {
+  teamCrestOptionsItaly.push(
+    path.slice(0, path.length - 4).replace('/public/images/teams-italy/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-germany/*.png');
+for (const path in files) {
+  teamCrestOptionsGermany.push(
+    path.slice(0, path.length - 4).replace('/public/images/teams-germany/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-france/*.png');
+for (const path in files) {
+  teamCrestOptionsFrance.push(
+    path.slice(0, path.length - 4).replace('/public/images/teams-france/', '')
+  );
 }

@@ -13,6 +13,13 @@ import {
 import { Leagues, Team, Player } from 'src/models';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
+import {
+  teamCrestOptionsEngland,
+  teamCrestOptionsFrance,
+  teamCrestOptionsGermany,
+  teamCrestOptionsItaly,
+  teamCrestOptionsSpain,
+} from 'src/models/team';
 import { computed, ref } from 'vue';
 
 const $q = useQuasar();
@@ -61,6 +68,8 @@ flagMap.keys().forEach((k) => nationalityOptions.push(k));
 //   .entries()
 //   .forEach((e) => nationalityOptions.push({ value: e[0], label: e[1] }));
 // console.log(nationalityOptions);
+
+let teamCrestOptions: string[] = [];
 
 const positionOptions = Object.values(Position);
 const tacticOptions = Object.values(TacticList);
@@ -391,6 +400,49 @@ const updateSelectedTeamData = (): void => {
 //   console.log(selectedTeamData.value);
 // };
 
+const updateCurrentTeamCrests = (): void => {
+  teamCrestOptions = [];
+  // console.log(selectedLeague.value);
+  switch (selectedLeague.value) {
+    case Leagues.LaLigaPrimeraDivision:
+      // crestMapSpain.keys().forEach((k) => teamCrestOptions.push(k));
+      // teamCrestOptionsSpain.forEach(option => teamCrestOptions.push(option))
+      teamCrestOptions = teamCrestOptionsSpain;
+      break;
+    case Leagues.PremierLeague:
+      //crestMapEngland.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsEngland;
+      break;
+    case Leagues.Bundesliga:
+      //crestMapGermany.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsGermany;
+      break;
+    case Leagues.SerieA:
+      //crestMapItaly.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsItaly;
+      break;
+    case Leagues.Ligue1:
+      //crestMapFrance.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsFrance;
+      break;
+  }
+};
+
+// const getTeamNameFromCrest = (teamShortName: string): string | undefined => {
+//   switch (selectedLeague.value) {
+//     case Leagues.LaLigaPrimeraDivision:
+//       return crestMapSpain.entries().find((e) => e[0] == teamShortName)?.[1];
+//     case Leagues.PremierLeague:
+//       crestMapEngland.keys().forEach((k) => teamCrestOptions.push(k));
+//     case Leagues.Bundesliga:
+//       crestMapGermany.keys().forEach((k) => teamCrestOptions.push(k));
+//     case Leagues.SerieA:
+//       crestMapItaly.keys().forEach((k) => teamCrestOptions.push(k));
+//     case Leagues.Ligue1:
+//       crestMapFrance.keys().forEach((k) => teamCrestOptions.push(k));
+//   }
+// };
+
 const refetchQueryLeague = (league: Leagues): void => {
   switch (league) {
     case Leagues.LaLigaPrimeraDivision:
@@ -463,6 +515,7 @@ const onReset = () => {
             (value) => {
               selectedTeamId = undefined;
               selectedTeamData = initialTeamData;
+              updateCurrentTeamCrests();
             }
           "
         />
@@ -549,20 +602,75 @@ const onReset = () => {
     <div v-if="selectedTeamData.id >= 0">
       <div class="team-body-info">
         <div class="team-body-info-left">
-          <q-img
-            :src="`/images/teams-${selectedLeague?.slice(
-              0,
-              selectedLeague.length - 2
-            )}/${selectedTeamData.shortName}.png`"
-            spinner-color="white"
-            width="40px"
-            height="40px"
-            style="margin-right: 10px"
-          />
+          <div>
+            <q-img
+              :src="`/images/teams-${selectedLeague?.slice(
+                0,
+                selectedLeague.length - 2
+              )}/${selectedTeamData.shortName}.png`"
+              spinner-color="white"
+              width="40px"
+              height="40px"
+              style="margin-right: 10px; cursor: pointer"
+            />
+            <q-popup-edit
+              v-model.number="selectedTeamData.shortName"
+              v-slot="scope"
+            >
+              <q-badge outline color="primary" class="q-mt-sm">
+                Escudo
+              </q-badge>
+              <q-select
+                v-model="selectedTeamData.shortName"
+                :options="teamCrestOptions"
+                options-dense
+                dense
+                @update:model-value="scope.set"
+              >
+                <template v-slot:option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-img
+                      :src="`/images/teams-${selectedLeague?.slice(
+                        0,
+                        selectedLeague.length - 2
+                      )}/${scope.opt}.png`"
+                      spinner-color="white"
+                      height="40px"
+                      width="40px"
+                      class="q-mr-sm"
+                    />
+                    <!-- {{ Object.values(scope.opt)[1] }} -->
+                    <!-- {{ flagMap.get(scope.opt) }} -->
+                    <!-- {{ getTeamNameFromCrest(scope.opt) }} -->
+                  </q-item>
+                </template>
+              </q-select>
+            </q-popup-edit>
+          </div>
           Plantilla del
-          <span style="font-weight: bold; margin-left: 7px">{{
-            selectedTeamData.name
-          }}</span>
+          <div style="font-weight: bold; margin-left: 7px; cursor: alias">
+            {{ selectedTeamData.name }}
+            <q-popup-edit
+              v-model.number="selectedTeamData.name"
+              buttons
+              label-set="Guardar"
+              label-cancel="Cerrar"
+              v-slot="scope"
+            >
+              <q-badge outline color="primary" class="q-mt-sm">
+                Nombre del equipo
+              </q-badge>
+              <q-input
+                type="text"
+                v-model.number="scope.value"
+                hint="Introduce el nombre del equipo"
+                bottom-slots
+                dense
+                autofocus
+                @keyup.enter="scope.set"
+              />
+            </q-popup-edit>
+          </div>
           <q-btn
             icon="person_add"
             color="primary"
@@ -723,7 +831,7 @@ const onReset = () => {
                 spinner-color="white"
                 width="27px"
                 height="17px"
-                style="border: 1px solid rgba(0, 0, 0, 65%); cursor: pointer"
+                style="border: 1px solid rgba(0, 0, 0, 65%)"
               />
               <q-popup-edit
                 v-model.number="props.row.nationality"
@@ -912,27 +1020,35 @@ const onReset = () => {
   }
   &-col1 {
     width: 6%;
+    cursor: alias;
   }
   &-col2 {
     width: 25%;
+    cursor: alias;
   }
   &-col3 {
     width: 25%;
+    cursor: alias;
   }
   &-col4 {
     width: 15%;
+    cursor: alias;
   }
   &-col5 {
     width: 8%;
+    cursor: pointer;
   }
   &-col6 {
     width: 8%;
+    cursor: pointer;
   }
   &-col7 {
     width: 8%;
+    cursor: pointer;
   }
   &-col8 {
     width: 5%;
+    cursor: pointer;
   }
 }
 </style>
