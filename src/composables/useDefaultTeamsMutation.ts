@@ -20,7 +20,7 @@ interface teamUpdateData {
 
 const addTeam = async (league: Leagues, id: number): Promise<void> => {
   //  await setDoc(doc(db, league, name), {
-  console.log({ id });
+  // console.log({ id });
   // await setDoc(doc(db, league, id.toString()), {
   //   // await setDoc(doc(db, league, (++numTeam).toString()), {
   //   id,
@@ -103,6 +103,16 @@ const useDefaultTeamsMutation = () => {
       addTeam(league, id),
     onSuccess: () => {
       refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo reiniciado con éxito',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido reiniciar el equipo',
+      });
     },
   });
 

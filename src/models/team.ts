@@ -1,10 +1,10 @@
-import {
-  teamsEngland1,
-  teamsFrance1,
-  teamsGermany1,
-  teamsItaly1,
-  teamsSpain1,
-} from 'src/data/teams';
+// import {
+//   teamsEngland1,
+//   teamsFrance1,
+//   teamsGermany1,
+//   teamsItaly1,
+//   teamsSpain1,
+// } from 'src/data/teams';
 import { Player } from './player';
 import { Tactic } from './tactic';
 

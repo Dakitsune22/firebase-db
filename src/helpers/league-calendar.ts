@@ -45,7 +45,7 @@ export const createCalendar = (teamsNumber: number): string[][] => {
       }
       // Matriz #2
       if (j === 0) {
-        console.log({ teamsNumber });
+        // console.log({ teamsNumber });
         m2[i].push(teams[teamsNumber - 1]);
       } else {
         m2[i].push(teams[counter2]);
@@ -132,7 +132,7 @@ export const generateLeagueCalendar = (teams: string[]): string[][] => {
       }
       // Matriz #2
       if (j === 0) {
-        console.log({ teamsNumber });
+        // console.log({ teamsNumber });
         m2[i].push(teams[teamsNumber - 1]);
       } else {
         m2[i].push(teams[counter2]);

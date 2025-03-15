@@ -27,9 +27,75 @@ interface teamUpdateData {
 const { userId } = useUI();
 const { getCurrentLeague } = useSoccer();
 
-const addTeam = async (league: Leagues, id: number): Promise<void> => {
+// const addTeam = async (
+//   league: Leagues,
+//   id?: number,
+//   team?: Team
+// ): Promise<void> => {
+//   //  await setDoc(doc(db, league, name), {
+//   console.log({ id });
+//   // await setDoc(doc(db, league, id.toString()), {
+//   //   // await setDoc(doc(db, league, (++numTeam).toString()), {
+//   //   id,
+//   //   name,
+//   //   points: 0,
+//   //   goalsScored: 0,
+//   //   goalsConceded: 0,
+//   //   goalDifference: 0,
+//   //   matchesPlayed: 0,
+//   //   wins: 0,
+//   //   draws: 0,
+//   //   losses: 0,
+//   //   players: players[id],
+//   // });
+//   let t: Team;
+
+//   switch (league) {
+//     case Leagues.LaLigaPrimeraDivision:
+//       if (team) {
+//         console.log('*** addTeam: Equipo añadido desde la tabla maestra ***');
+//       } else if (id) {
+//         t = teamsSpain1[id];
+//         console.log(
+//           '*** addTeam: Equipo añadido desde los datos por defecto de la app ***'
+//         );
+//       }
+//       break;
+
+//     // case Leagues.PremierLeague:
+//     //   t = teamsEngland1[id];
+//     //   break;
+
+//     // case Leagues.Bundesliga:
+//     //   t = teamsGermany1[id];
+//     //   break;
+
+//     // case Leagues.SerieA:
+//     //   t = teamsItaly1[id];
+//     //   break;
+
+//     // case Leagues.Ligue1:
+//     //   t = teamsFrance1[id];
+//     //   break;
+
+//     // default:
+//     //   t = teamsSpain1[id];
+//     //   break;
+//   }
+
+//   if (team) {
+//     await setDoc(
+//       doc(db, `${userId.value}-teams-${league}`, team.id.toString()),
+//       team
+//     );
+//   } else if (id) {
+//     await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t!);
+//   }
+// };
+
+const addTeam = async (league: Leagues, team: Team): Promise<void> => {
   //  await setDoc(doc(db, league, name), {
-  console.log({ id });
+  // console.log({ id });
   // await setDoc(doc(db, league, id.toString()), {
   //   // await setDoc(doc(db, league, (++numTeam).toString()), {
   //   id,
@@ -44,35 +110,49 @@ const addTeam = async (league: Leagues, id: number): Promise<void> => {
   //   losses: 0,
   //   players: players[id],
   // });
-  let t: Team;
+  // let t: Team;
 
-  switch (league) {
-    case Leagues.LaLigaPrimeraDivision:
-      t = teamsSpain1[id];
-      break;
+  // switch (league) {
+  // case Leagues.LaLigaPrimeraDivision:
+  //   if (team) {
+  //     console.log('*** addTeam: Equipo añadido desde la tabla maestra ***');
+  //   } else if (id) {
+  //     t = teamsSpain1[id];
+  //     console.log(
+  //       '*** addTeam: Equipo añadido desde los datos por defecto de la app ***'
+  //     );
+  //   }
+  //   break;
 
-    case Leagues.PremierLeague:
-      t = teamsEngland1[id];
-      break;
+  // case Leagues.PremierLeague:
+  //   t = teamsEngland1[id];
+  //   break;
 
-    case Leagues.Bundesliga:
-      t = teamsGermany1[id];
-      break;
+  // case Leagues.Bundesliga:
+  //   t = teamsGermany1[id];
+  //   break;
 
-    case Leagues.SerieA:
-      t = teamsItaly1[id];
-      break;
+  // case Leagues.SerieA:
+  //   t = teamsItaly1[id];
+  //   break;
 
-    case Leagues.Ligue1:
-      t = teamsFrance1[id];
-      break;
+  // case Leagues.Ligue1:
+  //   t = teamsFrance1[id];
+  //   break;
 
-    default:
-      t = teamsSpain1[id];
-      break;
-  }
+  // default:
+  //   t = teamsSpain1[id];
+  //   break;
+  // }
 
-  await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t);
+  // if (team) {
+  await setDoc(
+    doc(db, `${userId.value}-teams-${league}`, team.id.toString()),
+    team
+  );
+  // } else if (id) {
+  //   await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t!);
+  // }
 };
 
 const updateTeam = async (t: teamUpdateData): Promise<void> => {
@@ -147,8 +227,8 @@ const useTeamMutation = () => {
   };
 
   const mutateTeamAdd = useMutation({
-    mutationFn: ({ league, id }: { league: Leagues; id: number }) =>
-      addTeam(league, id),
+    mutationFn: ({ league, team }: { league: Leagues; team: Team }) =>
+      addTeam(league, team),
     onSuccess: () => {
       refreshData();
     },

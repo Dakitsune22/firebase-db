@@ -461,7 +461,7 @@ const refetchQueryLeague = (league: Leagues): void => {
 const onSubmit = () => {
   console.log('To Do: On submit');
   let error = false;
-  if (selectedLeague.value && selectedTeamId.value) {
+  if (selectedLeague.value && selectedTeamId.value !== undefined) {
     selectedTeamData.value.players.forEach((p) => {
       if (
         (p.name.trim().length === 0 || p.surname.trim().length === 0) &&
@@ -483,6 +483,8 @@ const onSubmit = () => {
       team: selectedTeamData.value,
     });
     refetchQueryLeague(selectedLeague.value);
+  } else {
+    console.error('Error: No se pueden guardar los datos');
   }
 };
 

@@ -7,6 +7,7 @@ import { teamsGermany1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
+import useDefaultTeams from 'src/composables/useDefaultTeams';
 import usePlayers from 'src/composables/usePlayers';
 import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
@@ -29,6 +30,7 @@ setCurrentLeague(Leagues.Bundesliga);
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
 const { queryTeams } = useTeams();
+const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
@@ -77,12 +79,30 @@ const restartLeague = async () => {
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  teamsGermany1.forEach((team) => {
-    mutateTeamAdd.mutate({
-      league: getCurrentLeague(),
-      id: team.id,
+  if (queryTeamsMasterDB.data.value) {
+    console.log(
+      '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
+    );
+    queryTeamsMasterDB.data.value.forEach((team) => {
+      mutateTeamAdd.mutate({
+        league: getCurrentLeague(),
+        team,
+      });
     });
-  });
+  } else {
+    console.error(
+      '*** Error: No se han podido recuperar los equipos de la tabla maestra ***'
+    );
+    console.log(
+      '*** addTeam: Se van a añadir los equipos desde los datos por defecto de la app ***'
+    );
+    teamsGermany1.forEach((team) => {
+      mutateTeamAdd.mutate({
+        league: getCurrentLeague(),
+        team,
+      });
+    });
+  }
 
   // Inicializamos ronda a 1 y refrescamos query:
   // currentRound.value = 1;
