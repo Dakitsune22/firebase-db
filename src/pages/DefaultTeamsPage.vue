@@ -550,7 +550,10 @@ const onReset = () => {
       <div class="team-body-info">
         <div class="team-body-info-left">
           <q-img
-            :src="`/images/teams-${selectedLeague}/${selectedTeamData.shortName}.png`"
+            :src="`/images/teams-${selectedLeague?.slice(
+              0,
+              selectedLeague.length - 2
+            )}/${selectedTeamData.shortName}.png`"
             spinner-color="white"
             width="40px"
             height="40px"
