@@ -10,6 +10,7 @@ export interface Team {
   losses: number;
   matchesPlayed: number;
   name: string;
+  shortName: string;
   points: number;
   wins: number;
   tactic: Tactic;

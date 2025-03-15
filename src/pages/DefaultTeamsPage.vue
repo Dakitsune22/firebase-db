@@ -26,6 +26,7 @@ const initialTeamData: Team = {
   losses: 0,
   matchesPlayed: 0,
   name: '',
+  shortName: '',
   points: 0,
   wins: 0,
   tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
@@ -549,7 +550,7 @@ const onReset = () => {
       <div class="team-body-info">
         <div class="team-body-info-left">
           <q-img
-            :src="`/images/teams-${selectedLeague}/${selectedTeamId}.png`"
+            :src="`/images/teams-${selectedLeague}/${selectedTeamData.shortName}.png`"
             spinner-color="white"
             width="40px"
             height="40px"

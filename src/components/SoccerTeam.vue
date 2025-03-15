@@ -53,7 +53,10 @@ const getRankClass = (iKey: number) => {
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-img">
           <q-img
-            :src="`/images/teams-${getCurrentLeague()}/${props.team.id}.png`"
+            :src="`/images/teams-${getCurrentLeague().slice(
+              0,
+              getCurrentLeague().length - 2
+            )}/${props.team.shortName}.png`"
             spinner-color="white"
             width="30px"
             height="30px"
