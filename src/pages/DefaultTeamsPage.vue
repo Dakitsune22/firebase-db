@@ -20,7 +20,7 @@ import {
   teamCrestOptionsItaly,
   teamCrestOptionsSpain,
 } from 'src/models/team';
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onBeforeUpdate, ref } from 'vue';
 
 const $q = useQuasar();
 
@@ -43,6 +43,7 @@ const initialTeamData: Team = {
 const selectedLeague = ref<Leagues>();
 const selectedTeamId = ref<number>();
 const selectedTeamData = ref<Team>(initialTeamData);
+const selectedTeamOriginalData = ref<Team>(initialTeamData);
 
 const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
   Leagues.LaLigaPrimeraDivision
@@ -378,6 +379,29 @@ const updateSelectedTeamData = (): void => {
         formation: tacticPositionsToUpdate,
       },
     };
+
+    const selectedTeamDefaultPlayers: Player[] = [];
+    selectedTeamData.value.players.forEach((player) => {
+      selectedTeamDefaultPlayers.push({ ...player });
+    });
+
+    const selectedTeamDefaultFormation: Position[] = [];
+    selectedTeamData.value.tactic.formation.forEach((position) => {
+      selectedTeamDefaultFormation.push(position);
+    });
+
+    selectedTeamOriginalData.value = {
+      ...initialTeamData,
+      id: selectedTeamData.value.id,
+      name: selectedTeamData.value.name,
+      shortName: selectedTeamData.value.shortName,
+      // ...selectedTeamData.value,
+      players: selectedTeamDefaultPlayers,
+      tactic: {
+        name: selectedTeamData.value.tactic.name,
+        formation: selectedTeamDefaultFormation,
+      },
+    };
   }
 };
 
@@ -458,40 +482,217 @@ const refetchQueryLeague = (league: Leagues): void => {
   }
 };
 
+const isSelectedTeamDataChanged = (): boolean => {
+  let infoTeamOriginal =
+    selectedTeamOriginalData.value.name +
+    selectedTeamOriginalData.value.shortName +
+    selectedTeamOriginalData.value.tactic.name;
+
+  selectedTeamOriginalData.value.players.forEach(
+    (p) =>
+      (infoTeamOriginal =
+        infoTeamOriginal +
+        p.shirtNumber.toString() +
+        p.name +
+        p.surname +
+        (p.nickname ? p.nickname : '') +
+        p.nationality +
+        p.position +
+        p.overall.toString())
+  );
+  // console.log('infoTeamOriginal', infoTeamOriginal);
+
+  let infoTeam =
+    selectedTeamData.value.name +
+    selectedTeamData.value.shortName +
+    selectedTeamData.value.tactic.name;
+
+  selectedTeamData.value.players.forEach(
+    (p) =>
+      (infoTeam =
+        infoTeam +
+        p.shirtNumber.toString() +
+        p.name +
+        p.surname +
+        (p.nickname ? p.nickname : '') +
+        p.nationality +
+        p.position +
+        p.overall.toString())
+  );
+  // console.log('infoTeam:', infoTeam);
+  console.log('Is team data equal?', infoTeam === infoTeamOriginal);
+  return infoTeam !== infoTeamOriginal;
+};
+
+// const continueLosingTeamChanges = async (): Promise<boolean> => {
+//   $q.dialog({
+//     html: true,
+//     title: '<span class="text-primary">Before update</span>',
+//     message:
+//       'Este mensaje es antes de actualizar la página.<br><br><strong>¿Estás seguro de continuar?</strong>',
+//     cancel: { label: 'Volver', flat: true },
+//     ok: {
+//       icon: 'warning',
+//       label: 'Continuar',
+//       flat: true,
+//     },
+//     persistent: true,
+//   })
+//     .onOk(() => {
+//       return true
+//     })
+//     .onCancel(() => {
+//       // console.log('I am triggered on Cancel')
+//       return false
+//     })
+//     .onDismiss(() => {
+//       // console.log('I am triggered on both OK and Cancel')
+//     });
+// };
+
+// const catchLeagueChange = (newValue: Leagues): void => {
+//   $q.dialog({
+//     html: true,
+//     title: '<span class="text-primary">Datos no guardados</span>',
+//     message:
+//       'Se han realizado cambios en el equipo, que se perderán si se sigue adelante.<br><br><strong>¿Estás seguro de continuar?</strong>',
+//     cancel: { label: 'Volver', flat: true },
+//     ok: {
+//       color: 'negative',
+//       icon: 'warning',
+//       label: 'Continuar',
+//       flat: true,
+//     },
+//     persistent: true,
+//   })
+//     .onOk(() => {
+//       selectedTeamId.value = undefined;
+//       selectedTeamData.value = initialTeamData;
+//       selectedTeamOriginalData.value = initialTeamData;
+//       updateCurrentTeamCrests();
+//     })
+//     .onCancel(() => {
+//       selectedLeague.value = newValue;
+//       // console.log('I am triggered on Cancel')
+//     })
+//     .onDismiss(() => {
+//       // console.log('I am triggered on both OK and Cancel')
+//     });
+// };
+
 const onSubmit = () => {
-  console.log('To Do: On submit');
-  let error = false;
-  if (selectedLeague.value && selectedTeamId.value !== undefined) {
-    selectedTeamData.value.players.forEach((p) => {
-      if (
-        (p.name.trim().length === 0 || p.surname.trim().length === 0) &&
-        p.nickname?.trim().length === 0
-      ) {
-        $q.notify({
-          type: 'negative',
-          message: `El jugador #${p.shirtNumber} debe tener nombre y apellido o bien apodo`,
-        });
-        error = true;
-      }
-    });
+  // console.log(selectedTeamOriginalData.value);
+  // console.log(selectedTeamData.value);
+  // // console.log(Object.is(selectedTeamData.value, selectedTeamOriginalData));
+  // console.log(
+  //   Object.entries(selectedTeamData.value).sort().toString() ===
+  //     Object.entries(selectedTeamOriginalData.value).sort().toString()
+  // );
+  // console.log(Object.entries(selectedTeamOriginalData.value).sort().toString());
+  // console.log(Object.entries(selectedTeamData.value).sort().toString());
+  // console.log(
+  //   Object.entries(selectedTeamData.value.players).sort().toString() ===
+  //     Object.entries(selectedTeamOriginalData.value.players).sort().toString()
+  // );
+  // console.log(
+  //   Object.entries(selectedTeamOriginalData.value.players).sort().toString()
+  // );
+  // console.log(Object.entries(selectedTeamData.value.players).sort().toString());
+  // let tInfo = '';
+  // selectedTeamData.value.tactic.formation.forEach()
 
-    if (error) return;
-
-    mutateTeamUpdate.mutate({
-      league: selectedLeague.value,
-      id: selectedTeamId.value,
-      team: selectedTeamData.value,
+  if (!isSelectedTeamDataChanged()) {
+    $q.notify({
+      type: 'info',
+      message:
+        'Ningún dato del equipo ni de ningún jugador ha variado, no guardarán en base de datos.',
+      progress: true,
     });
-    refetchQueryLeague(selectedLeague.value);
   } else {
-    console.error('Error: No se pueden guardar los datos');
+    $q.dialog({
+      html: true,
+      title: '<span class="text-primary">Guardar cambios</span>',
+      message:
+        'Se van a actualizar los datos del equipo en la base de datos maestra.<br><br><strong>¿Estás seguro de continuar?</strong>',
+      cancel: { label: 'Volver', flat: true },
+      ok: {
+        icon: 'warning',
+        label: 'Continuar',
+        flat: true,
+      },
+      persistent: true,
+    })
+      .onOk(() => {
+        let error = false;
+        if (selectedLeague.value && selectedTeamId.value !== undefined) {
+          selectedTeamData.value.players.forEach((p) => {
+            if (
+              (p.name.trim().length === 0 || p.surname.trim().length === 0) &&
+              p.nickname?.trim().length === 0
+            ) {
+              $q.notify({
+                type: 'negative',
+                message: `El jugador #${p.shirtNumber} debe tener nombre y apellido o bien apodo`,
+              });
+              error = true;
+            }
+          });
+
+          if (error) return;
+
+          mutateTeamUpdate.mutate({
+            league: selectedLeague.value,
+            id: selectedTeamId.value,
+            team: selectedTeamData.value,
+          });
+          refetchQueryLeague(selectedLeague.value);
+        } else {
+          console.error('Error: No se pueden guardar los datos');
+        }
+      })
+      .onCancel(() => {
+        return;
+      })
+      .onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      });
   }
 };
 
 const onReset = () => {
-  selectedLeague.value = undefined;
-  selectedTeamId.value = undefined;
-  selectedTeamData.value = initialTeamData;
+  if (isSelectedTeamDataChanged()) {
+    $q.dialog({
+      html: true,
+      title: '<span class="text-primary">Datos no guardados</span>',
+      message:
+        'Se han realizado cambios en el equipo, que se perderán si se sigue adelante.<br><br><strong>¿Estás seguro de continuar?</strong>',
+      cancel: { label: 'Volver', flat: true },
+      ok: {
+        color: 'negative',
+        icon: 'warning',
+        label: 'Continuar',
+        flat: true,
+      },
+      persistent: true,
+    })
+      .onOk(() => {
+        selectedLeague.value = undefined;
+        selectedTeamId.value = undefined;
+        selectedTeamData.value = initialTeamData;
+        selectedTeamOriginalData.value = initialTeamData;
+      })
+      .onCancel(() => {
+        // console.log('I am triggered on Cancel')
+      })
+      .onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      });
+  } else {
+    selectedLeague.value = undefined;
+    selectedTeamId.value = undefined;
+    selectedTeamData.value = initialTeamData;
+    selectedTeamOriginalData.value = initialTeamData;
+  }
 };
 </script>
 
@@ -513,11 +714,29 @@ const onReset = () => {
           label="Liga"
           emit-value
           map-options
+          @popup-show="
+            () => {
+              if (isSelectedTeamDataChanged()) {
+                $q.notify({
+                  type: 'warning',
+                  message:
+                    'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otra liga, estos datos se perderán.',
+                  progress: true,
+                  position: 'top',
+                });
+              }
+            }
+          "
           @update:model-value="
             (value) => {
+              // if (isSelectedTeamDataChanged()) {
+              //   catchLeagueChange(value);
+              // } else {
               selectedTeamId = undefined;
               selectedTeamData = initialTeamData;
+              selectedTeamOriginalData = initialTeamData;
               updateCurrentTeamCrests();
+              // }
             }
           "
         />
@@ -541,6 +760,19 @@ const onReset = () => {
         emit-value
         map-options
         :disable="!selectedLeague"
+        @popup-show="
+          () => {
+            if (isSelectedTeamDataChanged()) {
+              $q.notify({
+                type: 'warning',
+                message:
+                  'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otro equipo, estos datos se perderán.',
+                progress: true,
+                position: 'top',
+              });
+            }
+          }
+        "
         @update:model-value="
           (value) => {
             console.log(value);
@@ -695,7 +927,7 @@ const onReset = () => {
                 const tempTactic = tactics.find((t) => t.name === value) as Tactic;
                 selectedTeamData.tactic = {
                   name: value,
-                  formation: {...tempTactic.formation}
+                  formation: [...tempTactic.formation]
                 }
               }
             "

@@ -35,8 +35,10 @@ export enum Flag {
   Angola = 'ao',
   Argelia = 'dz',
   Argentina = 'ar',
+  Armenia = 'am',
   Australia = 'au',
   Austria = 'at',
+  Azerbayan = 'az',
   Belgium = 'be',
   Bolivia = 'bo',
   Bosnia = 'ba',
@@ -54,6 +56,7 @@ export enum Flag {
   CostaRica = 'cr',
   Croatia = 'hr',
   Cyprus = 'cy',
+  Cuba = 'cu',
   CzechRepublic = 'cz',
   Denmark = 'dk',
   DominicanRepublic = 'do',
@@ -64,11 +67,13 @@ export enum Flag {
   FaroeIslands = 'fo',
   Finland = 'fi',
   France = 'fr',
+  Gabon = 'ga',
   Gambia = 'gm',
   Georgia = 'ge',
   Germany = 'de',
   Ghana = 'gh',
   Greece = 'gr',
+  Guatemala = 'gt',
   Guinea = 'gn',
   GuineaBissau = 'gw',
   GuineaEquatorial = 'gq',
@@ -83,6 +88,7 @@ export enum Flag {
   IvoryCoast = 'ci',
   Jamaica = 'jm',
   Japan = 'jp',
+  Kenia = 'kn',
   Kosovo = 'xk',
   Latvia = 'lv',
   Liechtenstein = 'li',
@@ -97,17 +103,22 @@ export enum Flag {
   Mozambique = 'mz',
   Netherlands = 'nl',
   NewZealand = 'nz',
+  Namibia = 'na',
+  Nicaragua = 'ni',
   Nigeria = 'ng',
   NorthIreland = 'gb-nir',
   Norway = 'no',
   Panama = 'pa',
   Paraguay = 'py',
   Peru = 'pe',
+  Philippines = 'ph',
   Poland = 'pl',
   Portugal = 'pt',
+  PuertoRico = 'pr',
   Qatar = 'qa',
   Romania = 'ro',
   Russia = 'ru',
+  Rwanda = 'rw',
   SaudiArabia = 'sa',
   Scotland = 'gb-sct',
   Senegal = 'sn',
@@ -121,9 +132,12 @@ export enum Flag {
   Spain = 'es',
   Sweden = 'se',
   Switzerland = 'ch',
+  Tanzania = 'tz',
   Togo = 'tg',
+  TrinidadTobago = 'tt',
   Tunisia = 'tn',
   Turkey = 'tr',
+  Uganda = 'ug',
   Ukraine = 'ua',
   UnitedStates = 'us',
   Uruguay = 'uy',
@@ -143,8 +157,10 @@ flagMap.set('ao', 'Angola');
 flagMap.set('sa', 'Arabia Saudí');
 flagMap.set('dz', 'Argelia');
 flagMap.set('ar', 'Argentina');
+flagMap.set('am', 'Armenia');
 flagMap.set('au', 'Australia');
 flagMap.set('at', 'Austria');
+flagMap.set('az', 'Azerbayán');
 flagMap.set('be', 'Bélgica');
 flagMap.set('bo', 'Bolivia');
 flagMap.set('ba', 'Bosnia');
@@ -163,6 +179,7 @@ flagMap.set('ci', 'Costa de Marfil');
 flagMap.set('cr', 'Costa Rica');
 flagMap.set('hr', 'Croacia');
 flagMap.set('cy', 'Chipre');
+flagMap.set('cu', 'Cuba');
 flagMap.set('dk', 'Dinamarca');
 flagMap.set('ec', 'Ecuador');
 flagMap.set('eg', 'Egipto');
@@ -172,13 +189,16 @@ flagMap.set('si', 'Eslovenia');
 flagMap.set('es', 'España');
 flagMap.set('us', 'Estados Unidos');
 flagMap.set('ee', 'Estonia');
+flagMap.set('ph', 'Filipinas');
 flagMap.set('fi', 'Finlandia');
 flagMap.set('fr', 'Francia');
+flagMap.set('ga', 'Gabón');
 flagMap.set('gb-wls', 'Gales');
 flagMap.set('gm', 'Gambia');
 flagMap.set('ge', 'Georgia');
 flagMap.set('gh', 'Ghana');
 flagMap.set('gr', 'Grecia');
+flagMap.set('gt', 'Guatemala');
 flagMap.set('gn', 'Guinea');
 flagMap.set('gw', 'Guinea Bissau');
 flagMap.set('gq', 'Guinea Ecuatorial');
@@ -195,6 +215,7 @@ flagMap.set('il', 'Israel');
 flagMap.set('it', 'Italia');
 flagMap.set('jm', 'Jamaica');
 flagMap.set('jp', 'Japón');
+flagMap.set('ke', 'Kenia');
 flagMap.set('xk', 'Kosovo');
 flagMap.set('lv', 'Letonia');
 flagMap.set('li', 'Liechtenstein');
@@ -207,6 +228,8 @@ flagMap.set('mx', 'México');
 flagMap.set('md', 'Moldavia');
 flagMap.set('me', 'Montenegro');
 flagMap.set('mz', 'Mozambique');
+flagMap.set('na', 'Namibia');
+flagMap.set('ni', 'Nicaragua');
 flagMap.set('ng', 'Nigeria');
 flagMap.set('no', 'Noruega');
 flagMap.set('nz', 'Nueva Zelanda');
@@ -216,11 +239,13 @@ flagMap.set('py', 'Paraguay');
 flagMap.set('pe', 'Perú');
 flagMap.set('pl', 'Polonia');
 flagMap.set('pt', 'Portugal');
+flagMap.set('pr', 'Puerto Rico');
 flagMap.set('qa', 'Qatar');
 flagMap.set('cd', 'Rep. Dem. Congo');
 flagMap.set('do', 'Rep. Dominicana');
 flagMap.set('cz', 'República Checa');
 flagMap.set('ro', 'Rumanía');
+flagMap.set('rw', 'Ruanda');
 flagMap.set('ru', 'Rusia');
 flagMap.set('sn', 'Senegal');
 flagMap.set('rs', 'Serbia');
@@ -229,10 +254,13 @@ flagMap.set('za', 'Sudáfrica');
 flagMap.set('se', 'Suecia');
 flagMap.set('ch', 'Suiza');
 flagMap.set('sr', 'Surinam');
+flagMap.set('tz', 'Tanzania');
 flagMap.set('tg', 'Togo');
+flagMap.set('tt', 'Trinidad y Tobago');
 flagMap.set('tn', 'Túnez');
 flagMap.set('tr', 'Turquía');
 flagMap.set('ua', 'Ucrania');
+flagMap.set('ug', 'Uganda');
 flagMap.set('uy', 'Uruguay');
 flagMap.set('uz', 'Uzbekistán');
 flagMap.set('ve', 'Venezuela');
