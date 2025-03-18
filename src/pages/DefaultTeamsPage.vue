@@ -914,6 +914,13 @@ const onReset = () => {
           />
         </div>
         <div class="team-body-info-right">
+          <q-img
+            :src="`/images/tactics/${selectedTeamData.tactic.name}.png`"
+            spinner-color="white"
+            height="56px"
+            width="90px"
+            class="q-mr-sm"
+          />
           <q-select
             filled
             v-model="selectedTeamData.tactic.name"
@@ -921,6 +928,7 @@ const onReset = () => {
             options-dense
             label="Táctica actual"
             emit-value
+            style="width: 160px"
             @update:model-value="
               (value: TacticList) => {
                 console.log('selected value: ', value)
@@ -1228,11 +1236,12 @@ const onReset = () => {
 
       &-left {
         @include flexPosition(start, end);
-        width: 75%;
+        width: 71%;
         // background-color: bisque;
       }
       &-right {
-        width: 25%;
+        @include flexPosition(end, end);
+        width: 29%;
         // padding-bottom: 5px;
         // background-color: burlywood;
       }
