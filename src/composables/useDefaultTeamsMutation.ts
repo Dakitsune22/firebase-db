@@ -83,6 +83,10 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
   });
 };
 
+const addTeamToMyLeague = async (team: Team): Promise<void> => {
+  await setDoc(doc(db, 'teams-myleague', team.id.toString()), team);
+};
+
 const useDefaultTeamsMutation = () => {
   const $q = useQuasar();
   const queryClient = useQueryClient();
@@ -97,6 +101,23 @@ const useDefaultTeamsMutation = () => {
       exact: true,
     });
   };
+
+  const mutateTeamAddMyLeague = useMutation({
+    mutationFn: ({ team }: { team: Team }) => addTeamToMyLeague(team),
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo añadido con éxito a MyLeague',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido añadir el equipo a MyLeague',
+      });
+    },
+  });
 
   const mutateTeamAdd = useMutation({
     mutationFn: ({ league, id }: { league: Leagues; id: number }) =>
@@ -141,6 +162,7 @@ const useDefaultTeamsMutation = () => {
   return {
     mutateTeamAdd,
     mutateTeamUpdate,
+    mutateTeamAddMyLeague,
   };
 };
 

@@ -4,6 +4,10 @@ import { ref } from 'vue';
 import { type Player, Flag, Position } from 'src/models/player';
 import useTeams from 'src/composables/useTeams';
 
+defineOptions({
+  name: 'AddPlayerPage',
+});
+
 const { queryTeams } = useTeams();
 
 // const $q = useQuasar();

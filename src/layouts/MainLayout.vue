@@ -35,7 +35,7 @@ const pageKey = ref<number>(0);
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> My Leagues </q-toolbar-title>
+        <q-toolbar-title> My League </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
         <div>ID Usuario: {{ userId }}</div>

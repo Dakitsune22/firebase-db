@@ -27,6 +27,12 @@ export const linksList: EssentialLinkProps[] = [
     link: '/teams-db',
   },
   {
+    title: 'Gestión de My League',
+    caption: 'Configurar My League',
+    icon: 'groups',
+    link: '/myleague',
+  },
+  {
     title: 'La Liga: Primera División',
     caption: 'España',
     img: '/images/leagues/spain1.png',

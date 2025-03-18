@@ -52,6 +52,11 @@ const routes: RouteRecordRaw[] = [
         path: '/teams-db',
         component: () => import('pages/DefaultTeamsPage.vue'),
       },
+      {
+        name: 'myLeague',
+        path: '/myleague',
+        component: () => import('pages/MyLeaguePage.vue'),
+      },
     ],
   },
 

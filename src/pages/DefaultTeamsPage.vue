@@ -20,7 +20,11 @@ import {
   teamCrestOptionsItaly,
   teamCrestOptionsSpain,
 } from 'src/models/team';
-import { computed, onBeforeUnmount, onBeforeUpdate, ref } from 'vue';
+import { computed, ref } from 'vue';
+
+defineOptions({
+  name: 'DefaultTeamsPage',
+});
 
 const $q = useQuasar();
 
