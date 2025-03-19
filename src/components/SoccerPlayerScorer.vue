@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import useSoccer from 'src/composables/storeWrappers/useSoccer';
+// import useSoccer from 'src/composables/storeWrappers/useSoccer';
+import useTeams from 'src/composables/useTeams';
 import { Player } from 'src/models';
 
 interface Props {
@@ -9,7 +10,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const { getCurrentLeague } = useSoccer();
+// const { getCurrentLeague } = useSoccer();
+const { queryTeamById } = useTeams(props.player.teamId);
 </script>
 
 <template>
@@ -36,9 +38,7 @@ const { getCurrentLeague } = useSoccer();
         }}</q-item-section>
         <div class="section-team">
           <q-img
-            :src="`/images/teams-${getCurrentLeague()}/${
-              props.player.teamId
-            }.png`"
+            :src="`/images/teams-${queryTeamById.data.value?.country}/${queryTeamById.data.value?.shortName}.png`"
             spinner-color="white"
             width="26px"
             height="26px"

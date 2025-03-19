@@ -123,27 +123,25 @@ const onPlayMatch = () => {
       <q-item class="item">
         <q-item-section>
           <q-img
-            :src="`/images/teams-${getCurrentLeague().slice(
-              0,
-              getCurrentLeague().length - 2
-            )}/${qt1.data.value?.shortName}.png`"
+            :src="`/images/teams-${qt1.data.value?.country}/${qt1.data.value?.shortName}.png`"
             spinner-color="white"
             width="22px"
             height="22px"
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          getCurrentLeague() === Leagues.LaLigaPrimeraDivision
-            ? teamsSpain1[props.team1].name
-            : getCurrentLeague() === Leagues.PremierLeague
-            ? teamsEngland1[props.team1].name
-            : getCurrentLeague() === Leagues.Bundesliga
-            ? teamsGermany1[props.team1].name
-            : getCurrentLeague() === Leagues.SerieA
-            ? teamsItaly1[props.team1].name
-            : getCurrentLeague() === Leagues.Ligue1
-            ? teamsFrance1[props.team1].name
-            : 'No team'
+          // getCurrentLeague() === Leagues.LaLigaPrimeraDivision
+          //   ? teamsSpain1[props.team1].name
+          //   : getCurrentLeague() === Leagues.PremierLeague
+          //   ? teamsEngland1[props.team1].name
+          //   : getCurrentLeague() === Leagues.Bundesliga
+          //   ? teamsGermany1[props.team1].name
+          //   : getCurrentLeague() === Leagues.SerieA
+          //   ? teamsItaly1[props.team1].name
+          //   : getCurrentLeague() === Leagues.Ligue1
+          //   ? teamsFrance1[props.team1].name
+          //   : 'No team'
+          qt1.data.value?.name
         }}</q-item-section>
         <q-item-section class="section-score"
           >{{ matchRef.score1 }}
@@ -153,27 +151,25 @@ const onPlayMatch = () => {
         }}</q-item-section>
         <q-item-section style="padding-left: 7px">
           <q-img
-            :src="`/images/teams-${getCurrentLeague().slice(
-              0,
-              getCurrentLeague().length - 2
-            )}/${qt2.data.value?.shortName}.png`"
+            :src="`/images/teams-${qt2.data.value?.country}/${qt2.data.value?.shortName}.png`"
             spinner-color="white"
             width="22px"
             height="22px"
           />
         </q-item-section>
         <q-item-section side class="section-team">{{
-          getCurrentLeague() === Leagues.LaLigaPrimeraDivision
-            ? teamsSpain1[props.team2].name
-            : getCurrentLeague() === Leagues.PremierLeague
-            ? teamsEngland1[props.team2].name
-            : getCurrentLeague() === Leagues.Bundesliga
-            ? teamsGermany1[props.team2].name
-            : getCurrentLeague() === Leagues.SerieA
-            ? teamsItaly1[props.team2].name
-            : getCurrentLeague() === Leagues.Ligue1
-            ? teamsFrance1[props.team2].name
-            : 'No team'
+          // getCurrentLeague() === Leagues.LaLigaPrimeraDivision
+          //   ? teamsSpain1[props.team2].name
+          //   : getCurrentLeague() === Leagues.PremierLeague
+          //   ? teamsEngland1[props.team2].name
+          //   : getCurrentLeague() === Leagues.Bundesliga
+          //   ? teamsGermany1[props.team2].name
+          //   : getCurrentLeague() === Leagues.SerieA
+          //   ? teamsItaly1[props.team2].name
+          //   : getCurrentLeague() === Leagues.Ligue1
+          //   ? teamsFrance1[props.team2].name
+          //   : 'No team'
+          qt2.data.value?.name
         }}</q-item-section>
         <q-item-section
           class="section-sim"

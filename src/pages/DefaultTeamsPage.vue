@@ -10,7 +10,7 @@ import {
   teamsItaly1,
   teamsSpain1,
 } from 'src/data/teams';
-import { Leagues, Team, Player } from 'src/models';
+import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import {
@@ -29,6 +29,7 @@ defineOptions({
 const $q = useQuasar();
 
 const initialTeamData: Team = {
+  country: CountryLeague.Spain,
   draws: 0,
   goalDifference: 0,
   goalsConceded: 0,
@@ -37,8 +38,8 @@ const initialTeamData: Team = {
   losses: 0,
   matchesPlayed: 0,
   name: '',
-  shortName: '',
   points: 0,
+  shortName: '',
   wins: 0,
   tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
   players: [],

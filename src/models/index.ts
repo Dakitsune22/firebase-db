@@ -5,4 +5,4 @@ export type { Team } from './team';
 export type { Player } from './player';
 export type { Tactic, PositionReplacement } from './tactic';
 
-export { Leagues } from './leagues';
+export { Leagues, CountryLeague } from './leagues';

@@ -9,6 +9,7 @@ import { Player } from './player';
 import { Tactic } from './tactic';
 
 export interface Team {
+  country: string;
   draws: number;
   goalDifference: number;
   goalsConceded: number;

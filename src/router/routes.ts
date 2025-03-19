@@ -43,6 +43,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/SoccerPageFrance1.vue'),
       },
       {
+        name: 'soccer-myleague',
+        path: '/soccer-myleague',
+        component: () => import('pages/SoccerPageMyLeague.vue'),
+      },
+      {
         name: 'addPlayer',
         path: '/add-player',
         component: () => import('pages/AddPlayerPage.vue'),

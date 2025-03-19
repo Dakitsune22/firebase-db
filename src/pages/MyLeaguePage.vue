@@ -10,7 +10,7 @@ import {
   teamsItaly1,
   teamsSpain1,
 } from 'src/data/teams';
-import { Leagues, Team, Player } from 'src/models';
+import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import {
@@ -29,6 +29,7 @@ defineOptions({
 const $q = useQuasar();
 
 const initialTeamData: Team = {
+  country: CountryLeague.Spain,
   draws: 0,
   goalDifference: 0,
   goalsConceded: 0,
@@ -37,8 +38,8 @@ const initialTeamData: Team = {
   losses: 0,
   matchesPlayed: 0,
   name: '',
-  shortName: '',
   points: 0,
+  shortName: '',
   wins: 0,
   tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
   players: [],
@@ -58,6 +59,34 @@ const { queryTeams: queryTeamsEngland1 } = useDefaultTeams(
 const { queryTeams: queryTeamsGermany1 } = useDefaultTeams(Leagues.Bundesliga);
 const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
 const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
+const { queryTeams: queryTeamsMyLeague } = useDefaultTeams(Leagues.MyLeague);
+
+if (queryTeamsMyLeague.data.value) {
+  queryTeamsMyLeague.data.value.forEach((t) => {
+    selectedMyLeagueTeams.value.push({
+      ...t,
+      // country: t.country,
+      // draws: t.draws,
+      // goalDifference: t.goalDifference,
+      // goalsConceded: t.goalsConceded,
+      // goalsScored: t.goalsScored,
+      // id: t.id,
+      // losses: t.losses,
+      // matchesPlayed: t.matchesPlayed,
+      // name: t.name,
+      // points: t.points,
+      // shortName: t.shortName,
+      // wins: t.wins,
+      // tactic: { ...t.tactic },
+      players: [],
+    });
+    t.players.forEach((p) => {
+      selectedMyLeagueTeams.value[
+        selectedMyLeagueTeams.value.length - 1
+      ].players.push({ ...p });
+    });
+  });
+}
 const { mutateTeamAdd, mutateTeamUpdate, mutateTeamAddMyLeague } =
   useDefaultTeamsMutation();
 
@@ -152,6 +181,20 @@ const onSelectTeam = (): void => {
     ...selectedTeamData.value,
     id: selectedMyLeagueTeams.value.length,
   });
+
+  selectedMyLeagueTeams.value.forEach((t) => {
+    t.players.forEach((p) => (p.teamId = t.id));
+  });
+};
+
+const onDeleteTeam = (idx: number): void => {
+  selectedMyLeagueTeams.value.splice(idx, 1);
+  selectedMyLeagueTeams.value.forEach((team, i) => {
+    team.id = i;
+  });
+  selectedMyLeagueTeams.value.forEach((t) => {
+    t.players.forEach((p) => (p.teamId = t.id));
+  });
 };
 
 const refetchQueryLeague = (league: Leagues): void => {
@@ -171,6 +214,11 @@ const refetchQueryLeague = (league: Leagues): void => {
 
 const onSubmit = () => {
   console.log('To Do: Submit');
+  // Teams:
+  selectedMyLeagueTeams.value.forEach((team) => {
+    console.log('addTeamToMyLeague');
+    mutateTeamAddMyLeague.mutate({ team });
+  });
 };
 
 const onReset = () => {
@@ -230,14 +278,17 @@ const onReset = () => {
           icon="save"
           flat
           class="q-ml-sm"
-          :disable="selectedTeamId == undefined"
+          :disable="
+            selectedMyLeagueTeams.length < 4 ||
+            selectedMyLeagueTeams.length % 2 !== 0
+          "
         />
       </div>
     </q-form>
     <div v-if="selectedMyLeagueTeams.length > 0">
       <div class="team-body-list">
         <div
-          v-for="t in selectedMyLeagueTeams"
+          v-for="(t, idx) in selectedMyLeagueTeams"
           :key="t.id"
           class="team-body-list-item"
         >
@@ -261,10 +312,7 @@ const onReset = () => {
               }}</q-item-section>
               <q-item-section class="qlist-item2">
                 <q-img
-                  :src="`/images/teams-${selectedLeague?.slice(
-                    0,
-                    selectedLeague.length - 2
-                  )}/${t.shortName}.png`"
+                  :src="`/images/teams-${t.country}/${t.shortName}.png`"
                   spinner-color="white"
                   width="40px"
                   height="40px"
@@ -277,7 +325,14 @@ const onReset = () => {
               <!-- <q-item-section>{{ 'Delete' }}</q-item-section> -->
             </q-item>
           </q-list>
-          <q-btn icon="delete" color="primary" flat rounded size="lg" />
+          <q-btn
+            icon="delete"
+            color="primary"
+            flat
+            rounded
+            size="lg"
+            @click="onDeleteTeam(idx)"
+          />
         </div>
       </div>
     </div>
@@ -326,7 +381,7 @@ const onReset = () => {
   }
   &-item3 {
     @include flexPosition(center, start);
-    width: 300px;
+    width: 220px;
     // background-color: aquamarine;
   }
 }
