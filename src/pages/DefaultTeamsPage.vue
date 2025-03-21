@@ -636,13 +636,13 @@ const onTransferPlayer = (squadIndex: number): void => {
   $q.dialog({
     html: true,
     title: '<span class="text-primary">Traspasar jugador</span>',
-    message: `Se va a traspasar a <strong>${
+    message: `Se va a traspasar a <strong class="text-primary">${
       player.nickname ? player.nickname : player.name + ' ' + player.surname
-    }</strong> a:<BR><BR><div><img src="/public/images/teams-${
+    }</strong> a:<BR><BR><div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><div><img src="/public/images/teams-${
       transferTargetTeamData.country
     }/${transferTargetTeamData.shortName}.png" /></div><div><strong>${
       transferTargetTeamData.name
-    }</strong></div><BR>
+    }</strong></div></div><BR>
         Este cambio se guardará directamente en la base de datos maestra.<br><br>
         <strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
@@ -664,22 +664,35 @@ const onTransferPlayer = (squadIndex: number): void => {
       selectedTeamOriginalData.value.players.splice(squadIndex, 1);
       console.log(selectedTeamData.value.name);
       console.log(selectedTeamData.value.players);
-      if (transferSelectedLeague.value && transferSelectedTeamId.value) {
+      if (
+        transferSelectedLeague.value &&
+        transferSelectedTeamId.value !== undefined
+      ) {
         mutateTeamUpdate.mutate({
           league: transferSelectedLeague.value,
           id: transferSelectedTeamId.value,
           team: transferTargetTeamData,
         });
-        refetchQueryLeague(transferSelectedLeague.value);
       }
-      if (selectedLeague.value && selectedTeamId.value) {
+      if (selectedLeague.value && selectedTeamId.value !== undefined) {
         mutateTeamUpdate.mutate({
           league: selectedLeague.value,
           id: selectedTeamId.value,
           team: selectedTeamData.value,
         });
+      }
+      if (
+        transferSelectedLeague.value &&
+        transferSelectedTeamId.value !== undefined
+      ) {
+        refetchQueryLeague(transferSelectedLeague.value);
+      }
+      if (selectedLeague.value && selectedTeamId.value !== undefined) {
         refetchQueryLeague(selectedLeague.value);
       }
+      // // Init data:
+      // transferSelectedLeague.value = undefined;
+      // transferSelectedTeamId.value = undefined;
     })
     .onCancel(() => {
       return;
@@ -1314,6 +1327,12 @@ const onReset = () => {
               <q-popup-edit
                 v-model.number="props.row.transfer"
                 style="width: 250px"
+                v-slot="scope"
+                @hide="
+                  // Init data:
+                  transferSelectedLeague = undefined;
+                  transferSelectedTeamId = undefined;
+                "
               >
                 <q-badge outline color="primary" class="q-mt-sm">
                   Traspaso
@@ -1333,7 +1352,11 @@ const onReset = () => {
                 <q-select
                   filled
                   v-model="transferSelectedTeamId"
-                  :options="transferCurrentTeams.data.value"
+                  :options="
+                    transferCurrentTeams.data.value?.filter(
+                      (t) => t.id !== selectedTeamData.id
+                    )
+                  "
                   option-value="id"
                   option-label="name"
                   options-dense
@@ -1349,8 +1372,13 @@ const onReset = () => {
                     size="lg"
                     flat
                     dense
-                    :disable="!transferSelectedTeamId"
-                    @click="onTransferPlayer(props.rowIndex)"
+                    :disable="transferSelectedTeamId === undefined"
+                    @click="
+                      {
+                        onTransferPlayer(props.rowIndex);
+                        scope.set;
+                      }
+                    "
                   />
                 </div>
               </q-popup-edit>
