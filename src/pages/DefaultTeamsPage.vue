@@ -50,6 +50,9 @@ const selectedTeamId = ref<number>();
 const selectedTeamData = ref<Team>(initialTeamData);
 const selectedTeamOriginalData = ref<Team>(initialTeamData);
 
+const transferSelectedLeague = ref<Leagues>();
+const transferSelectedTeamId = ref<number>();
+
 const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
   Leagues.LaLigaPrimeraDivision
 );
@@ -83,6 +86,24 @@ const tacticOptions = Object.values(TacticList);
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
   switch (selectedLeague.value) {
+    case Leagues.LaLigaPrimeraDivision:
+      return queryTeamsSpain1;
+    case Leagues.PremierLeague:
+      return queryTeamsEngland1;
+    case Leagues.Bundesliga:
+      return queryTeamsGermany1;
+    case Leagues.SerieA:
+      return queryTeamsItaly1;
+    case Leagues.Ligue1:
+      return queryTeamsFrance1;
+    default:
+      return queryTeamsSpain1;
+  }
+});
+
+const transferCurrentTeams = computed(() => {
+  console.log(transferSelectedLeague.value);
+  switch (transferSelectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
     case Leagues.PremierLeague:
@@ -204,6 +225,12 @@ const columns = [
     align: 'center',
     field: 'delete',
   },
+  {
+    name: 'transfer',
+    label: 'Traspasar',
+    align: 'center',
+    field: 'transfer',
+  },
 ];
 
 const errorShirtNumber = ref(false);
@@ -250,12 +277,10 @@ const overallRangeValidation = (val: number): boolean => {
   }
 };
 
-const getNextAvailableShirtNumber = (): number => {
+const getNextAvailableShirtNumber = (team: Team): number => {
   let shirtNumber = 0;
   for (let i = 1; i < 100; i++) {
-    if (
-      selectedTeamData.value.players.findIndex((p) => p.shirtNumber === i) < 0
-    ) {
+    if (team.players.findIndex((p) => p.shirtNumber === i) < 0) {
       shirtNumber = i;
       break;
     }
@@ -266,7 +291,7 @@ const getNextAvailableShirtNumber = (): number => {
 const onAddPlayer = (): void => {
   selectedTeamData.value.players.push({
     teamId: selectedTeamData.value.id,
-    shirtNumber: getNextAvailableShirtNumber(),
+    shirtNumber: getNextAvailableShirtNumber(selectedTeamData.value),
     name: '',
     surname: '',
     nickname: '',
@@ -584,6 +609,85 @@ const isSelectedTeamDataChanged = (): boolean => {
 //       // console.log('I am triggered on both OK and Cancel')
 //     });
 // };
+
+const onTransferPlayer = (squadIndex: number): void => {
+  console.log('To Do: On transfer player');
+  console.log({ squadIndex });
+  const player = { ...selectedTeamData.value.players[squadIndex] };
+  console.log(player);
+
+  let transferTargetTeamData: Team = initialTeamData;
+  let auxTeamData: Team = initialTeamData;
+  if (transferCurrentTeams.value.data.value) {
+    auxTeamData =
+      transferCurrentTeams.value.data.value[
+        transferCurrentTeams.value.data.value.findIndex(
+          (t) => t.id === transferSelectedTeamId.value
+        )
+      ];
+    transferTargetTeamData = { ...auxTeamData };
+    transferTargetTeamData.players = [];
+    auxTeamData.players.forEach((p) => {
+      transferTargetTeamData.players.push({ ...p });
+    });
+  }
+  console.log(transferTargetTeamData);
+
+  $q.dialog({
+    html: true,
+    title: '<span class="text-primary">Traspasar jugador</span>',
+    message: `Se va a traspasar a <strong>${
+      player.nickname ? player.nickname : player.name + ' ' + player.surname
+    }</strong> a:<BR><BR><div><img src="/public/images/teams-${
+      transferTargetTeamData.country
+    }/${transferTargetTeamData.shortName}.png" /></div><div><strong>${
+      transferTargetTeamData.name
+    }</strong></div><BR>
+        Este cambio se guardará directamente en la base de datos maestra.<br><br>
+        <strong>¿Estás seguro de continuar?</strong>`,
+    cancel: { label: 'Volver', flat: true },
+    ok: {
+      icon: 'check_circle',
+      label: 'Continuar',
+      flat: true,
+    },
+    persistent: true,
+  })
+    .onOk(() => {
+      player.teamId = transferTargetTeamData.id;
+      player.shirtNumber = getNextAvailableShirtNumber(transferTargetTeamData);
+      transferTargetTeamData.players.push(player);
+      console.log(transferTargetTeamData.name);
+      console.log(transferTargetTeamData.players);
+
+      selectedTeamData.value.players.splice(squadIndex, 1);
+      selectedTeamOriginalData.value.players.splice(squadIndex, 1);
+      console.log(selectedTeamData.value.name);
+      console.log(selectedTeamData.value.players);
+      if (transferSelectedLeague.value && transferSelectedTeamId.value) {
+        mutateTeamUpdate.mutate({
+          league: transferSelectedLeague.value,
+          id: transferSelectedTeamId.value,
+          team: transferTargetTeamData,
+        });
+        refetchQueryLeague(transferSelectedLeague.value);
+      }
+      if (selectedLeague.value && selectedTeamId.value) {
+        mutateTeamUpdate.mutate({
+          league: selectedLeague.value,
+          id: selectedTeamId.value,
+          team: selectedTeamData.value,
+        });
+        refetchQueryLeague(selectedLeague.value);
+      }
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
 
 const onSubmit = () => {
   // console.log(selectedTeamOriginalData.value);
@@ -1201,6 +1305,56 @@ const onReset = () => {
                 @click="selectedTeamData.players.splice(props.rowIndex, 1)"
               />
             </q-td>
+            <q-td
+              key="transfer"
+              :props="props"
+              class="table table-value table-col9"
+            >
+              <q-btn icon="output" color="primary" flat />
+              <q-popup-edit
+                v-model.number="props.row.transfer"
+                style="width: 250px"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Traspaso
+                </q-badge>
+                <q-select
+                  filled
+                  v-model="transferSelectedLeague"
+                  :options="leagueOptions"
+                  option-value="value"
+                  option-label="label"
+                  options-dense
+                  label="Liga destino"
+                  emit-value
+                  map-options
+                  class="q-mt-md q-mb-xs"
+                />
+                <q-select
+                  filled
+                  v-model="transferSelectedTeamId"
+                  :options="transferCurrentTeams.data.value"
+                  option-value="id"
+                  option-label="name"
+                  options-dense
+                  label="Equipo destino"
+                  emit-value
+                  map-options
+                  :disable="!transferSelectedLeague"
+                />
+                <div class="transfer-btn">
+                  <q-btn
+                    icon="handshake"
+                    color="primary"
+                    size="lg"
+                    flat
+                    dense
+                    :disable="!transferSelectedTeamId"
+                    @click="onTransferPlayer(props.rowIndex)"
+                  />
+                </div>
+              </q-popup-edit>
+            </q-td>
           </q-tr>
         </template>
       </q-table>
@@ -1267,7 +1421,7 @@ const onReset = () => {
     }
   }
   &-col1 {
-    width: 6%;
+    width: 5%;
     cursor: alias;
   }
   &-col2 {
@@ -1279,24 +1433,32 @@ const onReset = () => {
     cursor: alias;
   }
   &-col4 {
-    width: 15%;
+    width: 14%;
     cursor: alias;
   }
   &-col5 {
-    width: 8%;
+    width: 7cm;
     cursor: pointer;
   }
   &-col6 {
-    width: 8%;
+    width: 7%;
     cursor: pointer;
   }
   &-col7 {
-    width: 8%;
+    width: 7%;
     cursor: pointer;
   }
   &-col8 {
     width: 5%;
     cursor: pointer;
   }
+  &-col9 {
+    width: 5%;
+    cursor: pointer;
+  }
+}
+.transfer-btn {
+  @include flexPosition(center, center);
+  margin-top: 8px;
 }
 </style>
