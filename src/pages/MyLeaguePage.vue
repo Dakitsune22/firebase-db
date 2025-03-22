@@ -3,24 +3,10 @@ import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import { tactics } from 'src/data/tactics';
-import {
-  teamsEngland1,
-  teamsFrance1,
-  teamsGermany1,
-  teamsItaly1,
-  teamsSpain1,
-} from 'src/data/teams';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
-import { Flag, flagMap, Position } from 'src/models/player';
+import { Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
-import {
-  teamCrestOptionsEngland,
-  teamCrestOptionsFrance,
-  teamCrestOptionsGermany,
-  teamCrestOptionsItaly,
-  teamCrestOptionsSpain,
-} from 'src/models/team';
-import { computed, onBeforeUnmount, onBeforeUpdate, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 defineOptions({
   name: 'MyLeaguePage',
@@ -87,8 +73,7 @@ if (queryTeamsMyLeague.data.value) {
     });
   });
 }
-const { mutateTeamAdd, mutateTeamUpdate, mutateTeamAddMyLeague } =
-  useDefaultTeamsMutation();
+const { mutateTeamAddMyLeague } = useDefaultTeamsMutation();
 
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
@@ -195,21 +180,6 @@ const onDeleteTeam = (idx: number): void => {
   selectedMyLeagueTeams.value.forEach((t) => {
     t.players.forEach((p) => (p.teamId = t.id));
   });
-};
-
-const refetchQueryLeague = (league: Leagues): void => {
-  switch (league) {
-    case Leagues.LaLigaPrimeraDivision:
-      queryTeamsSpain1.refetch();
-    case Leagues.PremierLeague:
-      queryTeamsEngland1.refetch();
-    case Leagues.Bundesliga:
-      queryTeamsGermany1.refetch();
-    case Leagues.SerieA:
-      queryTeamsItaly1.refetch();
-    case Leagues.Ligue1:
-      queryTeamsFrance1.refetch();
-  }
 };
 
 const onSubmit = () => {
