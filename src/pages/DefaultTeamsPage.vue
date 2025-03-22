@@ -768,6 +768,28 @@ const onSubmit = () => {
             team: selectedTeamData.value,
           });
           refetchQueryLeague(selectedLeague.value);
+
+          const selectedTeamDefaultPlayers: Player[] = [];
+          selectedTeamData.value.players.forEach((player) => {
+            selectedTeamDefaultPlayers.push({ ...player });
+          });
+
+          const selectedTeamDefaultFormation: Position[] = [];
+          selectedTeamData.value.tactic.formation.forEach((position) => {
+            selectedTeamDefaultFormation.push(position);
+          });
+
+          selectedTeamOriginalData.value = {
+            ...selectedTeamData.value,
+            // id: selectedTeamData.value.id,
+            // name: selectedTeamData.value.name,
+            // shortName: selectedTeamData.value.shortName,
+            players: selectedTeamDefaultPlayers,
+            tactic: {
+              name: selectedTeamData.value.tactic.name,
+              formation: selectedTeamDefaultFormation,
+            },
+          };
         } else {
           console.error('Error: No se pueden guardar los datos');
         }
