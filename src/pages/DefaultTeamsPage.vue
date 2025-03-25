@@ -313,8 +313,11 @@ const onRestoreTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Reiniciar ${labelLeague}</span>`,
-    message: `Se van a reiniciar los datos de todos los equipos de <strong>${labelLeague}</strong>, recuperando los valores por defecto y perdiendo, por lo tanto, cualquier cambio que se haya realizado (nombre, táctica, jugadores...)<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    title: `<span class="text-primary">Reiniciar ${labelLeague}</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+      '-',
+      ''
+    )}.png" /></div>`,
+    message: `Se van a reiniciar en la tabla maestra los datos de todos los equipos de <strong>${labelLeague}</strong>, recuperando los valores por defecto y perdiendo, por lo tanto, cualquier cambio que se haya realizado hasta la fecha (nombres, tácticas, jugadores...)<br><br><strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     persistent: true,
