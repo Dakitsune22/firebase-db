@@ -29,7 +29,7 @@ export const linksList: EssentialLinkProps[] = [
   {
     title: 'Gestión de My~League',
     caption: 'Configurar My~League',
-    icon: 'groups',
+    icon: 'published_with_changes',
     link: '/myleague',
   },
   {

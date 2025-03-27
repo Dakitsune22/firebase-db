@@ -1411,6 +1411,25 @@ const onReset = () => {
           </q-tr>
         </template>
       </q-table>
+      <div class="footer-container">
+        Media de la plantilla:
+        {{
+          (
+            selectedTeamData.players.reduce((a, b) => a + b.overall, 0) /
+            selectedTeamData.players.length
+          ).toFixed(1)
+        }}
+        <!-- <q-rating
+          v-model="ratingTeam2"
+          size="15px"
+          color="amber-11"
+          readonly
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
+          max="10"
+        /> -->
+      </div>
     </div>
   </div>
 </template>
@@ -1513,5 +1532,9 @@ const onReset = () => {
 .transfer-btn {
   @include flexPosition(center, center);
   margin-top: 8px;
+}
+.footer-container {
+  @include flexPosition(center, center);
+  margin-top: 10px;
 }
 </style>
