@@ -2,6 +2,8 @@
 import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
+import useTeamMutation from 'src/composables/useTeamMutation';
+import useTeams from 'src/composables/useTeams';
 import { tactics } from 'src/data/tactics';
 import {
   teamsEngland1,
@@ -53,16 +55,30 @@ const selectedTeamOriginalData = ref<Team>(initialTeamData);
 const transferSelectedLeague = ref<Leagues>();
 const transferSelectedTeamId = ref<number>();
 
-const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
+const { queryTeams: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
-const { queryTeams: queryTeamsEngland1 } = useDefaultTeams(
+const { queryTeams: queryTeamsEngland1 } = useTeams(Leagues.PremierLeague);
+const { queryTeams: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
+const { queryTeams: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
+const { queryTeams: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
+
+const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
+  Leagues.LaLigaPrimeraDivision
+);
+const { queryTeams: queryMDBTeamsEngland1 } = useDefaultTeams(
   Leagues.PremierLeague
 );
-const { queryTeams: queryTeamsGermany1 } = useDefaultTeams(Leagues.Bundesliga);
-const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
-const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
-const { mutateTeamAdd, mutateTeamUpdate } = useDefaultTeamsMutation();
+const { queryTeams: queryMDBTeamsGermany1 } = useDefaultTeams(
+  Leagues.Bundesliga
+);
+const { queryTeams: queryMDBTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
+const { queryTeams: queryMDBTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
+const {
+  mutateTeamAdd: mutateMDBTeamAdd,
+  mutateTeamUpdate: mutateMDBTeamUpdate,
+} = useDefaultTeamsMutation();
 
 // const nationalityOptions = Object.values(Flag);
 // interface nacOptions {
@@ -117,6 +133,18 @@ const transferCurrentTeams = computed(() => {
     default:
       return queryTeamsSpain1;
   }
+});
+
+const selectedTeamRating = computed(() => {
+  // return (
+  //   selectedTeamData.value.players.reduce((a, b) => a + b.overall, 0) /
+  //   selectedTeamData.value.players.length
+  // ).toFixed(1);
+  return (
+    selectedTeamData.value.players.reduce((a, b) => a + b.overall, 0) /
+    selectedTeamData.value.players.length /
+    10
+  );
 });
 
 // const currentTeamData = computed(() => {
@@ -313,11 +341,11 @@ const onRestoreTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Reiniciar ${labelLeague}</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+    title: `<span class="text-primary">Restaurar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a reiniciar en la tabla maestra los datos de todos los equipos de <strong>${labelLeague}</strong>, recuperando los valores por defecto y perdiendo, por lo tanto, cualquier cambio que se haya realizado hasta la fecha (nombres, tácticas, jugadores...)<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a restaurar los equipos de <strong>${labelLeague}</strong>.<BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...), sustituyéndose por los datos por defecto de los equipos.<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     persistent: true,
@@ -328,7 +356,7 @@ const onRestoreTeams = () => {
           teamsSpain1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.LaLigaPrimeraDivision,
-              id: team.id,
+              team,
             });
           });
           break;
@@ -337,7 +365,7 @@ const onRestoreTeams = () => {
           teamsEngland1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.PremierLeague,
-              id: team.id,
+              team,
             });
           });
           break;
@@ -346,7 +374,7 @@ const onRestoreTeams = () => {
           teamsGermany1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.Bundesliga,
-              id: team.id,
+              team,
             });
           });
           break;
@@ -355,7 +383,7 @@ const onRestoreTeams = () => {
           teamsItaly1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.SerieA,
-              id: team.id,
+              team,
             });
           });
           break;
@@ -364,7 +392,7 @@ const onRestoreTeams = () => {
           teamsFrance1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.Ligue1,
-              id: team.id,
+              team,
             });
           });
           break;
@@ -376,6 +404,151 @@ const onRestoreTeams = () => {
       if (selectedLeague.value) {
         refetchQueryLeague(selectedLeague.value);
       }
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
+
+const onGetMasterDBTeams = () => {
+  const labelLeague = Object.values(leagueOptions.value).find(
+    (league) => league.value === selectedLeague.value
+  )?.label;
+
+  $q.dialog({
+    html: true,
+    title: `<span class="text-primary">Actualizar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+      '-',
+      ''
+    )}.png" /></div>`,
+    message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos. Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    cancel: { label: 'Volver', flat: true },
+    ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
+    persistent: true,
+  })
+    .onOk(() => {
+      switch (selectedLeague.value) {
+        case Leagues.LaLigaPrimeraDivision:
+          if (queryMDBTeamsSpain1.data.value) {
+            queryMDBTeamsSpain1.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.LaLigaPrimeraDivision,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.PremierLeague:
+          if (queryMDBTeamsEngland1.data.value) {
+            queryMDBTeamsEngland1.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.PremierLeague,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.Bundesliga:
+          if (queryMDBTeamsGermany1.data.value) {
+            queryMDBTeamsGermany1.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.Bundesliga,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.SerieA:
+          if (queryMDBTeamsItaly1.data.value) {
+            queryMDBTeamsItaly1.data.value.forEach((team) => {
+              console.log(team.name);
+              mutateTeamAdd.mutate({
+                league: Leagues.SerieA,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.Ligue1:
+          if (queryMDBTeamsFrance1.data.value) {
+            queryMDBTeamsFrance1.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.Ligue1,
+                team,
+              });
+            });
+          }
+          break;
+      }
+    })
+    .onOk(() => {
+      selectedTeamId.value = undefined;
+      selectedTeamData.value = initialTeamData;
+      if (selectedLeague.value) {
+        refetchQueryLeague(selectedLeague.value);
+      }
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
+
+const onSetMasterDBTeams = () => {
+  const labelLeague = Object.values(leagueOptions.value).find(
+    (league) => league.value === selectedLeague.value
+  )?.label;
+
+  $q.dialog({
+    html: true,
+    title: `<span class="text-primary">Subir cambios</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+      '-',
+      ''
+    )}.png" /></div>`,
+    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra. Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    cancel: { label: 'Volver', flat: true },
+    ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
+    prompt: {
+      model: '',
+      isValid: (val) => val.length > 0, // << here is the magic
+      type: 'text', // optional
+    },
+    persistent: true,
+  })
+    .onOk((data) => {
+      if (data !== 'Dakitsune22') {
+        $q.notify({
+          type: 'negative',
+          message:
+            'Se require cuenta de administrador para poder modificar la tabla maestra.',
+        });
+      } else {
+        currentTeams.value.data.value?.forEach((team) => {
+          if (selectedLeague.value !== undefined) {
+            // console.log(team.name);
+            mutateMDBTeamAdd.mutate({
+              league: selectedLeague.value,
+              team,
+            });
+          }
+        });
+        if (selectedLeague.value) {
+          refetchQueryLeague(selectedLeague.value);
+        }
+      }
+    })
+    .onOk(() => {
+      // selectedTeamId.value = undefined;
+      // selectedTeamData.value = initialTeamData;
     })
     .onCancel(() => {
       return;
@@ -504,14 +677,19 @@ const refetchQueryLeague = (league: Leagues): void => {
   switch (league) {
     case Leagues.LaLigaPrimeraDivision:
       queryTeamsSpain1.refetch();
+      queryMDBTeamsSpain1.refetch();
     case Leagues.PremierLeague:
       queryTeamsEngland1.refetch();
+      queryMDBTeamsEngland1.refetch();
     case Leagues.Bundesliga:
       queryTeamsGermany1.refetch();
+      queryMDBTeamsGermany1.refetch();
     case Leagues.SerieA:
       queryTeamsItaly1.refetch();
+      queryMDBTeamsItaly1.refetch();
     case Leagues.Ligue1:
       queryTeamsFrance1.refetch();
+      queryMDBTeamsFrance1.refetch();
   }
 };
 
@@ -883,16 +1061,37 @@ const onReset = () => {
               selectedTeamData = initialTeamData;
               selectedTeamOriginalData = initialTeamData;
               updateCurrentTeamCrests();
+              // console.log(queryTeamsItaly1.data.value);
+              // console.log(queryMDBTeamsItaly1.data.value);
               // }
             }
           "
         />
         <q-btn
-          class="team-body-league-right"
+          class="team-body-league-right q-ml-xs"
           color="negative"
           icon="restart_alt"
+          size="lg"
           flat
           @click="onRestoreTeams"
+          :disable="!selectedLeague"
+        />
+        <q-btn
+          class="team-body-league-right"
+          color="primary"
+          icon="cloud_download"
+          size="lg"
+          flat
+          @click="onGetMasterDBTeams"
+          :disable="!selectedLeague"
+        />
+        <q-btn
+          class="team-body-league-right"
+          color="primary"
+          icon="cloud_upload"
+          size="lg"
+          flat
+          @click="onSetMasterDBTeams"
           :disable="!selectedLeague"
         />
       </div>
@@ -943,11 +1142,12 @@ const onReset = () => {
           flat
           @click="onAddPlayer"
         /> -->
-        <q-btn type="reset" color="primary" icon="clear_all" flat />
+        <q-btn type="reset" color="primary" icon="clear_all" size="18px" flat />
         <q-btn
           type="submit"
           color="primary"
           icon="save"
+          size="18px"
           flat
           class="q-ml-sm"
           :disable="selectedTeamId == undefined"
@@ -1412,23 +1612,21 @@ const onReset = () => {
         </template>
       </q-table>
       <div class="footer-container">
-        Media de la plantilla:
-        {{
-          (
-            selectedTeamData.players.reduce((a, b) => a + b.overall, 0) /
-            selectedTeamData.players.length
-          ).toFixed(1)
-        }}
-        <!-- <q-rating
-          v-model="ratingTeam2"
-          size="15px"
-          color="amber-11"
+        Potencial medio de la plantilla:
+        <q-rating
+          v-model="selectedTeamRating"
+          size="17px"
+          color="amber-12"
           readonly
           icon="star_border"
           icon-selected="star"
           icon-half="star_half"
           max="10"
-        /> -->
+          class="q-pb-xs q-ml-xs q-mr-xs"
+        />
+        <span class="text-bold text-primary">{{
+          (selectedTeamRating * 10).toFixed(1)
+        }}</span>
       </div>
     </div>
   </div>
@@ -1535,6 +1733,7 @@ const onReset = () => {
 }
 .footer-container {
   @include flexPosition(center, center);
-  margin-top: 10px;
+  margin-top: 15px;
+  font-size: 15px;
 }
 </style>

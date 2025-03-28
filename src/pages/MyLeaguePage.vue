@@ -2,6 +2,8 @@
 import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
+import useTeamMutation from 'src/composables/useTeamMutation';
+import useTeams from 'src/composables/useTeams';
 import { tactics } from 'src/data/tactics';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { Position } from 'src/models/player';
@@ -36,16 +38,27 @@ const selectedTeamId = ref<number>();
 const selectedTeamData = ref<Team>(initialTeamData);
 const selectedMyLeagueTeams = ref<Team[]>([]);
 
-const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
+const initialMyLeagueTeamsId: number[] = [];
+
+// const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
+//   Leagues.LaLigaPrimeraDivision
+// );
+// const { queryTeams: queryTeamsEngland1 } = useDefaultTeams(
+//   Leagues.PremierLeague
+// );
+// const { queryTeams: queryTeamsGermany1 } = useDefaultTeams(Leagues.Bundesliga);
+// const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
+// const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
+// const { queryTeams: queryTeamsMyLeague } = useDefaultTeams(Leagues.MyLeague);
+
+const { queryTeams: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
-const { queryTeams: queryTeamsEngland1 } = useDefaultTeams(
-  Leagues.PremierLeague
-);
-const { queryTeams: queryTeamsGermany1 } = useDefaultTeams(Leagues.Bundesliga);
-const { queryTeams: queryTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
-const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
-const { queryTeams: queryTeamsMyLeague } = useDefaultTeams(Leagues.MyLeague);
+const { queryTeams: queryTeamsEngland1 } = useTeams(Leagues.PremierLeague);
+const { queryTeams: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
+const { queryTeams: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
+const { queryTeams: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { queryTeams: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
 
 if (queryTeamsMyLeague.data.value) {
   queryTeamsMyLeague.data.value.forEach((t) => {
@@ -73,7 +86,13 @@ if (queryTeamsMyLeague.data.value) {
     });
   });
 }
-const { mutateTeamAddMyLeague } = useDefaultTeamsMutation();
+selectedMyLeagueTeams.value.sort((a, b) => a.id - b.id);
+selectedMyLeagueTeams.value.forEach((t) => {
+  initialMyLeagueTeamsId.push(t.id);
+});
+
+// const { mutateTeamAddMyLeague } = useDefaultTeamsMutation();
+const { mutateTeamAddMyLeague, mutateTeamDeleteMyLeague } = useTeamMutation();
 
 const currentTeams = computed(() => {
   console.log(selectedLeague.value);
@@ -165,11 +184,21 @@ const onSelectTeam = (): void => {
   selectedMyLeagueTeams.value.push({
     ...selectedTeamData.value,
     id: selectedMyLeagueTeams.value.length,
+    draws: 0,
+    goalDifference: 0,
+    goalsConceded: 0,
+    goalsScored: 0,
+    losses: 0,
+    matchesPlayed: 0,
+    points: 0,
+    wins: 0,
   });
 
   selectedMyLeagueTeams.value.forEach((t) => {
     t.players.forEach((p) => (p.teamId = t.id));
   });
+
+  console.log(selectedMyLeagueTeams.value);
 };
 
 const onDeleteTeam = (idx: number): void => {
@@ -180,14 +209,21 @@ const onDeleteTeam = (idx: number): void => {
   selectedMyLeagueTeams.value.forEach((t) => {
     t.players.forEach((p) => (p.teamId = t.id));
   });
+  console.log(selectedMyLeagueTeams.value);
 };
 
 const onSubmit = () => {
-  console.log('To Do: Submit');
-  // Teams:
+  // Delete current DB teams:
+  initialMyLeagueTeamsId.forEach((teamId) => {
+    console.log('deleteTeamFromMyLeague');
+    mutateTeamDeleteMyLeague.mutate(teamId);
+    currentTeams.value.refetch();
+  });
+  // Add teams:
   selectedMyLeagueTeams.value.forEach((team) => {
     console.log('addTeamToMyLeague');
     mutateTeamAddMyLeague.mutate({ team });
+    currentTeams.value.refetch();
   });
 };
 
@@ -196,6 +232,10 @@ const onReset = () => {
   selectedTeamId.value = undefined;
   selectedTeamData.value = initialTeamData;
 };
+
+// function useTeamsMutation(): { mutateTeamAddMyLeague: any } {
+//   throw new Error('Function not implemented.');
+// }
 </script>
 
 <template>
@@ -241,11 +281,12 @@ const onReset = () => {
         "
       />
       <div class="btn-container">
-        <q-btn type="reset" color="primary" icon="clear_all" flat />
+        <q-btn type="reset" color="primary" icon="clear_all" size="18px" flat />
         <q-btn
           type="submit"
           color="primary"
           icon="save"
+          size="18px"
           flat
           class="q-ml-sm"
           :disable="

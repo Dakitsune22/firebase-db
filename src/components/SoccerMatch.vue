@@ -38,11 +38,17 @@ const matchRef = ref<Match>({
 
 const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
-const { mutateTeamUpdate } = useTeamMutation();
+const { mutateTeamUpdateStats } = useTeamMutation();
 const { queryTopScorers } = usePlayers();
 
-const { queryTeamById: qt1 } = useTeams(matchRef.value.team1);
-const { queryTeamById: qt2 } = useTeams(matchRef.value.team2);
+const { queryTeamById: qt1 } = useTeams(
+  getCurrentLeague(),
+  matchRef.value.team1
+);
+const { queryTeamById: qt2 } = useTeams(
+  getCurrentLeague(),
+  matchRef.value.team2
+);
 
 const showMatchStats = ref<boolean>(false);
 
@@ -94,7 +100,7 @@ const onPlayMatch = () => {
     matches: roundMatches.value,
   });
 
-  mutateTeamUpdate.mutate({
+  mutateTeamUpdateStats.mutate({
     league: getCurrentLeague(),
     id: matchRef.value.team1,
     newGoalsScored: matchRef.value.score1,
@@ -103,7 +109,7 @@ const onPlayMatch = () => {
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
 
-  mutateTeamUpdate.mutate({
+  mutateTeamUpdateStats.mutate({
     league: getCurrentLeague(),
     id: matchRef.value.team2,
     newGoalsScored: matchRef.value.score2,

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { Leagues, Team } from 'src/models';
 // import players from 'src/data/players';
@@ -12,10 +12,17 @@ import {
 } from 'src/data/teams';
 import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
+import { useQuasar } from 'quasar';
 
 // let numTeam = 0;
 
 interface teamUpdateData {
+  league: Leagues;
+  id: number;
+  team: Team;
+}
+
+interface teamUpdateStatsData {
   league: Leagues;
   id: number;
   newGoalsScored: number;
@@ -150,12 +157,13 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
     doc(db, `${userId.value}-teams-${league}`, team.id.toString()),
     team
   );
+
   // } else if (id) {
   //   await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t!);
   // }
 };
 
-const updateTeam = async (t: teamUpdateData): Promise<void> => {
+const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
   // const { queryTeamById } = useTeams(id);
 
   console.log(t);
@@ -204,7 +212,40 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
   );
 };
 
+const updateTeam = async (t: teamUpdateData): Promise<void> => {
+  // const { queryTeamById } = useTeams(id);
+
+  console.log(t);
+
+  // const ut: Team = { ...t.team };
+  // ut.players = t.team.players.map((p) => ({ ...p }));
+
+  // console.log('before update', ut);
+
+  // console.log('after update', ut);
+
+  await updateDoc(
+    doc(db, `${userId.value}-teams-${t.league}`, t.id.toString()),
+    {
+      ...t.team,
+    }
+  );
+};
+
+const addTeamToMyLeague = async (team: Team): Promise<void> => {
+  await setDoc(
+    doc(db, `${userId.value}-teams-myleague`, team.id.toString()),
+    team
+  );
+};
+
+const deleteTeamMyLeague = async (teamId: number): Promise<void> => {
+  const docRef = doc(db, `${userId.value}-teams-myleague`, teamId.toString());
+  await deleteDoc(docRef);
+};
+
 const useTeamMutation = () => {
+  const $q = useQuasar();
   const queryClient = useQueryClient();
 
   const refreshData = (): void => {
@@ -231,10 +272,20 @@ const useTeamMutation = () => {
       addTeam(league, team),
     onSuccess: () => {
       refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo reiniciado con éxito',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido reiniciar el equipo',
+      });
     },
   });
 
-  const mutateTeamUpdate = useMutation({
+  const mutateTeamUpdateStats = useMutation({
     mutationFn: ({
       league,
       id,
@@ -242,8 +293,8 @@ const useTeamMutation = () => {
       newGoalsConceded,
       scorers,
       team,
-    }: teamUpdateData) =>
-      updateTeam({
+    }: teamUpdateStatsData) =>
+      updateTeamStats({
         league,
         id,
         newGoalsScored,
@@ -256,9 +307,72 @@ const useTeamMutation = () => {
     },
   });
 
+  const mutateTeamUpdate = useMutation({
+    mutationFn: ({ league, id, team }: teamUpdateData) =>
+      updateTeam({
+        league,
+        id,
+        team,
+      }),
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo actualizado con éxito',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido actualizar el equipo',
+      });
+    },
+  });
+
+  const mutateTeamAddMyLeague = useMutation({
+    mutationFn: ({ team }: { team: Team }) => addTeamToMyLeague(team),
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo añadido con éxito a MyLeague',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido añadir el equipo a MyLeague',
+      });
+    },
+  });
+
+  const mutateTeamDeleteMyLeague = useMutation({
+    mutationFn: (teamId: number) => deleteTeamMyLeague(teamId),
+    // onSuccess: (fruit) => {
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'info',
+        message: 'Equipo eliminado de MyLeague',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido eliminar el equipo de MyLeague',
+      });
+    },
+    onSettled: () => {
+      console.log('Team deleted');
+    },
+  });
+
   return {
     mutateTeamAdd,
     mutateTeamUpdate,
+    mutateTeamUpdateStats,
+    mutateTeamAddMyLeague,
+    mutateTeamDeleteMyLeague,
   };
 };
 

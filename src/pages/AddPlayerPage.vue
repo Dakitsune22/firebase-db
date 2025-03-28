@@ -3,12 +3,14 @@ import { ref } from 'vue';
 // import { useQuasar } from 'quasar';
 import { type Player, Flag, Position } from 'src/models/player';
 import useTeams from 'src/composables/useTeams';
+import useSoccer from 'src/composables/storeWrappers/useSoccer';
 
 defineOptions({
   name: 'AddPlayerPage',
 });
 
-const { queryTeams } = useTeams();
+const { getCurrentLeague } = useSoccer();
+const { queryTeams } = useTeams(getCurrentLeague());
 
 // const $q = useQuasar();
 const player = ref<Player>({

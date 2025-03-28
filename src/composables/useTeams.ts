@@ -1,4 +1,4 @@
-import { Team } from 'src/models';
+import { Leagues, Team } from 'src/models';
 import {
   collection,
   doc,
@@ -9,15 +9,15 @@ import {
 } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
 import { useQuery } from '@tanstack/vue-query';
-import useSoccer from './storeWrappers/useSoccer';
+// import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
 
 const { userId } = useUI();
-const { getCurrentLeague } = useSoccer();
+// const { getCurrentLeague } = useSoccer();
 
-const getTeamsByPoints = async (): Promise<Team[]> => {
+const getTeamsByPoints = async (league: Leagues): Promise<Team[]> => {
   const q = query(
-    collection(db, `${userId.value}-teams-${getCurrentLeague()}`),
+    collection(db, `${userId.value}-teams-${league}`),
     orderBy('points', 'desc')
     // orderBy('goalDifference', 'desc')
   );
@@ -49,12 +49,8 @@ const getTeamsByPoints = async (): Promise<Team[]> => {
   return teams;
 };
 
-const getTeamById = async (teamId: number): Promise<Team> => {
-  const docRef = doc(
-    db,
-    `${userId.value}-teams-${getCurrentLeague()}`,
-    teamId.toString()
-  );
+const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
+  const docRef = doc(db, `${userId.value}-teams-${league}`, teamId.toString());
   const docSnap = await getDoc(docRef);
 
   let t: Team;
@@ -72,16 +68,16 @@ const getTeamById = async (teamId: number): Promise<Team> => {
   return t;
 };
 
-const useTeams = (id?: number) => {
+const useTeams = (league: Leagues, id?: number) => {
   const queryTeams = useQuery({
-    queryKey: [`teams-${getCurrentLeague()}`],
-    queryFn: getTeamsByPoints,
+    queryKey: [`teams-${league}`],
+    queryFn: () => getTeamsByPoints(league),
   });
 
   const queryTeamById = useQuery({
-    queryKey: [`teams-${getCurrentLeague()}`, id],
+    queryKey: [`teams-${league}`, id],
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    queryFn: () => getTeamById(id!),
+    queryFn: () => getTeamById(league, id!),
   });
 
   return {

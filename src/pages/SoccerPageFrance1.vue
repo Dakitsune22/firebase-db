@@ -29,8 +29,8 @@ setCurrentLeague(Leagues.Ligue1);
 
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
-const { queryTeams } = useTeams();
-const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
+const { queryTeams } = useTeams(getCurrentLeague());
+// const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
@@ -79,11 +79,11 @@ const restartLeague = async () => {
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  if (queryTeamsMasterDB.data.value) {
+  if (queryTeams.data.value) {
     console.log(
       '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
     );
-    queryTeamsMasterDB.data.value.forEach((team) => {
+    queryTeams.data.value.forEach((team) => {
       mutateTeamAdd.mutate({
         league: getCurrentLeague(),
         team,

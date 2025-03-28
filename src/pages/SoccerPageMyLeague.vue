@@ -28,8 +28,8 @@ setCurrentLeague(Leagues.MyLeague);
 
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
-const { queryTeams } = useTeams();
-const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
+const { queryTeams } = useTeams(getCurrentLeague());
+// const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
@@ -52,8 +52,8 @@ onBeforeUnmount(async () => {
 
 const restartLeague = async () => {
   // Rounds:
-  if (queryTeamsMasterDB.data.value) {
-    const rounds = createCalendar(queryTeamsMasterDB.data.value.length);
+  if (queryTeams.data.value) {
+    const rounds = createCalendar(queryTeams.data.value.length);
     console.log(rounds);
     rounds.forEach((r, index) => {
       const sr: SeasonRound = {
@@ -81,7 +81,7 @@ const restartLeague = async () => {
     console.log(
       '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
     );
-    queryTeamsMasterDB.data.value.forEach((team) => {
+    queryTeams.data.value.forEach((team) => {
       mutateTeamAdd.mutate({
         league: getCurrentLeague(),
         team,
