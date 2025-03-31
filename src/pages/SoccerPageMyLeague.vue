@@ -165,7 +165,10 @@ const onLastRound = async () => {
 
 <template>
   <!-- <q-page class="row items-center justify-evenly"> -->
-  <q-page class="page-body">
+  <q-page
+    v-if="queryCountRounds.data.value && queryCountRounds.data.value > 0"
+    class="page-body"
+  >
     <div>
       <div class="teams-header">
         <div class="teams-header-coleq">Equipo</div>
@@ -293,6 +296,16 @@ const onLastRound = async () => {
       </div>
     </div>
   </q-page>
+  <q-page v-else class="no-teams">
+    <q-icon name="info" size="72px" color="primary" />
+    <span style="margin-top: 10px"
+      >No existen equipos para <strong>My~League</strong>.</span
+    >
+    <span style="margin-bottom: 10px"
+      >Puedes seleccionar los equipos participantes en:</span
+    >
+    <Router-link :to="{ name: 'myLeague' }">Gestión de My~League</Router-link>
+  </q-page>
 </template>
 
 <style lang="scss" scoped>
@@ -354,6 +367,13 @@ const onLastRound = async () => {
 .restart-league {
   @include flexPosition(center, center);
   padding-top: 10px;
+}
+.no-teams {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
 }
 /* Transition Group */
 .rank-move {

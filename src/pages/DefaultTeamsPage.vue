@@ -13,6 +13,7 @@ import {
   teamsSpain1,
 } from 'src/data/teams';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
+import { leaguesMap, LeaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import {
@@ -159,28 +160,7 @@ const selectedTeamRating = computed(() => {
 //   return team;
 // })
 
-const leagueOptions = ref([
-  {
-    label: 'La Liga Primera Division',
-    value: Leagues.LaLigaPrimeraDivision,
-  },
-  {
-    label: 'Premier League',
-    value: Leagues.PremierLeague,
-  },
-  {
-    label: 'Bundesliga',
-    value: Leagues.Bundesliga,
-  },
-  {
-    label: 'Serie A',
-    value: Leagues.SerieA,
-  },
-  {
-    label: 'Ligue 1',
-    value: Leagues.Ligue1,
-  },
-]);
+const leagueOptions = ref(leaguesMap);
 
 // interface Columns {
 //   name: string;
@@ -1027,6 +1007,7 @@ const onReset = () => {
   </div> -->
   <div class="team-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
+      <div class="team-body-title">Gestión de equipos</div>
       <div class="team-body-league">
         <q-select
           class="team-body-league-left"
@@ -1092,7 +1073,10 @@ const onReset = () => {
           size="lg"
           flat
           @click="onSetMasterDBTeams"
-          :disable="!selectedLeague"
+          :disable="
+            !selectedLeague ||
+            (currentTeams.data.value && currentTeams.data.value?.length <= 0)
+          "
         />
       </div>
       <q-select
@@ -1642,6 +1626,13 @@ const onReset = () => {
     margin-top: 40px;
     min-width: 600px;
     max-width: 900px;
+
+    &-title {
+      font-size: 20px;
+      border-left: 6px solid $primary;
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
 
     &-league {
       @include flexPosition(center, center);

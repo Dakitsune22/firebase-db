@@ -244,6 +244,7 @@ const onReset = () => {
   </div> -->
   <div class="team-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
+      <div class="team-body-title">Gestión de My~League</div>
       <q-select
         class="team-body-league-left"
         filled
@@ -360,6 +361,13 @@ const onReset = () => {
     margin-top: 40px;
     min-width: 600px;
     max-width: 900px;
+
+    &-title {
+      font-size: 20px;
+      border-left: 6px solid $primary;
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
 
     &-list {
       display: flex;

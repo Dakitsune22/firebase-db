@@ -14,3 +14,26 @@ export enum CountryLeague {
   Italy = 'italy',
   Spain = 'spain',
 }
+
+export const leaguesMap = [
+  {
+    label: 'La Liga Primera Division',
+    value: Leagues.LaLigaPrimeraDivision,
+  },
+  {
+    label: 'Premier League',
+    value: Leagues.PremierLeague,
+  },
+  {
+    label: 'Bundesliga',
+    value: Leagues.Bundesliga,
+  },
+  {
+    label: 'Serie A',
+    value: Leagues.SerieA,
+  },
+  {
+    label: 'Ligue 1',
+    value: Leagues.Ligue1,
+  },
+];

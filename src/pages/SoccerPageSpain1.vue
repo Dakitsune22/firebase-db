@@ -16,6 +16,7 @@ import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
 import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
 import useUserInfoMutation from 'src/composables/useUserInfoMutation';
+import { leaguesMap } from 'src/models/leagues';
 
 defineOptions({
   name: 'SoccerPage',
@@ -203,7 +204,10 @@ const onLastRound = async () => {
 
 <template>
   <!-- <q-page class="row items-center justify-evenly"> -->
-  <q-page class="page-body">
+  <q-page
+    v-if="queryCountRounds.data.value && queryCountRounds.data.value > 0"
+    class="page-body"
+  >
     <div>
       <div class="teams-header">
         <div class="teams-header-coleq">Equipo</div>
@@ -339,6 +343,23 @@ const onLastRound = async () => {
       </div>
     </div>
   </q-page>
+  <q-page v-else class="no-teams">
+    <q-icon name="info" size="72px" color="primary" />
+    <span style="margin-top: 10px"
+      >No existen equipos para
+      <strong>
+        {{
+          Object.values(leaguesMap).find(
+            (league) => league.value === getCurrentLeague()
+          )?.label
+        }}</strong
+      >.</span
+    >
+    <span style="margin-bottom: 10px"
+      >Puedes importar los equipos por defecto o desde la BD en:</span
+    >
+    <Router-link :to="{ name: 'teamsDB' }">Gestión de equipos</Router-link>
+  </q-page>
 </template>
 
 <style lang="scss" scoped>
@@ -400,6 +421,13 @@ const onLastRound = async () => {
 .restart-league {
   @include flexPosition(center, center);
   padding-top: 10px;
+}
+.no-teams {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
 }
 /* Transition Group */
 .rank-move {

@@ -153,10 +153,17 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
   // }
 
   // if (team) {
-  await setDoc(
-    doc(db, `${userId.value}-teams-${league}`, team.id.toString()),
-    team
-  );
+  await setDoc(doc(db, `${userId.value}-teams-${league}`, team.id.toString()), {
+    ...team,
+    points: 0,
+    goalsScored: 0,
+    goalsConceded: 0,
+    goalDifference: 0,
+    matchesPlayed: 0,
+    wins: 0,
+    draws: 0,
+    losses: 0,
+  });
 
   // } else if (id) {
   //   await setDoc(doc(db, `${userId.value}-teams-${league}`, id.toString()), t!);
@@ -233,10 +240,17 @@ const updateTeam = async (t: teamUpdateData): Promise<void> => {
 };
 
 const addTeamToMyLeague = async (team: Team): Promise<void> => {
-  await setDoc(
-    doc(db, `${userId.value}-teams-myleague`, team.id.toString()),
-    team
-  );
+  await setDoc(doc(db, `${userId.value}-teams-myleague`, team.id.toString()), {
+    ...team,
+    points: 0,
+    goalsScored: 0,
+    goalsConceded: 0,
+    goalDifference: 0,
+    matchesPlayed: 0,
+    wins: 0,
+    draws: 0,
+    losses: 0,
+  });
 };
 
 const deleteTeamMyLeague = async (teamId: number): Promise<void> => {
