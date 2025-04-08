@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { Leagues, Team } from 'src/models';
+import { Leagues, Team, Player } from 'src/models';
 // import players from 'src/data/players';
 import {
   teamsEngland1,
@@ -151,6 +151,17 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
   //   t = teamsSpain1[id];
   //   break;
   // }
+  const players: Player[] = [];
+  team.players.forEach((p) => {
+    players.push({
+      ...p,
+      seasonStats: {
+        assists: 0,
+        goals: 0,
+        injured: 0,
+      },
+    });
+  });
 
   // if (team) {
   await setDoc(doc(db, `${userId.value}-teams-${league}`, team.id.toString()), {
@@ -163,6 +174,7 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
     wins: 0,
     draws: 0,
     losses: 0,
+    players,
   });
 
   // } else if (id) {

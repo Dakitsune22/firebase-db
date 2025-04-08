@@ -145,7 +145,7 @@ $midGrey: rgb(150, 150, 150);
   @include flexPosition(start, start);
   background-color: lightgrey;
   padding: 6px;
-  padding-top: 4px;
+  // padding-top: 4px;
   border: 1px solid $midGrey;
   border-radius: 0.2em;
   margin-top: 1px;
@@ -154,10 +154,12 @@ $midGrey: rgb(150, 150, 150);
 
   &-left {
     width: 50%;
+    padding-left: 10px;
     // background-color: aquamarine;
   }
   &-right {
     width: 50%;
+    padding-left: 6px;
     // background-color: bisque;
   }
 
