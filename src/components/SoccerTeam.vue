@@ -15,7 +15,13 @@ const { getCurrentLeague } = useSoccer();
 const getRankClass = (iKey: number) => {
   if (iKey === 1) {
     return 'best';
-  } else if (iKey >= 2 && iKey <= 4) {
+  } else if (
+    iKey >= 2 &&
+    iKey <= 4 &&
+    getCurrentLeague() !== Leagues.MyLeague
+  ) {
+    return 'champions';
+  } else if (iKey === 2 && getCurrentLeague() === Leagues.MyLeague) {
     return 'champions';
   } else if (iKey === 5) {
     return 'uefa';
@@ -102,22 +108,22 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
   &-rank {
     &-best {
-      border-color: rgb(228, 170, 25);
+      border-color: darken($color: rgb(253, 206, 88), $amount: 25%);
     }
     &-champions {
-      border-color: rgb(233, 181, 50);
+      border-color: darken($color: rgb(255, 220, 133), $amount: 32%);
     }
     &-uefa {
-      border-color: rgb(83, 194, 245);
+      border-color: darken($color: rgb(152, 220, 252), $amount: 25%);
     }
     &-conference {
-      border-color: rgb(90, 197, 140);
+      border-color: darken($color: rgb(172, 231, 200), $amount: 25%);
     }
     &-relegation {
-      border-color: rgb(201, 61, 61);
+      border-color: darken($color: rgb(241, 169, 169), $amount: 25%);
     }
     &-relegation-playoff {
-      border-color: rgb(212, 99, 99);
+      border-color: darken($color: rgb(243, 194, 194), $amount: 25%);
     }
   }
 }
