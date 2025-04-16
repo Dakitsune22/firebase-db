@@ -132,6 +132,7 @@ export enum Flag {
   Spain = 'es',
   Sweden = 'se',
   Switzerland = 'ch',
+  Syria = 'sy',
   Tanzania = 'tz',
   Togo = 'tg',
   TrinidadTobago = 'tt',
@@ -250,6 +251,7 @@ flagMap.set('ru', 'Rusia');
 flagMap.set('sn', 'Senegal');
 flagMap.set('rs', 'Serbia');
 flagMap.set('sl', 'Sierra Leona');
+flagMap.set('sy', 'Siria');
 flagMap.set('za', 'Sudáfrica');
 flagMap.set('se', 'Suecia');
 flagMap.set('ch', 'Suiza');

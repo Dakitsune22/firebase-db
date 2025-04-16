@@ -5,11 +5,12 @@
 //   teamsItaly1,
 //   teamsSpain1,
 // } from 'src/data/teams';
+import { CountryLeague } from './leagues';
 import { Player } from './player';
 import { Tactic } from './tactic';
 
 export interface Team {
-  country: string;
+  country: CountryLeague;
   draws: number;
   goalDifference: number;
   goalsConceded: number;

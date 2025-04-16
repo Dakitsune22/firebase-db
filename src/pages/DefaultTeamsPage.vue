@@ -1613,6 +1613,15 @@ const onReset = () => {
         }}</span>
       </div>
     </div>
+    <div
+      v-if="
+        selectedLeague &&
+        currentTeams.data.value &&
+        currentTeams.data.value?.length < 1
+      "
+    >
+      NO TEAMS
+    </div>
   </div>
 </template>
 
