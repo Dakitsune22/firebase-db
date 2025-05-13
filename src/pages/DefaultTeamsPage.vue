@@ -494,7 +494,7 @@ const onSetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra. Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra. Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     prompt: {
