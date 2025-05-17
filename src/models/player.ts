@@ -68,6 +68,7 @@ export enum Flag {
   FaroeIslands = 'fo',
   Finland = 'fi',
   France = 'fr',
+  FrenchGuyane = 'gf',
   Gabon = 'ga',
   Gambia = 'gm',
   Georgia = 'ge',
@@ -90,9 +91,11 @@ export enum Flag {
   IvoryCoast = 'ci',
   Jamaica = 'jm',
   Japan = 'jp',
+  Jordania = 'jo',
   Kenia = 'kn',
   Kosovo = 'xk',
   Latvia = 'lv',
+  Libya = 'ly',
   Liechtenstein = 'li',
   Lithuania = 'lt',
   Luxembourg = 'lu',
@@ -204,6 +207,7 @@ flagMap.set('gh', 'Ghana');
 flagMap.set('gr', 'Grecia');
 flagMap.set('gp', 'Guadalupe');
 flagMap.set('gt', 'Guatemala');
+flagMap.set('gf', 'Guayana Francesa');
 flagMap.set('gn', 'Guinea');
 flagMap.set('gw', 'Guinea Bissau');
 flagMap.set('gq', 'Guinea Ecuatorial');
@@ -220,9 +224,11 @@ flagMap.set('il', 'Israel');
 flagMap.set('it', 'Italia');
 flagMap.set('jm', 'Jamaica');
 flagMap.set('jp', 'Japón');
+flagMap.set('jo', 'Jordania');
 flagMap.set('ke', 'Kenia');
 flagMap.set('xk', 'Kosovo');
 flagMap.set('lv', 'Letonia');
+flagMap.set('ly', 'Libia');
 flagMap.set('li', 'Liechtenstein');
 flagMap.set('lt', 'Lituania');
 flagMap.set('lu', 'Luxemburgo');
