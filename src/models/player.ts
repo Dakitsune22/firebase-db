@@ -40,6 +40,7 @@ export enum Flag {
   Austria = 'at',
   Azerbayan = 'az',
   Belgium = 'be',
+  Benin = 'bj',
   Bolivia = 'bo',
   Bosnia = 'ba',
   Brazil = 'br',
@@ -73,6 +74,7 @@ export enum Flag {
   Germany = 'de',
   Ghana = 'gh',
   Greece = 'gr',
+  Guadalupe = 'gp',
   Guatemala = 'gt',
   Guinea = 'gn',
   GuineaBissau = 'gw',
@@ -163,6 +165,7 @@ flagMap.set('au', 'Australia');
 flagMap.set('at', 'Austria');
 flagMap.set('az', 'Azerbayán');
 flagMap.set('be', 'Bélgica');
+flagMap.set('bj', 'Benin');
 flagMap.set('bo', 'Bolivia');
 flagMap.set('ba', 'Bosnia');
 flagMap.set('br', 'Brasil');
@@ -199,6 +202,7 @@ flagMap.set('gm', 'Gambia');
 flagMap.set('ge', 'Georgia');
 flagMap.set('gh', 'Ghana');
 flagMap.set('gr', 'Grecia');
+flagMap.set('gp', 'Guadalupe');
 flagMap.set('gt', 'Guatemala');
 flagMap.set('gn', 'Guinea');
 flagMap.set('gw', 'Guinea Bissau');

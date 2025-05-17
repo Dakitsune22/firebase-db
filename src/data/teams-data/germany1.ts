@@ -112,7 +112,7 @@ export const teamsGermany1: Team[] = [
     country: CountryLeague.Germany,
     name: 'Hoffenheim',
     shortName: 'hof',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
     players: playersGermany1[i++],
   },
   {
@@ -121,6 +121,15 @@ export const teamsGermany1: Team[] = [
     country: CountryLeague.Germany,
     name: 'B. Leverkusen',
     shortName: 'lev',
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
+    players: playersGermany1[i++],
+  },
+  {
+    ...initTeamData,
+    id: i,
+    country: CountryLeague.Germany,
+    name: "Bor. M'gladbach",
+    shortName: 'mgb',
     tactic: tactics.find(
       (t) => t.name === TacticList['4-5-1-Ofensivo']
     ) as Tactic,
@@ -130,18 +139,9 @@ export const teamsGermany1: Team[] = [
     ...initTeamData,
     id: i,
     country: CountryLeague.Germany,
-    name: "Bor. M'gladbach",
-    shortName: 'mgb',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
-    players: playersGermany1[i++],
-  },
-  {
-    ...initTeamData,
-    id: i,
-    country: CountryLeague.Germany,
     name: 'Unión Berlín',
     shortName: 'ube',
-    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
     players: playersGermany1[i++],
   },
   {
@@ -150,7 +150,7 @@ export const teamsGermany1: Team[] = [
     country: CountryLeague.Germany,
     name: 'Mainz',
     shortName: 'mnz',
-    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
     players: playersGermany1[i++],
   },
   {
@@ -168,7 +168,7 @@ export const teamsGermany1: Team[] = [
     country: CountryLeague.Germany,
     name: 'Augsburgo',
     shortName: 'aug',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
     players: playersGermany1[i++],
   },
 ];
