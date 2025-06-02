@@ -102,9 +102,7 @@ export const teamsFrance1: Team[] = [
     country: CountryLeague.France,
     name: 'Stade Brest',
     shortName: 'sbr',
-    tactic: tactics.find(
-      (t) => t.name === TacticList['4-3-3-Defensivo']
-    ) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -113,7 +111,9 @@ export const teamsFrance1: Team[] = [
     country: CountryLeague.France,
     name: 'Nantes',
     shortName: 'nan',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-3-3-Defensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -132,7 +132,7 @@ export const teamsFrance1: Team[] = [
     name: 'Toulouse',
     shortName: 'tou',
     tactic: tactics.find(
-      (t) => t.name === TacticList['4-5-1-Ofensivo']
+      (t) => t.name === TacticList['5-4-1-Ofensivo']
     ) as Tactic,
     players: playersFrance1[i++],
   },
@@ -142,7 +142,7 @@ export const teamsFrance1: Team[] = [
     country: CountryLeague.France,
     name: 'Montpellier',
     shortName: 'mpl',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -151,7 +151,7 @@ export const teamsFrance1: Team[] = [
     country: CountryLeague.France,
     name: 'Lens',
     shortName: 'len',
-    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
+    tactic: tactics.find((t) => t.name === TacticList['4-4-2']) as Tactic,
     players: playersFrance1[i++],
   },
   {
@@ -160,7 +160,9 @@ export const teamsFrance1: Team[] = [
     country: CountryLeague.France,
     name: 'Angers',
     shortName: 'ang',
-    tactic: tactics.find((t) => t.name === TacticList['5-3-2']) as Tactic,
+    tactic: tactics.find(
+      (t) => t.name === TacticList['4-5-1-Ofensivo']
+    ) as Tactic,
     players: playersFrance1[i++],
   },
   {

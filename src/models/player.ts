@@ -33,6 +33,7 @@ export enum Flag {
   Albania = 'al',
   Andorra = 'ad',
   Angola = 'ao',
+  ArabicEmirates = 'ae',
   Argelia = 'dz',
   Argentina = 'ar',
   Armenia = 'am',
@@ -49,9 +50,11 @@ export enum Flag {
   CaboVerde = 'cv',
   Cameroon = 'cm',
   Canada = 'ca',
+  CentralAfricanRep = 'cf',
   Chile = 'cl',
   China = 'cn',
   Colombia = 'co',
+  Comoras = 'km',
   Congo = 'cg',
   CongoDR = 'cd',
   CostaRica = 'cr',
@@ -80,6 +83,7 @@ export enum Flag {
   Guinea = 'gn',
   GuineaBissau = 'gw',
   GuineaEquatorial = 'gq',
+  Haiti = 'ht',
   Honduras = 'hn',
   Hungary = 'hu',
   Iceland = 'is',
@@ -181,6 +185,7 @@ flagMap.set('ca', 'Canadá');
 flagMap.set('cl', 'Chile');
 flagMap.set('cn', 'China');
 flagMap.set('co', 'Colombia');
+flagMap.set('km', 'Colombia');
 flagMap.set('cg', 'Congo');
 flagMap.set('kr', 'Corea del Sur');
 flagMap.set('ci', 'Costa de Marfil');
@@ -191,6 +196,7 @@ flagMap.set('cu', 'Cuba');
 flagMap.set('dk', 'Dinamarca');
 flagMap.set('ec', 'Ecuador');
 flagMap.set('eg', 'Egipto');
+flagMap.set('ae', 'Emiratos Árabes');
 flagMap.set('gb-sct', 'Escocia');
 flagMap.set('sk', 'Eslovaquia');
 flagMap.set('si', 'Eslovenia');
@@ -212,6 +218,7 @@ flagMap.set('gf', 'Guayana Francesa');
 flagMap.set('gn', 'Guinea');
 flagMap.set('gw', 'Guinea Bissau');
 flagMap.set('gq', 'Guinea Ecuatorial');
+flagMap.set('ht', 'Haití');
 flagMap.set('hn', 'Honduras');
 flagMap.set('hu', 'Hungría');
 flagMap.set('gb-eng', 'Inglaterra');
@@ -254,6 +261,7 @@ flagMap.set('pl', 'Polonia');
 flagMap.set('pt', 'Portugal');
 flagMap.set('pr', 'Puerto Rico');
 flagMap.set('qa', 'Qatar');
+flagMap.set('cf', 'Rep. Centroafricana');
 flagMap.set('cd', 'Rep. Dem. Congo');
 flagMap.set('do', 'Rep. Dominicana');
 flagMap.set('cz', 'República Checa');
