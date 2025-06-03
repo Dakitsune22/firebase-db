@@ -47,6 +47,7 @@ export enum Flag {
   Brazil = 'br',
   Bulgaria = 'bg',
   BurkinaFaso = 'bf',
+  Burundi = 'bi',
   CaboVerde = 'cv',
   Cameroon = 'cm',
   Canada = 'ca',
@@ -179,6 +180,7 @@ flagMap.set('ba', 'Bosnia');
 flagMap.set('br', 'Brasil');
 flagMap.set('bg', 'Bulgaria');
 flagMap.set('bf', 'Burkina Faso');
+flagMap.set('bi', 'Burundi');
 flagMap.set('cv', 'Cabo Verde');
 flagMap.set('cm', 'Camerún');
 flagMap.set('ca', 'Canadá');
