@@ -37,7 +37,7 @@ export const playersData: Player[] = [
     shirtNumber: 6,
     name: 'Nicolás',
     surname: 'Valentini',
-    nationality: Nationality.Spain,
+    nationality: Nationality.Argentina,
     position: Position.DF,
     overall: 75,
     seasonStats: initialSeasonStats,

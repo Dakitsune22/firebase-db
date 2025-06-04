@@ -69,7 +69,7 @@ export const playersData: Player[] = [
     surname: 'Jiménez',
     nationality: Nationality.Spain,
     position: Position.LI,
-    overall: 75,
+    overall: 74,
     seasonStats: initialSeasonStats,
     teamId: 8,
   },

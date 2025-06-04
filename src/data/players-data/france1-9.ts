@@ -17,7 +17,7 @@ export const playersData: Player[] = [
     shirtNumber: 30,
     name: 'Grégoire',
     surname: 'Coudert',
-    nationality: Nationality.Spain,
+    nationality: Nationality.France,
     position: Position.POR,
     overall: 68,
     seasonStats: initialSeasonStats,

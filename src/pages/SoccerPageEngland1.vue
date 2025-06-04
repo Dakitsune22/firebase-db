@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
 import { Leagues, SeasonRound } from 'src/models';
@@ -37,6 +37,7 @@ const { queryTopScorers } = usePlayers();
 const { queryRound, queryCountRounds } = useRounds();
 
 const roundKey = ref<number>(0);
+const initLeague = ref<boolean>(false);
 // const leagueKey = ref<number>(0);
 
 const forceRender = (): void => {
@@ -111,6 +112,7 @@ const restartLeague = async () => {
   await queryRound.refetch();
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+  // initLeague.value = true;
 };
 
 const onRestartLeague = () => {
@@ -148,6 +150,7 @@ const onPreviousRound = async () => {
 };
 
 const onNextRound = async () => {
+  console.log('round count:', queryCountRounds.data.value);
   if (
     queryCountRounds.data.value &&
     getCurrentRound() < queryCountRounds.data.value
@@ -178,9 +181,29 @@ const onLastRound = async () => {
 <template>
   <!-- <q-page class="row items-center justify-evenly"> -->
   <q-page
-    v-if="queryCountRounds.data.value && queryCountRounds.data.value > 0"
-    class="page-body"
+    v-if="
+      !queryTeams.data.value ||
+      (queryTeams.data.value && queryTeams.data.value.length <= 0)
+    "
+    class="no-teams"
   >
+    <q-icon name="info" size="72px" color="primary" />
+    <span style="margin-top: 10px"
+      >No existen equipos para
+      <strong>
+        {{
+          Object.values(leaguesMap).find(
+            (league) => league.value === getCurrentLeague()
+          )?.label
+        }}</strong
+      >.</span
+    >
+    <span style="margin-bottom: 10px"
+      >Puedes importar los equipos por defecto o desde la BD en:</span
+    >
+    <Router-link :to="{ name: 'teamsDB' }">Gestión de equipos</Router-link>
+  </q-page>
+  <q-page v-else class="page-body">
     <div>
       <div class="teams-header">
         <div class="teams-header-coleq">Equipo</div>
@@ -203,15 +226,26 @@ const onLastRound = async () => {
         </TransitionGroup>
         <div class="restart-league">
           <q-btn
+            v-if="queryRound.data.value && queryRound.data.value?.round > 0"
             label="Reiniciar liga"
             color="negative"
             icon="restart_alt"
             @click="onRestartLeague"
           />
+          <q-btn
+            v-else
+            label="Iniciar liga"
+            color="primary"
+            icon="restart_alt"
+            @click="restartLeague"
+          />
         </div>
       </div>
     </div>
-    <div class="round">
+    <div
+      v-if="queryRound.data.value && queryRound.data.value?.round > 0"
+      class="round"
+    >
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
       </div> -->
@@ -278,7 +312,7 @@ const onLastRound = async () => {
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="queryRound.data.value && queryRound.data.value?.round > 0">
       <div v-if="queryTopScorers.isLoading.value">CARGANDO...</div>
       <div v-else>
         <div class="scorers-header q-ml-md">Máximos goleadores:</div>
@@ -306,23 +340,6 @@ const onLastRound = async () => {
         </div>
       </div>
     </div>
-  </q-page>
-  <q-page v-else class="no-teams">
-    <q-icon name="info" size="72px" color="primary" />
-    <span style="margin-top: 10px"
-      >No existen equipos para
-      <strong>
-        {{
-          Object.values(leaguesMap).find(
-            (league) => league.value === getCurrentLeague()
-          )?.label
-        }}</strong
-      >.</span
-    >
-    <span style="margin-bottom: 10px"
-      >Puedes importar los equipos por defecto o desde la BD en:</span
-    >
-    <Router-link :to="{ name: 'teamsDB' }">Gestión de equipos</Router-link>
   </q-page>
 </template>
 

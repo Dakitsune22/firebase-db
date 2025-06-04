@@ -98,7 +98,7 @@ export const playersData: Player[] = [
     shirtNumber: 26,
     name: 'Julian',
     surname: 'Ryerson',
-    nationality: Nationality.Spain,
+    nationality: Nationality.Norway,
     position: Position.LD,
     overall: 80,
     seasonStats: initialSeasonStats,
