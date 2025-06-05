@@ -1056,7 +1056,11 @@ const onReset = () => {
           flat
           @click="onRestoreTeams"
           :disable="!selectedLeague"
-        />
+        >
+          <q-tooltip style="font-size: 12px" class="bg-negative"
+            >Restaurar equipos</q-tooltip
+          >
+        </q-btn>
         <q-btn
           class="team-body-league-right"
           color="primary"
@@ -1065,7 +1069,11 @@ const onReset = () => {
           flat
           @click="onGetMasterDBTeams"
           :disable="!selectedLeague"
-        />
+        >
+          <q-tooltip style="font-size: 12px" class="bg-primary"
+            >Actualizar equipos</q-tooltip
+          >
+        </q-btn>
         <q-btn
           class="team-body-league-right"
           color="primary"
@@ -1077,7 +1085,11 @@ const onReset = () => {
             !selectedLeague ||
             (currentTeams.data.value && currentTeams.data.value?.length <= 0)
           "
-        />
+        >
+          <q-tooltip style="font-size: 12px" class="bg-primary"
+            >Subir cambios</q-tooltip
+          >
+        </q-btn>
       </div>
       <q-select
         filled
@@ -1619,8 +1631,22 @@ const onReset = () => {
         currentTeams.data.value &&
         currentTeams.data.value?.length < 1
       "
+      class="no-teams"
     >
-      NO TEAMS
+      <q-icon name="info" size="72px" color="primary" />
+      <span style="margin-top: 10px"
+        >No existen equipos para
+        <strong>
+          {{
+            Object.values(leaguesMap).find(
+              (league) => league.value === selectedLeague
+            )?.label
+          }}</strong
+        >.</span
+      >
+      <span style="margin-bottom: 10px"
+        >Restaura o actualiza para cargarlos.</span
+      >
     </div>
   </div>
 </template>
@@ -1735,5 +1761,12 @@ const onReset = () => {
   @include flexPosition(center, center);
   margin-top: 15px;
   font-size: 15px;
+}
+.no-teams {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
 }
 </style>

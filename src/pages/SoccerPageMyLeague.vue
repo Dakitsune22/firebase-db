@@ -14,6 +14,7 @@ import SoccerMatch from 'src/components/SoccerMatch.vue';
 import SoccerTeam from 'src/components/SoccerTeam.vue';
 import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
 import useUserInfoMutation from 'src/composables/useUserInfoMutation';
+import { sleep } from 'src/helpers/functions';
 
 defineOptions({
   name: 'SoccerPageMyLeague',
@@ -99,6 +100,15 @@ const restartLeague = async () => {
   await queryRound.refetch();
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+
+  // Esperamos para hacer refetch del contador de rondas hasta que
+  // el mutate de rondas haya finalizado (sigue en curso al llegar aquí)
+  while (mutateRoundAdd.isPending.value) {
+    console.log('Mutate status:', mutateRoundAdd.status.value);
+    await sleep(200);
+  }
+  console.log('Mutate status:', mutateRoundAdd.status.value);
+  await queryCountRounds.refetch();
 };
 
 const onRestartLeague = () => {
