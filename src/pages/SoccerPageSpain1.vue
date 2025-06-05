@@ -31,7 +31,7 @@ setCurrentLeague(Leagues.LaLigaPrimeraDivision);
 
 const { mutateRoundAdd } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
-const { queryTeams } = useTeams(getCurrentLeague());
+const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 // const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
@@ -99,11 +99,11 @@ const restartLeague = async () => {
     mutateRoundAdd.mutate(sr);
   });
   // Teams:
-  if (queryTeams.data.value) {
+  if (queryTeamsByPoints.data.value) {
     console.log(
       '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
     );
-    queryTeams.data.value.forEach((team) => {
+    queryTeamsByPoints.data.value.forEach((team) => {
       mutateTeamAdd.mutate({
         league: getCurrentLeague(),
         team,
@@ -216,8 +216,9 @@ const onLastRound = async () => {
   <!-- <q-page class="row items-center justify-evenly"> -->
   <q-page
     v-if="
-      !queryTeams.data.value ||
-      (queryTeams.data.value && queryTeams.data.value.length <= 0)
+      !queryTeamsByPoints.data.value ||
+      (queryTeamsByPoints.data.value &&
+        queryTeamsByPoints.data.value.length <= 0)
     "
     class="no-teams"
   >
@@ -249,10 +250,13 @@ const onLastRound = async () => {
         <div class="teams-header-colvalaux">GF</div>
         <div class="teams-header-colvalaux">GC</div>
       </div>
-      <div v-if="queryTeams.isLoading.value">CARGANDO...</div>
+      <div v-if="queryTeamsByPoints.isLoading.value">CARGANDO...</div>
       <div v-else>
         <TransitionGroup name="rank">
-          <div v-for="(team, idx) in queryTeams.data.value" :key="team.id">
+          <div
+            v-for="(team, idx) in queryTeamsByPoints.data.value"
+            :key="team.id"
+          >
             <!-- {{ team.name }} {{ team.points }} {{ team.goalDifference }}
             {{ team.goalsConceded }} -->
             <soccer-team :team="team" :i-key="idx + 1" />

@@ -40,7 +40,7 @@ const selectedMyLeagueTeams = ref<Team[]>([]);
 
 const initialMyLeagueTeamsId: number[] = [];
 
-// const { queryTeams: queryTeamsSpain1 } = useDefaultTeams(
+// const { queryTeamsByName: queryTeamsSpain1 } = useDefaultTeams(
 //   Leagues.LaLigaPrimeraDivision
 // );
 // const { queryTeams: queryTeamsEngland1 } = useDefaultTeams(
@@ -51,14 +51,16 @@ const initialMyLeagueTeamsId: number[] = [];
 // const { queryTeams: queryTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
 // const { queryTeams: queryTeamsMyLeague } = useDefaultTeams(Leagues.MyLeague);
 
-const { queryTeams: queryTeamsSpain1 } = useTeams(
+const { queryTeamsByName: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
-const { queryTeams: queryTeamsEngland1 } = useTeams(Leagues.PremierLeague);
-const { queryTeams: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
-const { queryTeams: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
-const { queryTeams: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
-const { queryTeams: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
+const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
+  Leagues.PremierLeague
+);
+const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
+const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
+const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { queryTeamsByName: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
 
 if (queryTeamsMyLeague.data.value) {
   queryTeamsMyLeague.data.value.forEach((t) => {

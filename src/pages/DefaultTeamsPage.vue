@@ -56,13 +56,15 @@ const selectedTeamOriginalData = ref<Team>(initialTeamData);
 const transferSelectedLeague = ref<Leagues>();
 const transferSelectedTeamId = ref<number>();
 
-const { queryTeams: queryTeamsSpain1 } = useTeams(
+const { queryTeamsByName: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
-const { queryTeams: queryTeamsEngland1 } = useTeams(Leagues.PremierLeague);
-const { queryTeams: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
-const { queryTeams: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
-const { queryTeams: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
+  Leagues.PremierLeague
+);
+const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
+const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
+const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
 const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
 
 const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(

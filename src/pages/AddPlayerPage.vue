@@ -10,7 +10,7 @@ defineOptions({
 });
 
 const { getCurrentLeague } = useSoccer();
-const { queryTeams } = useTeams(getCurrentLeague());
+const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 
 // const $q = useQuasar();
 const player = ref<Player>({
@@ -76,7 +76,7 @@ const onReset = () => {
       <q-select
         filled
         v-model="selectedTeamId"
-        :options="queryTeams.data.value"
+        :options="queryTeamsByPoints.data.value"
         option-value="id"
         option-label="name"
         options-dense

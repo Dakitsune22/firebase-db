@@ -49,6 +49,32 @@ const getTeamsByPoints = async (league: Leagues): Promise<Team[]> => {
   return teams;
 };
 
+const getTeamsByName = async (league: Leagues): Promise<Team[]> => {
+  const q = query(
+    collection(db, `${userId.value}-teams-${league}`),
+    orderBy('name', 'asc')
+  );
+  const docs = await getDocs(q);
+  const teams: Team[] = [];
+
+  docs.forEach((doc) => {
+    teams.push(doc.data() as Team);
+  });
+  // Ordenamos equipos por nombre (asc):
+  // teams.sort((a, b) => {
+  //   if (a.name && b.name) {
+  //     if (a.name > b.name) {
+  //       return 1;
+  //     }
+  //     if (a.name < b.name) {
+  //       return -1;
+  //     }
+  //   }
+  //   return 0;
+  // });
+  return teams;
+};
+
 const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
   const docRef = doc(db, `${userId.value}-teams-${league}`, teamId.toString());
   const docSnap = await getDoc(docRef);
@@ -69,9 +95,14 @@ const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
 };
 
 const useTeams = (league: Leagues, id?: number) => {
-  const queryTeams = useQuery({
-    queryKey: [`teams-${league}`],
+  const queryTeamsByPoints = useQuery({
+    queryKey: [`teams-p-${league}`],
     queryFn: () => getTeamsByPoints(league),
+  });
+
+  const queryTeamsByName = useQuery({
+    queryKey: [`teams-n-${league}`],
+    queryFn: () => getTeamsByName(league),
   });
 
   const queryTeamById = useQuery({
@@ -81,7 +112,8 @@ const useTeams = (league: Leagues, id?: number) => {
   });
 
   return {
-    queryTeams,
+    queryTeamsByPoints,
+    queryTeamsByName,
     queryTeamById,
   };
 };
