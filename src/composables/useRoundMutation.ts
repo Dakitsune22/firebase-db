@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
-import { SeasonRound } from 'src/models';
+import { Leagues, SeasonRound } from 'src/models';
 import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
 
@@ -32,6 +32,20 @@ const playRound = async (playedRound: SeasonRound): Promise<void> => {
   );
 };
 
+const deleteMyLeagueRounds = async (numRounds: number): Promise<void> => {
+  console.log('deleteRounds');
+  for (let i = 0; i < numRounds; i++) {
+    // const element = queryCountRounds[i];
+    const docRef = doc(
+      db,
+      `${userId.value}-season-rounds-${Leagues.MyLeague}`,
+      (i + 1).toString()
+    );
+    await deleteDoc(docRef);
+    console.log('delete doc', i + 1);
+  }
+};
+
 const useRoundsMutation = () => {
   const queryClient = useQueryClient();
 
@@ -60,9 +74,17 @@ const useRoundsMutation = () => {
     },
   });
 
+  const mutateMyLeagueRoundsDelete = useMutation({
+    mutationFn: (numRounds: number) => deleteMyLeagueRounds(numRounds),
+    onSuccess: () => {
+      refreshData();
+    },
+  });
+
   return {
     mutateRoundAdd,
     mutateRoundPlay,
+    mutateMyLeagueRoundsDelete,
   };
 };
 

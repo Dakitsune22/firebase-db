@@ -13,7 +13,7 @@ import {
   teamsSpain1,
 } from 'src/data/teams';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
-import { leaguesMap, LeaguesMap } from 'src/models/leagues';
+import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import {

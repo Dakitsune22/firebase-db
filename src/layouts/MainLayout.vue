@@ -38,7 +38,12 @@ const pageKey = ref<number>(0);
         <q-toolbar-title> My~League </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
-        <div>ID Usuario: {{ userId }}</div>
+        <router-link :to="{ name: 'user' }" class="user-menu">
+          <div>
+            <q-icon name="account_circle" size="md" color="white" />
+            <span style="margin-left: 3px">{{ userId }} (no registrado)</span>
+          </div>
+        </router-link>
       </q-toolbar>
     </q-header>
 
@@ -63,3 +68,10 @@ const pageKey = ref<number>(0);
     </q-page-container>
   </q-layout>
 </template>
+
+<style lang="scss" scoped>
+.user-menu {
+  color: white;
+  text-decoration: none;
+}
+</style>

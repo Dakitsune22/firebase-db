@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
+import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
+import useRoundsMutation from 'src/composables/useRoundMutation';
+import useRounds from 'src/composables/useRounds';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import { tactics } from 'src/data/tactics';
@@ -61,6 +64,11 @@ const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
 const { queryTeamsByName: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
+
+const { setCurrentLeague } = useSoccer();
+setCurrentLeague(Leagues.MyLeague);
+const { queryCountRounds } = useRounds();
+const { mutateMyLeagueRoundsDelete } = useRoundsMutation();
 
 if (queryTeamsMyLeague.data.value) {
   queryTeamsMyLeague.data.value.forEach((t) => {
@@ -227,6 +235,11 @@ const onSubmit = () => {
     mutateTeamAddMyLeague.mutate({ team });
     currentTeams.value.refetch();
   });
+  // Delete current league rounds:
+  if (queryCountRounds.data.value) {
+    console.log('query round count:', queryCountRounds.data.value);
+    mutateMyLeagueRoundsDelete.mutate(queryCountRounds.data.value);
+  }
 };
 
 const onReset = () => {

@@ -23,9 +23,9 @@ const getRankClass = (iKey: number) => {
     return 'champions';
   } else if (iKey === 2 && getCurrentLeague() === Leagues.MyLeague) {
     return 'champions';
-  } else if (iKey === 5) {
+  } else if (iKey === 5 && getCurrentLeague() !== Leagues.MyLeague) {
     return 'uefa';
-  } else if (iKey === 6) {
+  } else if (iKey === 6 && getCurrentLeague() !== Leagues.MyLeague) {
     return 'conference';
   } else if (
     iKey === 16 &&
@@ -36,7 +36,8 @@ const getRankClass = (iKey: number) => {
   } else if (
     (iKey >= 18 &&
       getCurrentLeague() !== Leagues.Bundesliga &&
-      getCurrentLeague() !== Leagues.Ligue1) ||
+      getCurrentLeague() !== Leagues.Ligue1 &&
+      getCurrentLeague() !== Leagues.MyLeague) ||
     (iKey >= 17 &&
       (getCurrentLeague() === Leagues.Bundesliga ||
         getCurrentLeague() === Leagues.Ligue1))
