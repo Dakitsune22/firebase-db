@@ -11,11 +11,11 @@ const routes: RouteRecordRaw[] = [
         path: '',
         component: () => import('pages/IndexPage.vue'),
       },
-      {
-        name: 'fruits',
-        path: '/fruits',
-        component: () => import('pages/FruitsPage.vue'),
-      },
+      // {
+      //   name: 'fruits',
+      //   path: '/fruits',
+      //   component: () => import('pages/FruitsPage.vue'),
+      // },
       {
         name: `soccer-${Leagues.LaLigaPrimeraDivision}`,
         // path: '/soccer/:leagueId',
@@ -47,11 +47,11 @@ const routes: RouteRecordRaw[] = [
         path: '/soccer-myleague',
         component: () => import('pages/SoccerPageMyLeague.vue'),
       },
-      {
-        name: 'addPlayer',
-        path: '/add-player',
-        component: () => import('pages/AddPlayerPage.vue'),
-      },
+      // {
+      //   name: 'addPlayer',
+      //   path: '/add-player',
+      //   component: () => import('pages/AddPlayerPage.vue'),
+      // },
       {
         name: 'teamsDB',
         path: '/teams-db',

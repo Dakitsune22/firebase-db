@@ -8,18 +8,18 @@ export const linksList: EssentialLinkProps[] = [
     icon: 'home',
     link: '/',
   },
-  {
-    title: 'Fruits',
-    caption: 'Some fruits here',
-    icon: 'favorite',
-    link: '/fruits',
-  },
-  {
-    title: 'Alta de jugador',
-    caption: 'La Liga',
-    icon: 'person_add',
-    link: '/add-player',
-  },
+  // {
+  //   title: 'Fruits',
+  //   caption: 'Some fruits here',
+  //   icon: 'favorite',
+  //   link: '/fruits',
+  // },
+  // {
+  //   title: 'Alta de jugador',
+  //   caption: 'La Liga',
+  //   icon: 'person_add',
+  //   link: '/add-player',
+  // },
   {
     title: 'Gestión de equipos',
     caption: 'Cambios en BD maestra',
