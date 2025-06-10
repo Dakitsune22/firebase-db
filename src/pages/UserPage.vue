@@ -87,11 +87,10 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <div>USER PAGE</div>
+  <!-- <div>USER PAGE</div>
   <div v-if="queryUsers.isFetched">
     {{ queryUsers.data.value }}
-  </div>
-
+  </div> -->
   <div class="user-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
       <div class="user-body-title">Cambio de usuario</div>
