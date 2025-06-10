@@ -3,6 +3,7 @@ import { useUIStore } from 'src/stores/ui';
 
 const useUI = () => {
   const { userId } = storeToRefs(useUIStore());
+  const { setUserId } = useUIStore();
 
   return {
     // State
@@ -11,6 +12,7 @@ const useUI = () => {
     // Getters
 
     // Actions
+    setUserId,
   };
 };
 

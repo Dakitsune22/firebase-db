@@ -41,7 +41,7 @@ const pageKey = ref<number>(0);
         <router-link :to="{ name: 'user' }" class="user-menu">
           <div>
             <q-icon name="account_circle" size="md" color="white" />
-            <span style="margin-left: 3px">{{ userId }} (no registrado)</span>
+            <span style="margin-left: 3px">{{ userId }}</span>
           </div>
         </router-link>
       </q-toolbar>

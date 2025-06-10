@@ -1,9 +1,18 @@
 <script setup>
 import { md5 } from 'js-md5';
+import { useQuasar } from 'quasar';
+import useUI from 'src/composables/storeWrappers/useUI';
 import useUserInfo from 'src/composables/useUserInfo';
+import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const $q = useQuasar();
+const router = useRouter();
 
 const { queryUsers } = useUserInfo();
+const { mutateUserInfoSignIn } = useUserInfoMutation();
+const { userId, setUserId } = useUI();
 
 const newUser = ref('');
 const password = ref('');
@@ -16,14 +25,64 @@ const onReset = () => {
 const onSubmit = () => {
   console.log('On submit');
 
+  if (userId.value === newUser.value) {
+    $q.notify({
+      type: 'info',
+      message: 'El usuario introducido coincide con el actual',
+    });
+    return;
+  }
   const userExists =
     queryUsers.data.value.findIndex((user) => user.id === newUser.value) >= 0;
   console.log({ userExists });
-
-  const encryptedPwd = md5(password.value);
-  console.log(encryptedPwd);
-
-  // ToDo: CONTINUAR POR AQUI
+  if (!userExists) {
+    $q.dialog({
+      html: true,
+      title: '<span class="text-primary">Nuevo usuario</span>',
+      message: `El usuario <span class="text-primary">${newUser.value}</span> no existe.<br><br><strong>¿Quieres crearlo?</strong>`,
+      cancel: { label: 'No', flat: true },
+      ok: { icon: 'how_to_reg', label: 'Sí', flat: true },
+      persistent: true,
+    })
+      .onOk(() => {
+        $q.notify({
+          type: 'positive',
+          message: `Se ha creado el usuario ${newUser.value}`,
+        });
+        setUserId(newUser.value);
+        mutateUserInfoSignIn.mutate(md5(password.value));
+        router.push({ name: 'index' });
+      })
+      .onOk(() => {
+        // console.log('>>>> second OK catcher')
+      })
+      .onCancel(() => {
+        return;
+      })
+      .onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      });
+  } else {
+    const userData = queryUsers.data.value.find(
+      (user) => user.id === newUser.value
+    );
+    if (!userData) {
+      return;
+    }
+    if (userData.password !== md5(password.value)) {
+      $q.notify({
+        type: 'negative',
+        message: `Se ha denegado el cambio al usuario ${newUser.value}`,
+      });
+      return;
+    }
+    $q.notify({
+      type: 'positive',
+      message: `Se ha cambiado el usuario a ${newUser.value}`,
+    });
+    setUserId(newUser.value);
+    router.push({ name: 'index' });
+  }
 };
 </script>
 
@@ -36,13 +95,24 @@ const onSubmit = () => {
   <div class="user-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
       <div class="user-body-title">Cambio de usuario</div>
+      <div class="user-body-subtitle">
+        Introduce el usuario al que quieres cambiar.<br /><br />
+        Si se trata de un usuario existente, asegúrate de que introduces la
+        contraseña correcta.<br />
+        Para un nuevo usuario, recuerda la contraseña para futuros accesos.
+      </div>
       <q-input
         filled
         hide-bottom-space
         v-model="newUser"
         label="Id. Usuario"
         lazy-rules
-        :rules="[(val) => (val && val.length > 0) || 'Campo obligatorio']"
+        :rules="[
+          (val) => (val && val.length > 0) || 'Campo obligatorio',
+          (val) =>
+            (val && val.length <= 20) ||
+            'La longitud máxima para el usuario son 20 caracteres.',
+        ]"
       />
       <q-input
         filled
@@ -77,14 +147,21 @@ const onSubmit = () => {
   &-body {
     margin: 20px;
     margin-top: 40px;
-    min-width: 600px;
-    max-width: 900px;
+    min-width: 380px;
+    max-width: 600px;
 
     &-title {
-      font-size: 20px;
+      font-size: 24px;
       border-left: 6px solid $primary;
       padding-left: 10px;
       margin-bottom: 16px;
+    }
+
+    &-subtitle {
+      font-size: 14px;
+      // border-left: 6px solid $primary;
+      padding-left: 18px;
+      margin-bottom: 28px;
     }
   }
 }
