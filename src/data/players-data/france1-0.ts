@@ -7,6 +7,7 @@ export const playersData: Player[] = [
     shirtNumber: 16,
     name: 'Donovan',
     surname: 'Léon',
+    birthDate: '03/11/1992',
     nationality: Nationality.FrenchGuyane,
     position: Position.POR,
     overall: 74,

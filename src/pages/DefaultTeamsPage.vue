@@ -12,6 +12,7 @@ import {
   teamsItaly1,
   teamsSpain1,
 } from 'src/data/teams';
+import { getAge, isValidBirthDate, isValidDate } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
@@ -210,6 +211,19 @@ const columns = [
   },
   { name: 'nickname', label: 'Apodo', align: 'center', field: 'nickname' },
   {
+    name: 'birthDate',
+    label: 'Fec. Nac.',
+    align: 'center',
+    field: 'birthDate',
+  },
+  {
+    name: 'age',
+    label: 'Edad',
+    align: 'center',
+    field: 'age',
+    // sortable: true,
+  },
+  {
     name: 'nationality',
     label: 'Nac.',
     align: 'center',
@@ -242,6 +256,33 @@ const columns = [
     field: 'transfer',
   },
 ];
+
+const errorBirthDate = ref(false);
+const errorBirthDateMessage = ref('');
+
+const birthDateValidation = (val: string): boolean => {
+  console.log(val);
+  if (val.length < 10) {
+    errorBirthDate.value = true;
+    errorBirthDateMessage.value = 'Introduce la fecha completa';
+    return false;
+  }
+  // if (getAge(val) > 99 || getAge(val) < 1) {
+  if (!isValidBirthDate(val)) {
+    errorBirthDate.value = true;
+    errorBirthDateMessage.value = 'La fecha introducida no es válida';
+    return false;
+  } else {
+    errorBirthDate.value = false;
+    errorBirthDateMessage.value = '';
+    return true;
+  }
+};
+
+const birthDateErrorReset = (): void => {
+  errorBirthDate.value = false;
+  errorBirthDateMessage.value = '';
+};
 
 const errorShirtNumber = ref(false);
 const errorShirtNumberMessage = ref('');
@@ -689,6 +730,7 @@ const isSelectedTeamDataChanged = (): boolean => {
         p.name +
         p.surname +
         (p.nickname ? p.nickname : '') +
+        (p.birthDate ? p.birthDate : '') +
         p.nationality +
         p.position +
         p.overall.toString())
@@ -708,6 +750,7 @@ const isSelectedTeamDataChanged = (): boolean => {
         p.name +
         p.surname +
         (p.nickname ? p.nickname : '') +
+        (p.birthDate ? p.birthDate : '') +
         p.nationality +
         p.position +
         p.overall.toString())
@@ -1411,6 +1454,44 @@ const onReset = () => {
                 />
               </q-popup-edit>
             </q-td>
+            <q-td
+              key="birthDate"
+              :props="props"
+              class="table table-value table-col10"
+            >
+              {{ props.row.birthDate }}
+              <q-popup-edit
+                v-model="props.row.birthDate"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                :validate="birthDateValidation"
+                @before-show="birthDateErrorReset"
+                @update:model-value="birthDateValidation"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Fecha de nacimiento
+                </q-badge>
+                <q-input
+                  mask="##/##/####"
+                  v-model="scope.value"
+                  hint="Introduce la fecha de nacimiento del jugador"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                  :error="errorBirthDate"
+                  :error-message="errorBirthDate ? errorBirthDateMessage : ''"
+                />
+              </q-popup-edit>
+            </q-td>
+            <q-td
+              key="age"
+              :props="props"
+              class="table table-value table-col11"
+            >
+              {{ props.row.birthDate ? getAge(props.row.birthDate) : '?' }}
+            </q-td>
             <q-td key="nationality" :props="props" class="table table-col5">
               <!-- {{ props.row.nationality }} -->
               <q-img
@@ -1723,27 +1804,27 @@ const onReset = () => {
     cursor: alias;
   }
   &-col2 {
-    width: 25%;
+    width: 20%;
     cursor: alias;
   }
   &-col3 {
-    width: 25%;
+    width: 20%;
     cursor: alias;
   }
   &-col4 {
-    width: 14%;
+    width: 10%;
     cursor: alias;
   }
   &-col5 {
-    width: 7cm;
+    width: 5cm;
     cursor: pointer;
   }
   &-col6 {
-    width: 7%;
+    width: 5%;
     cursor: pointer;
   }
   &-col7 {
-    width: 7%;
+    width: 5%;
     cursor: pointer;
   }
   &-col8 {
@@ -1753,6 +1834,14 @@ const onReset = () => {
   &-col9 {
     width: 5%;
     cursor: pointer;
+  }
+  &-col10 {
+    width: 15%;
+    cursor: alias;
+  }
+  &-col11 {
+    width: 5%;
+    cursor: default;
   }
 }
 .transfer-btn {

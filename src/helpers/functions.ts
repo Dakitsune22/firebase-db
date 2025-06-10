@@ -15,3 +15,19 @@ export const getAge = (birthDateStr: string): number => {
   const ageDate = new Date(diffMS);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
+
+export const isValidBirthDate = (dateStr: string): boolean => {
+  // Mask expected: DD/MM/YYYY
+  const dateArray = dateStr.split('/');
+  const reverseDate = `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
+
+  // console.log({ reverseDate });
+  const reverseDateMS = new Date(reverseDate).getTime();
+
+  // console.log(Date.now() - reverseDateMS);
+  return (
+    !isNaN(reverseDateMS) &&
+    Date.now() - reverseDateMS > 0 &&
+    getAge(dateStr) < 100
+  );
+};

@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   surname: string;
   nickname?: string;
+  birthDate?: string;
   nationality: Flag;
   position: Position;
   overall: number;
