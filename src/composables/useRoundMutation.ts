@@ -33,12 +33,25 @@ const playRound = async (playedRound: SeasonRound): Promise<void> => {
 };
 
 const deleteMyLeagueRounds = async (numRounds: number): Promise<void> => {
-  console.log('deleteRounds');
   for (let i = 0; i < numRounds; i++) {
     // const element = queryCountRounds[i];
     const docRef = doc(
       db,
       `${userId.value}-season-rounds-${Leagues.MyLeague}`,
+      (i + 1).toString()
+    );
+    await deleteDoc(docRef);
+    console.log('delete doc', i + 1);
+  }
+};
+
+const deleteRounds = async (league: Leagues): Promise<void> => {
+  for (let i = 0; i < 18; i++) {
+    // To Do: Cargar rondas según liga
+    // const element = queryCountRounds[i];
+    const docRef = doc(
+      db,
+      `${userId.value}-season-rounds-${league}`,
       (i + 1).toString()
     );
     await deleteDoc(docRef);
@@ -81,10 +94,18 @@ const useRoundsMutation = () => {
     },
   });
 
+  const mutateRoundsDelete = useMutation({
+    mutationFn: (league: Leagues) => deleteRounds(league),
+    onSuccess: () => {
+      refreshData();
+    },
+  });
+
   return {
     mutateRoundAdd,
     mutateRoundPlay,
     mutateMyLeagueRoundsDelete,
+    mutateRoundsDelete,
   };
 };
 

@@ -2,6 +2,7 @@
 import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
+import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import { tactics } from 'src/data/tactics';
@@ -12,7 +13,7 @@ import {
   teamsItaly1,
   teamsSpain1,
 } from 'src/data/teams';
-import { getAge, isValidBirthDate, isValidDate } from 'src/helpers/functions';
+import { getAge, isValidBirthDate } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
@@ -83,6 +84,8 @@ const {
   mutateTeamAdd: mutateMDBTeamAdd,
   mutateTeamUpdate: mutateMDBTeamUpdate,
 } = useDefaultTeamsMutation();
+
+const { mutateRoundsDelete } = useRoundsMutation();
 
 // const nationalityOptions = Object.values(Flag);
 // interface nacOptions {
@@ -368,7 +371,7 @@ const onRestoreTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a restaurar los equipos de <strong>${labelLeague}</strong>.<BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...), sustituyéndose por los datos por defecto de los equipos.<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a restaurar los equipos de <strong>${labelLeague}</strong>.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...), sustituyéndose por los datos por defecto de los equipos.<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     persistent: true,
@@ -425,6 +428,7 @@ const onRestoreTeams = () => {
       selectedTeamId.value = undefined;
       selectedTeamData.value = initialTeamData;
       if (selectedLeague.value) {
+        mutateRoundsDelete.mutate(selectedLeague.value);
         refetchQueryLeague(selectedLeague.value);
       }
     })
@@ -447,7 +451,7 @@ const onGetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos. Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     persistent: true,
@@ -515,6 +519,7 @@ const onGetMasterDBTeams = () => {
       selectedTeamId.value = undefined;
       selectedTeamData.value = initialTeamData;
       if (selectedLeague.value) {
+        mutateRoundsDelete.mutate(selectedLeague.value);
         refetchQueryLeague(selectedLeague.value);
       }
     })
@@ -537,7 +542,7 @@ const onSetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra. Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
+    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     prompt: {
