@@ -3,3 +3,5 @@ export { teamsEngland1 } from './teams-data/england1';
 export { teamsGermany1 } from './teams-data/germany1';
 export { teamsItaly1 } from './teams-data/italy1';
 export { teamsFrance1 } from './teams-data/france1';
+export { teamsOthersEurope } from './teams-data/othersEurope';
+export { teamsOthersWorld } from './teams-data/othersWorld';

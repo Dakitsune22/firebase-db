@@ -5,6 +5,8 @@ export enum Leagues {
   Bundesliga = 'germany-1',
   Ligue1 = 'france-1',
   MyLeague = 'myleague',
+  OthersEurope = 'others-europe-1',
+  OthersWorld = 'others-world-1',
 }
 
 export enum CountryLeague {
@@ -13,6 +15,8 @@ export enum CountryLeague {
   Germany = 'germany',
   Italy = 'italy',
   Spain = 'spain',
+  OthersEurope = 'others-europe',
+  OthersWorld = 'others-world',
 }
 
 export const leaguesMap = [
@@ -35,5 +39,13 @@ export const leaguesMap = [
   {
     label: 'Ligue 1',
     value: Leagues.Ligue1,
+  },
+  {
+    label: 'Otros equipos: Europa',
+    value: Leagues.OthersEurope,
+  },
+  {
+    label: 'Otros equipos: Mundo',
+    value: Leagues.OthersWorld,
   },
 ];

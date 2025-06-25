@@ -12,6 +12,8 @@ import {
   teamsGermany1,
   teamsItaly1,
   teamsSpain1,
+  teamsOthersEurope,
+  teamsOthersWorld,
 } from 'src/data/teams';
 import { getAge, isValidBirthDate } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
@@ -24,6 +26,8 @@ import {
   teamCrestOptionsGermany,
   teamCrestOptionsItaly,
   teamCrestOptionsSpain,
+  teamCrestOptionsOthersEurope,
+  teamCrestOptionsOthersWorld,
 } from 'src/models/team';
 import { computed, ref } from 'vue';
 
@@ -67,6 +71,12 @@ const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
 const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { queryTeamsByName: queryTeamsOthersEurope } = useTeams(
+  Leagues.OthersEurope
+);
+const { queryTeamsByName: queryTeamsOthersWorld } = useTeams(
+  Leagues.OthersWorld
+);
 const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
 
 const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
@@ -80,6 +90,12 @@ const { queryTeams: queryMDBTeamsGermany1 } = useDefaultTeams(
 );
 const { queryTeams: queryMDBTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
 const { queryTeams: queryMDBTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
+const { queryTeams: queryMDBTeamsOthersEurope } = useDefaultTeams(
+  Leagues.OthersEurope
+);
+const { queryTeams: queryMDBTeamsOthersWorld } = useDefaultTeams(
+  Leagues.OthersWorld
+);
 const {
   mutateTeamAdd: mutateMDBTeamAdd,
   mutateTeamUpdate: mutateMDBTeamUpdate,
@@ -119,6 +135,10 @@ const currentTeams = computed(() => {
       return queryTeamsItaly1;
     case Leagues.Ligue1:
       return queryTeamsFrance1;
+    case Leagues.OthersEurope:
+      return queryTeamsOthersEurope;
+    case Leagues.OthersWorld:
+      return queryTeamsOthersWorld;
     default:
       return queryTeamsSpain1;
   }
@@ -137,6 +157,10 @@ const transferCurrentTeams = computed(() => {
       return queryTeamsItaly1;
     case Leagues.Ligue1:
       return queryTeamsFrance1;
+    case Leagues.OthersEurope:
+      return queryTeamsOthersEurope;
+    case Leagues.OthersWorld:
+      return queryTeamsOthersWorld;
     default:
       return queryTeamsSpain1;
   }
@@ -367,7 +391,7 @@ const onRestoreTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Restaurar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+    title: `<span class="text-primary">Restaurar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -422,6 +446,24 @@ const onRestoreTeams = () => {
             });
           });
           break;
+
+        case Leagues.OthersEurope:
+          teamsOthersEurope.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.OthersEurope,
+              team,
+            });
+          });
+          break;
+
+        case Leagues.OthersWorld:
+          teamsOthersWorld.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.OthersWorld,
+              team,
+            });
+          });
+          break;
       }
     })
     .onOk(() => {
@@ -447,7 +489,7 @@ const onGetMasterDBTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Actualizar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+    title: `<span class="text-primary">Actualizar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -513,6 +555,28 @@ const onGetMasterDBTeams = () => {
             });
           }
           break;
+
+        case Leagues.OthersEurope:
+          if (queryMDBTeamsOthersEurope.data.value) {
+            queryMDBTeamsOthersEurope.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.OthersEurope,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.OthersWorld:
+          if (queryMDBTeamsOthersWorld.data.value) {
+            queryMDBTeamsOthersWorld.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.OthersWorld,
+                team,
+              });
+            });
+          }
+          break;
       }
     })
     .onOk(() => {
@@ -538,7 +602,7 @@ const onSetMasterDBTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Subir cambios</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replace(
+    title: `<span class="text-primary">Subir cambios</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -683,6 +747,14 @@ const updateCurrentTeamCrests = (): void => {
       //crestMapFrance.keys().forEach((k) => teamCrestOptions.push(k));
       teamCrestOptions = teamCrestOptionsFrance;
       break;
+    case Leagues.OthersEurope:
+      //crestMapFrance.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsOthersEurope;
+      break;
+    case Leagues.OthersWorld:
+      //crestMapFrance.keys().forEach((k) => teamCrestOptions.push(k));
+      teamCrestOptions = teamCrestOptionsOthersWorld;
+      break;
   }
 };
 
@@ -718,6 +790,12 @@ const refetchQueryLeague = (league: Leagues): void => {
     case Leagues.Ligue1:
       queryTeamsFrance1.refetch();
       queryMDBTeamsFrance1.refetch();
+    case Leagues.OthersEurope:
+      queryTeamsOthersEurope.refetch();
+      queryMDBTeamsOthersEurope.refetch();
+    case Leagues.OthersWorld:
+      queryTeamsOthersWorld.refetch();
+      queryMDBTeamsOthersWorld.refetch();
   }
 };
 

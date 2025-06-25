@@ -55,6 +55,8 @@ export const teamCrestOptionsEngland: string[] = [];
 export const teamCrestOptionsItaly: string[] = [];
 export const teamCrestOptionsGermany: string[] = [];
 export const teamCrestOptionsFrance: string[] = [];
+export const teamCrestOptionsOthersEurope: string[] = [];
+export const teamCrestOptionsOthersWorld: string[] = [];
 
 for (const path in files) {
   teamCrestOptionsSpain.push(
@@ -83,5 +85,21 @@ files = import.meta.glob('/public/images/teams-france/*.png');
 for (const path in files) {
   teamCrestOptionsFrance.push(
     path.slice(0, path.length - 4).replace('/public/images/teams-france/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-others-europe/*.png');
+for (const path in files) {
+  teamCrestOptionsOthersEurope.push(
+    path
+      .slice(0, path.length - 4)
+      .replace('/public/images/teams-others-europe/', '')
+  );
+}
+files = import.meta.glob('/public/images/teams-others-world/*.png');
+for (const path in files) {
+  teamCrestOptionsOthersWorld.push(
+    path
+      .slice(0, path.length - 4)
+      .replace('/public/images/teams-others-world/', '')
   );
 }

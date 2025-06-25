@@ -9,6 +9,7 @@ import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import { tactics } from 'src/data/tactics';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
+import { leaguesMap } from 'src/models/leagues';
 import { Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import { computed, ref } from 'vue';
@@ -63,6 +64,12 @@ const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
 const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
+const { queryTeamsByName: queryTeamsOthersEurope } = useTeams(
+  Leagues.OthersEurope
+);
+const { queryTeamsByName: queryTeamsOthersWorld } = useTeams(
+  Leagues.OthersWorld
+);
 const { queryTeamsByName: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
 
 const { setCurrentLeague } = useSoccer();
@@ -117,33 +124,38 @@ const currentTeams = computed(() => {
       return queryTeamsItaly1;
     case Leagues.Ligue1:
       return queryTeamsFrance1;
+    case Leagues.OthersEurope:
+      return queryTeamsOthersEurope;
+    case Leagues.OthersWorld:
+      return queryTeamsOthersWorld;
     default:
       return queryTeamsSpain1;
   }
 });
 
-const leagueOptions = ref([
-  {
-    label: 'La Liga Primera Division',
-    value: Leagues.LaLigaPrimeraDivision,
-  },
-  {
-    label: 'Premier League',
-    value: Leagues.PremierLeague,
-  },
-  {
-    label: 'Bundesliga',
-    value: Leagues.Bundesliga,
-  },
-  {
-    label: 'Serie A',
-    value: Leagues.SerieA,
-  },
-  {
-    label: 'Ligue 1',
-    value: Leagues.Ligue1,
-  },
-]);
+// const leagueOptions = ref([
+//   {
+//     label: 'La Liga Primera Division',
+//     value: Leagues.LaLigaPrimeraDivision,
+//   },
+//   {
+//     label: 'Premier League',
+//     value: Leagues.PremierLeague,
+//   },
+//   {
+//     label: 'Bundesliga',
+//     value: Leagues.Bundesliga,
+//   },
+//   {
+//     label: 'Serie A',
+//     value: Leagues.SerieA,
+//   },
+//   {
+//     label: 'Ligue 1',
+//     value: Leagues.Ligue1,
+//   },
+// ]);
+const leagueOptions = ref(leaguesMap);
 
 const updateSelectedTeamData = (): void => {
   if (currentTeams.value.data.value) {
