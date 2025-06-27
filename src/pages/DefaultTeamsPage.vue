@@ -110,7 +110,11 @@ const { mutateRoundsDelete } = useRoundsMutation();
 //   label: string;
 // }
 const nationalityOptions: string[] = [];
-flagMap.keys().forEach((k) => nationalityOptions.push(k));
+// flagMap.keys().forEach((k) => nationalityOptions.push(k));
+const x = Array.from(flagMap.keys());
+x.forEach((k) => nationalityOptions.push(k));
+
+// }
 // console.log(nationalityOptions);
 // const nationalityOptions: nacOptions[] = [];
 // flagMap

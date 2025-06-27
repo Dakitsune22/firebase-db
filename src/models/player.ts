@@ -161,7 +161,7 @@ export enum Flag {
   Zimbabwe = 'zw',
 }
 
-export const flagMap = new Map();
+export const flagMap = new Map<string, string>();
 
 flagMap.set('al', 'Albania');
 flagMap.set('de', 'Alemania');
