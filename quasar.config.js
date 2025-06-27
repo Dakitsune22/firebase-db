@@ -198,5 +198,12 @@ module.exports = configure(function (/* ctx */) {
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}
     },
+
+    // Añado esto para intentar omitir los errores durante el Build
+    // (el error con las 'columns' en DefaultTeamsPage que no sé por qué se marca como tal)
+    // eslint: {
+    //   warnings: false,
+    //   errors: false,
+    // },
   };
 });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { md5 } from 'js-md5';
-import { useQuasar } from 'quasar';
+import { QTableProps, useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import useRoundsMutation from 'src/composables/useRoundMutation';
@@ -215,73 +215,73 @@ const leagueOptions = ref(leaguesMap);
 //   { name: 'overall', label: 'Pot.', align: 'center', field: 'overall' },
 // ];
 
-const columns = [
+const columns: QTableProps['columns'] = [
   {
     name: 'shirtNumber',
     label: 'Dorsal',
-    align: 'center',
     field: 'shirtNumber',
+    align: 'center',
     sortable: true,
   },
   {
     name: 'name',
     label: 'Nombre',
-    align: 'center',
     field: 'name',
+    align: 'center',
     sortable: true,
   },
   {
     name: 'surname',
     label: 'Apellido',
-    align: 'center',
     field: 'surname',
+    align: 'center',
     sortable: true,
   },
-  { name: 'nickname', label: 'Apodo', align: 'center', field: 'nickname' },
+  { name: 'nickname', label: 'Apodo', field: 'nickname', align: 'center' },
   {
     name: 'birthDate',
     label: 'Fec. Nac.',
-    align: 'center',
     field: 'birthDate',
+    align: 'center',
   },
   {
     name: 'age',
     label: 'Edad',
-    align: 'center',
     field: 'age',
+    align: 'center',
     // sortable: true,
   },
   {
     name: 'nationality',
     label: 'Nac.',
-    align: 'center',
     field: 'nationality',
+    align: 'center',
   },
   {
     name: 'position',
     label: 'Pos.',
-    align: 'center',
     field: 'position',
+    align: 'center',
     sortable: true,
   },
   {
     name: 'overall',
     label: 'Pot.',
-    align: 'center',
     field: 'overall',
+    align: 'center',
     sortable: true,
   },
   {
     name: 'delete',
     label: 'Eliminar',
-    align: 'center',
     field: 'delete',
+    align: 'center',
   },
   {
     name: 'transfer',
     label: 'Traspasar',
-    align: 'center',
     field: 'transfer',
+    align: 'center',
   },
 ];
 
