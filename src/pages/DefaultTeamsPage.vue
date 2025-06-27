@@ -396,7 +396,7 @@ const onRestoreTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Restaurar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
+    title: `<span class="text-primary">Restaurar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -494,7 +494,7 @@ const onGetMasterDBTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Actualizar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
+    title: `<span class="text-primary">Actualizar equipos</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -607,7 +607,7 @@ const onSetMasterDBTeams = () => {
 
   $q.dialog({
     html: true,
-    title: `<span class="text-primary">Subir cambios</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/public/images/leagues/${selectedLeague.value?.replaceAll(
+    title: `<span class="text-primary">Subir cambios</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/${selectedLeague.value?.replaceAll(
       '-',
       ''
     )}.png" /></div>`,
@@ -932,7 +932,7 @@ const onTransferPlayer = (squadIndex: number): void => {
     title: '<span class="text-primary">Traspasar jugador</span>',
     message: `Se va a traspasar a <strong class="text-primary">${
       player.nickname ? player.nickname : player.name + ' ' + player.surname
-    }</strong> a:<BR><BR><div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><div><img src="/public/images/teams-${
+    }</strong> a:<BR><BR><div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><div><img src="/images/teams-${
       transferTargetTeamData.country
     }/${transferTargetTeamData.shortName}.png" /></div><div><strong>${
       transferTargetTeamData.name
