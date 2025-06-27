@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { md5 } from 'js-md5';
 import { useQuasar } from 'quasar';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
@@ -612,12 +613,12 @@ const onSetMasterDBTeams = () => {
     prompt: {
       model: '',
       isValid: (val) => val.length > 0, // << here is the magic
-      type: 'text', // optional
+      type: 'password', // optional
     },
     persistent: true,
   })
     .onOk((data) => {
-      if (data !== 'Dakitsune22') {
+      if (md5(data) !== '32e90b4f00b8f0be4394f9f03d6e50d7') {
         $q.notify({
           type: 'negative',
           message:

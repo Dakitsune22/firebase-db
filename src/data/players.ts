@@ -98,6 +98,8 @@ import {
   france1PlayersData17,
   othersEuropePlayersData0,
   othersWorldPlayersData0,
+  othersEuropePlayersData1,
+  othersWorldPlayersData1,
 } from './players-data';
 
 export const playersSpain1: Player[][] = [
@@ -211,8 +213,14 @@ export const playersFrance1: Player[][] = [
   france1PlayersData17,
 ];
 
-export const playersOthersEurope: Player[][] = [othersEuropePlayersData0];
+export const playersOthersEurope: Player[][] = [
+  othersEuropePlayersData0,
+  othersEuropePlayersData1,
+];
 
-export const playersOthersWorld: Player[][] = [othersWorldPlayersData0];
+export const playersOthersWorld: Player[][] = [
+  othersWorldPlayersData0,
+  othersWorldPlayersData1,
+];
 
 // export default playersSpain1;

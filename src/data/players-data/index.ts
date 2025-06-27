@@ -100,5 +100,7 @@ export { playersData as france1PlayersData16 } from './france1-16';
 export { playersData as france1PlayersData17 } from './france1-17';
 
 export { playersData as othersEuropePlayersData0 } from './others-europe-0';
+export { playersData as othersEuropePlayersData1 } from './others-europe-1';
 
 export { playersData as othersWorldPlayersData0 } from './others-world-0';
+export { playersData as othersWorldPlayersData1 } from './others-world-1';
