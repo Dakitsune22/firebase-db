@@ -40,6 +40,7 @@ const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
 const { mutateTeamUpdateStats } = useTeamMutation();
 const { queryTopScorers } = usePlayers();
+const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 
 const { queryTeamById: qt1 } = useTeams(
   getCurrentLeague(),
@@ -120,6 +121,7 @@ const onPlayMatch = () => {
 
   // Actualizamos query de goleadores, para que se refresquen en pantalla:
   queryTopScorers.refetch();
+  queryTeamsByPoints.refetch();
 };
 </script>
 

@@ -1385,7 +1385,7 @@ const onReset = () => {
             icon="person_add"
             color="primary"
             round
-            class="q-ml-lg"
+            class="q-ml-lg add-player"
             @click="onAddPlayer"
           />
         </div>
@@ -1833,6 +1833,13 @@ const onReset = () => {
     min-width: 600px;
     max-width: 900px;
 
+    @include response('mobile') {
+      min-width: 355px;
+      max-width: 390px;
+      margin: 10px;
+      margin-top: 40px;
+    }
+
     &-title {
       font-size: 20px;
       border-left: 6px solid $primary;
@@ -1847,10 +1854,16 @@ const onReset = () => {
         // @include flexPosition(start, end);
         width: 95%;
         // background-color: bisque;
+        @include response('mobile') {
+          width: 88%;
+        }
       }
       &-right {
         width: 5%;
         // background-color: burlywood;
+        @include response('mobile') {
+          width: 12%;
+        }
       }
     }
 
@@ -1860,16 +1873,36 @@ const onReset = () => {
       margin-bottom: 10px;
       // background-color: aqua;
 
+      @include response('mobile') {
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+        // background-color: aquamarine;
+      }
+
       &-left {
         @include flexPosition(start, end);
         width: 71%;
         // background-color: bisque;
+
+        @include response('mobile') {
+          width: 100%;
+          margin-bottom: 10px;
+          // justify-content: space-around;
+        }
       }
       &-right {
         @include flexPosition(end, end);
         width: 29%;
         // padding-bottom: 5px;
         // background-color: burlywood;
+
+        @include response('mobile') {
+          // display: flex;
+          // flex-direction: row;
+          // justify-content: end;
+          width: 100%;
+        }
       }
     }
   }
@@ -1940,12 +1973,24 @@ const onReset = () => {
   @include flexPosition(center, center);
   margin-top: 15px;
   font-size: 15px;
+
+  @include response('mobile') {
+    display: flex;
+    flex-direction: column;
+  }
 }
 .no-teams {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   font-size: 18px;
+}
+.add-player {
+  @include response('mobile') {
+    position: fixed;
+    right: 10px;
+  }
 }
 </style>

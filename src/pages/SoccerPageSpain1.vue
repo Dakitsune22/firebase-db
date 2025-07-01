@@ -400,6 +400,16 @@ const onLastRound = async () => {
   // padding: 16px;
   // padding-top: 0;
   // padding-bottom: 0;
+
+  @include response('mobile') {
+    // display: flex;
+    // flex-direction: column;
+    // width: 497px;
+    top: 10px;
+    // padding-left: 5px;
+    zoom: 78%;
+    // background-color: red;
+  }
 }
 .round-header {
   @include flexPosition(space-between, center);
@@ -445,6 +455,10 @@ const onLastRound = async () => {
   color: $primary;
   font-weight: 500;
   font-size: small;
+
+  @include response('mobile') {
+    padding-top: 0px;
+  }
 }
 .restart-league {
   @include flexPosition(center, center);
@@ -455,6 +469,7 @@ const onLastRound = async () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   font-size: 18px;
 }
 /* Transition Group */

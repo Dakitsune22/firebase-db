@@ -389,6 +389,13 @@ const onReset = () => {
     min-width: 600px;
     max-width: 900px;
 
+    @include response('mobile') {
+      min-width: 355px;
+      max-width: 390px;
+      margin: 10px;
+      margin-top: 40px;
+    }
+
     &-title {
       font-size: 20px;
       border-left: 6px solid $primary;
@@ -420,15 +427,24 @@ const onReset = () => {
   &-item1 {
     width: 30px;
     // background-color: cadetblue;
+    @include response('mobile') {
+      width: 22px;
+    }
   }
   &-item2 {
     width: 40px;
     // background-color: bisque;
+    @include response('mobile') {
+      width: 35px;
+    }
   }
   &-item3 {
     @include flexPosition(center, start);
     width: 220px;
     // background-color: aquamarine;
+    // @include response('mobile') {
+    //   width: 218px;
+    // }
   }
 }
 </style>

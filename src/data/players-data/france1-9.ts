@@ -40,7 +40,7 @@ export const playersData: Player[] = [
     shirtNumber: 5,
     name: 'Brendan',
     surname: 'Chardonnet',
-    birthDate: 'Brendan Chardonnet',
+    birthDate: '22/12/1994',
     nationality: Nationality.France,
     position: Position.DF,
     overall: 78,
