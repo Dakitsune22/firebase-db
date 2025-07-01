@@ -68,6 +68,11 @@ mutateUserInfo.mutate();
   // justify-content: center;
   // align-items: center;
   // background-color: aqua;
+
+  @include response('mobile') {
+    zoom: 60%;
+    margin-top: 100px;
+  }
 }
 .index-leagues {
   @include flexPosition(space-between, center);

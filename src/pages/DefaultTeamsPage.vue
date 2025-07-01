@@ -1989,7 +1989,7 @@ const onReset = () => {
 }
 .add-player {
   @include response('mobile') {
-    position: fixed;
+    position: absolute;
     right: 10px;
   }
 }
