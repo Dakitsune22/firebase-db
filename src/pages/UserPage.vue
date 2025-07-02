@@ -149,6 +149,13 @@ const onSubmit = () => {
     min-width: 380px;
     max-width: 600px;
 
+    @include response('mobile') {
+      min-width: 355px;
+      max-width: 390px;
+      margin: 10px;
+      margin-top: 40px;
+    }
+
     &-title {
       font-size: 24px;
       border-left: 6px solid $primary;
