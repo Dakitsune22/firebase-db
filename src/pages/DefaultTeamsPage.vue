@@ -16,7 +16,7 @@ import {
   teamsOthersEurope,
   teamsOthersWorld,
 } from 'src/data/teams';
-import { getAge, isValidBirthDate } from 'src/helpers/functions';
+import { getAge, isValidBirthDate, sleep } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
@@ -933,7 +933,7 @@ const onTransferPlayer = (squadIndex: number): void => {
     }/${transferTargetTeamData.shortName}.png" /></div><div><strong>${
       transferTargetTeamData.name
     }</strong></div></div><BR>
-        Este cambio se guardará directamente en la base de datos maestra.<br><br>
+        Este cambio se guardará directamente en la base de datos.<br><br>
         <strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: {
@@ -943,7 +943,7 @@ const onTransferPlayer = (squadIndex: number): void => {
     },
     persistent: true,
   })
-    .onOk(() => {
+    .onOk(async () => {
       player.teamId = transferTargetTeamData.id;
       player.shirtNumber = getNextAvailableShirtNumber(transferTargetTeamData);
       transferTargetTeamData.players.push(player);
@@ -971,18 +971,21 @@ const onTransferPlayer = (squadIndex: number): void => {
           team: selectedTeamData.value,
         });
       }
+      await sleep(200);
       if (
         transferSelectedLeague.value &&
         transferSelectedTeamId.value !== undefined
       ) {
         refetchQueryLeague(transferSelectedLeague.value);
+        console.log('Refetch target team league query');
       }
       if (selectedLeague.value && selectedTeamId.value !== undefined) {
         refetchQueryLeague(selectedLeague.value);
+        console.log('Refetch source team league query');
       }
-      // // Init data:
-      // transferSelectedLeague.value = undefined;
-      // transferSelectedTeamId.value = undefined;
+      // Init data:
+      transferSelectedLeague.value = undefined;
+      transferSelectedTeamId.value = undefined;
     })
     .onCancel(() => {
       return;
@@ -1025,7 +1028,7 @@ const onSubmit = () => {
       html: true,
       title: '<span class="text-primary">Guardar cambios</span>',
       message:
-        'Se van a actualizar los datos del equipo en la base de datos maestra.<br><br><strong>¿Estás seguro de continuar?</strong>',
+        'Se van a actualizar los datos del equipo en la base de datos.<br><br><strong>¿Estás seguro de continuar?</strong>',
       cancel: { label: 'Volver', flat: true },
       ok: {
         icon: 'warning',

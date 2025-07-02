@@ -119,7 +119,7 @@ export const playersData: Player[] = [
   {
     shirtNumber: 12,
     name: 'Thomas',
-    surname: 'Maunier',
+    surname: 'Meunier',
     birthDate: '12/09/1991',
     nationality: Nationality.Belgium,
     position: Position.LD,

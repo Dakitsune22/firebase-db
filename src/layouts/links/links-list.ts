@@ -22,7 +22,7 @@ export const linksList: EssentialLinkProps[] = [
   // },
   {
     title: 'Gestión de equipos',
-    caption: 'Cambios en BD maestra',
+    caption: 'Guardar o recuperar datos de BD',
     icon: 'groups',
     link: '/teams-db',
   },

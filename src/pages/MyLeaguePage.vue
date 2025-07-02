@@ -291,7 +291,7 @@ const onReset = () => {
       <q-select
         filled
         v-model="selectedTeamId"
-        :options="currentTeams.data.value"
+        :options="currentTeams.data.value?.filter((t) => t.players.length > 0)"
         option-value="id"
         option-label="name"
         options-dense
