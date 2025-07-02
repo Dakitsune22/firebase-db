@@ -33,19 +33,19 @@ const getWinner = (localOverall: number, awayOverall: number): WinnerInfo => {
   }
   // Actualizamos la diferencia de nivel entre equipos aplicando el bonus local calculado:
   overallDiff += homeBonus;
-  console.log({ homeBonus });
-  console.log({ overallDiff });
+  // console.log({ homeBonus });
+  // console.log({ overallDiff });
 
   // Guardamos la diferencia de nivel en positivo:
   const positiveOverallDiff: number = Math.abs(overallDiff);
-  console.log({ positiveOverallDiff });
+  // console.log({ positiveOverallDiff });
   //   if (overallDiff < 0) {
   //     overallDiff = overallDiff * -1;
   //   }
 
   // Calculamos, según diferencia de nivel, si el resultado es victoria, empate o derrota:
   const dice = Math.floor(Math.random() * 100);
-  console.log({ dice });
+  // console.log({ dice });
 
   if (positiveOverallDiff >= 9) {
     mrv =
@@ -134,7 +134,7 @@ export const getResult = (
     awayOverall
   );
 
-  console.log({ matchWinner });
+  // console.log({ matchWinner });
   switch (matchWinner) {
     // Empate:
     case 0:

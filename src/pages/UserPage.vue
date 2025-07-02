@@ -23,7 +23,7 @@ const onReset = () => {
 };
 
 const onSubmit = () => {
-  console.log('On submit');
+  // console.log('On submit');
 
   if (userId.value === newUser.value) {
     $q.notify({

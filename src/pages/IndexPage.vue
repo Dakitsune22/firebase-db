@@ -80,8 +80,8 @@ mutateUserInfo.mutate();
   margin-left: 20px;
   // background-color: aqua;
 
-  &-img {
-    // background-color: aquamarine;
-  }
+  //  &-img {
+  // background-color: aquamarine;
+  //  }
 }
 </style>

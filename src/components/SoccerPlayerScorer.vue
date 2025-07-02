@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import useTeams from 'src/composables/useTeams';
 import { Player } from 'src/models';

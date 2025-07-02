@@ -78,10 +78,10 @@ export const createCalendar = (teamsNumber: number): string[][] => {
   }
 
   // Mostrarlo en consola:
-  console.log('Matriz #1: ', m1);
-  console.log('Matriz #2: ', m2);
-  console.log('Jornadas ida', j1);
-  console.log('Jornadas vuelta', j2);
+  // console.log('Matriz #1: ', m1);
+  // console.log('Matriz #2: ', m2);
+  // console.log('Jornadas ida', j1);
+  // console.log('Jornadas vuelta', j2);
 
   j1.push(...j2);
   return j1;
@@ -165,10 +165,10 @@ export const generateLeagueCalendar = (teams: string[]): string[][] => {
   }
 
   // Mostrarlo en consola:
-  console.log('Matriz #1: ', m1);
-  console.log('Matriz #2: ', m2);
-  console.log('Jornadas ida', j1);
-  console.log('Jornadas vuelta', j2);
+  // console.log('Matriz #1: ', m1);
+  // console.log('Matriz #2: ', m2);
+  // console.log('Jornadas ida', j1);
+  // console.log('Jornadas vuelta', j2);
 
   j1.push(...j2);
   return j1;

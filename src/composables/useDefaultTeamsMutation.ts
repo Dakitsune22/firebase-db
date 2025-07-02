@@ -1,16 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { useQuasar } from 'quasar';
 import { db } from 'src/boot/firebase';
 import { Leagues, Team } from 'src/models';
-// import players from 'src/data/players';
-import {
-  teamsEngland1,
-  teamsSpain1,
-  teamsGermany1,
-  teamsItaly1,
-  teamsFrance1,
-} from 'src/data/teams';
-import { useQuasar } from 'quasar';
 
 interface teamUpdateData {
   league: Leagues;

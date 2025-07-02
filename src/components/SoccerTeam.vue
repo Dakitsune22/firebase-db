@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { teamsSpain1 } from 'src/data/teams';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import { Leagues } from 'src/models';
 import { Team } from 'src/models/team';
@@ -168,11 +167,11 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     font-size: 12px;
     color: $darkGrey;
   }
-  &-img {
-    // width: 30px;
-    // height: 40px;
-    // background-color: aqua;
-  }
+  //&-img {
+  // width: 30px;
+  // height: 40px;
+  // background-color: aqua;
+  //}
   &-team {
     // background-color: aquamarine;
     align-items: start;

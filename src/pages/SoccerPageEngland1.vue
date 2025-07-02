@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
 import { Leagues, SeasonRound } from 'src/models';
@@ -7,7 +7,7 @@ import { teamsEngland1 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import useDefaultTeams from 'src/composables/useDefaultTeams';
+//import useDefaultTeams from 'src/composables/useDefaultTeams';
 import usePlayers from 'src/composables/usePlayers';
 import useRounds from 'src/composables/useRounds';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
@@ -57,7 +57,7 @@ const restartLeague = async () => {
   // Rounds:
   // const rounds = generateLeagueCalendar(teamsEngland1);
   const rounds = createCalendar(teamsEngland1.length);
-  console.log(rounds);
+  console.log('Jornadas a generar:', rounds);
   rounds.forEach((r, index) => {
     const sr: SeasonRound = {
       round: index + 1,
@@ -77,7 +77,8 @@ const restartLeague = async () => {
         startingLineup2: [],
       });
     }
-    console.log(sr);
+    // console.log(sr);
+    console.log('Jornadas generadas:', sr.matches.length);
     mutateRoundAdd.mutate(sr);
   });
   // Teams:

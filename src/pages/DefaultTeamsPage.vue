@@ -97,10 +97,7 @@ const { queryTeams: queryMDBTeamsOthersEurope } = useDefaultTeams(
 const { queryTeams: queryMDBTeamsOthersWorld } = useDefaultTeams(
   Leagues.OthersWorld
 );
-const {
-  mutateTeamAdd: mutateMDBTeamAdd,
-  mutateTeamUpdate: mutateMDBTeamUpdate,
-} = useDefaultTeamsMutation();
+const { mutateTeamAdd: mutateMDBTeamAdd } = useDefaultTeamsMutation();
 
 const { mutateRoundsDelete } = useRoundsMutation();
 
@@ -128,7 +125,7 @@ const positionOptions = Object.values(Position);
 const tacticOptions = Object.values(TacticList);
 
 const currentTeams = computed(() => {
-  console.log(selectedLeague.value);
+  // console.log(selectedLeague.value);
   switch (selectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
@@ -150,7 +147,7 @@ const currentTeams = computed(() => {
 });
 
 const transferCurrentTeams = computed(() => {
-  console.log(transferSelectedLeague.value);
+  // console.log(transferSelectedLeague.value);
   switch (transferSelectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
@@ -293,7 +290,7 @@ const errorBirthDate = ref(false);
 const errorBirthDateMessage = ref('');
 
 const birthDateValidation = (val: string): boolean => {
-  console.log(val);
+  // console.log(val);
   if (val.length < 10) {
     errorBirthDate.value = true;
     errorBirthDateMessage.value = 'Introduce la fecha completa';
@@ -320,7 +317,7 @@ const errorShirtNumber = ref(false);
 const errorShirtNumberMessage = ref('');
 
 const shirtNumberRangeValidation = (val: number): boolean => {
-  console.log(val);
+  // console.log(val);
   if (
     selectedTeamData.value.players.findIndex((p) => p.shirtNumber === val) >= 0
   ) {
@@ -541,7 +538,7 @@ const onGetMasterDBTeams = () => {
         case Leagues.SerieA:
           if (queryMDBTeamsItaly1.data.value) {
             queryMDBTeamsItaly1.data.value.forEach((team) => {
-              console.log(team.name);
+              // console.log(team.name);
               mutateTeamAdd.mutate({
                 league: Leagues.SerieA,
                 team,
@@ -905,10 +902,9 @@ const isSelectedTeamDataChanged = (): boolean => {
 // };
 
 const onTransferPlayer = (squadIndex: number): void => {
-  console.log('To Do: On transfer player');
-  console.log({ squadIndex });
+  // console.log({ squadIndex });
   const player = { ...selectedTeamData.value.players[squadIndex] };
-  console.log(player);
+  // console.log(player);
 
   let transferTargetTeamData: Team = initialTeamData;
   let auxTeamData: Team = initialTeamData;
@@ -925,7 +921,7 @@ const onTransferPlayer = (squadIndex: number): void => {
       transferTargetTeamData.players.push({ ...p });
     });
   }
-  console.log(transferTargetTeamData);
+  // console.log(transferTargetTeamData);
 
   $q.dialog({
     html: true,
@@ -951,13 +947,13 @@ const onTransferPlayer = (squadIndex: number): void => {
       player.teamId = transferTargetTeamData.id;
       player.shirtNumber = getNextAvailableShirtNumber(transferTargetTeamData);
       transferTargetTeamData.players.push(player);
-      console.log(transferTargetTeamData.name);
-      console.log(transferTargetTeamData.players);
+      // console.log(transferTargetTeamData.name);
+      // console.log(transferTargetTeamData.players);
 
       selectedTeamData.value.players.splice(squadIndex, 1);
       selectedTeamOriginalData.value.players.splice(squadIndex, 1);
-      console.log(selectedTeamData.value.name);
-      console.log(selectedTeamData.value.players);
+      // console.log(selectedTeamData.value.name);
+      // console.log(selectedTeamData.value.players);
       if (
         transferSelectedLeague.value &&
         transferSelectedTeamId.value !== undefined
@@ -1250,7 +1246,7 @@ const onReset = () => {
         "
         @update:model-value="
           (value) => {
-            console.log(value);
+            // console.log(value);
             updateSelectedTeamData();
             // if (currentTeams.data.value) {
             //   selectedTeamData =
@@ -1407,7 +1403,7 @@ const onReset = () => {
             style="width: 160px"
             @update:model-value="
               (value: TacticList) => {
-                console.log('selected value: ', value)
+                // console.log('selected value: ', value)
                 const tempTactic = tactics.find((t) => t.name === value) as Tactic;
                 selectedTeamData.tactic = {
                   name: value,

@@ -83,7 +83,7 @@ const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
 
   if (docSnap.exists()) {
     t = docSnap.data() as Team;
-    console.log(t);
+    // console.log(t);
     // t= {
     //   draws: docSnap.data().draws,
     //   goalDifference: docSnap.data().goalDifference

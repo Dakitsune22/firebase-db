@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
-import useDefaultTeams from 'src/composables/useDefaultTeams';
-import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useRounds from 'src/composables/useRounds';
 import useTeamMutation from 'src/composables/useTeamMutation';
@@ -112,7 +110,7 @@ selectedMyLeagueTeams.value.forEach((t) => {
 const { mutateTeamAddMyLeague, mutateTeamDeleteMyLeague } = useTeamMutation();
 
 const currentTeams = computed(() => {
-  console.log(selectedLeague.value);
+  // console.log(selectedLeague.value);
   switch (selectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
@@ -220,7 +218,7 @@ const onSelectTeam = (): void => {
     t.players.forEach((p) => (p.teamId = t.id));
   });
 
-  console.log(selectedMyLeagueTeams.value);
+  // console.log(selectedMyLeagueTeams.value);
 };
 
 const onDeleteTeam = (idx: number): void => {
@@ -231,19 +229,19 @@ const onDeleteTeam = (idx: number): void => {
   selectedMyLeagueTeams.value.forEach((t) => {
     t.players.forEach((p) => (p.teamId = t.id));
   });
-  console.log(selectedMyLeagueTeams.value);
+  // console.log(selectedMyLeagueTeams.value);
 };
 
 const onSubmit = () => {
   // Delete current DB teams:
   initialMyLeagueTeamsId.forEach((teamId) => {
-    console.log('deleteTeamFromMyLeague');
+    // console.log('deleteTeamFromMyLeague');
     mutateTeamDeleteMyLeague.mutate(teamId);
     currentTeams.value.refetch();
   });
   // Add teams:
   selectedMyLeagueTeams.value.forEach((team) => {
-    console.log('addTeamToMyLeague');
+    // console.log('addTeamToMyLeague');
     mutateTeamAddMyLeague.mutate({ team });
     currentTeams.value.refetch();
   });
@@ -303,7 +301,7 @@ const onReset = () => {
         :disable="!selectedLeague"
         @update:model-value="
           (value) => {
-            console.log(value);
+            // console.log(value);
             onSelectTeam();
           }
         "

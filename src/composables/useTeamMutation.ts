@@ -1,18 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/boot/firebase';
+import { useQuasar } from 'quasar';
 import { Leagues, Team, Player } from 'src/models';
-// import players from 'src/data/players';
-import {
-  teamsEngland1,
-  teamsSpain1,
-  teamsGermany1,
-  teamsItaly1,
-  teamsFrance1,
-} from 'src/data/teams';
 import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
-import { useQuasar } from 'quasar';
 
 // let numTeam = 0;
 
@@ -185,7 +177,7 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
 const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
   // const { queryTeamById } = useTeams(id);
 
-  console.log(t);
+  // console.log(t);
 
   const ut: Team = { ...t.team };
   ut.players = t.team.players.map((p) => ({ ...p }));
@@ -195,7 +187,7 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
   //   console.log(t);
   // }
 
-  console.log('before update', ut);
+  // console.log('before update', ut);
 
   ut.matchesPlayed++;
   ut.goalsScored += t.newGoalsScored;
@@ -221,7 +213,7 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
     };
   });
 
-  console.log('after update', ut);
+  // console.log('after update', ut);
 
   await updateDoc(
     doc(db, `${userId.value}-teams-${t.league}`, t.id.toString()),
@@ -234,13 +226,11 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
 const updateTeam = async (t: teamUpdateData): Promise<void> => {
   // const { queryTeamById } = useTeams(id);
 
-  console.log(t);
+  // console.log(t);
 
   // const ut: Team = { ...t.team };
-  // ut.players = t.team.players.map((p) => ({ ...p }));
-
   // console.log('before update', ut);
-
+  // ut.players = t.team.players.map((p) => ({ ...p }));
   // console.log('after update', ut);
 
   await updateDoc(
@@ -389,7 +379,7 @@ const useTeamMutation = () => {
       });
     },
     onSettled: () => {
-      console.log('Team deleted');
+      // console.log('Team deleted');
     },
   });
 

@@ -52,7 +52,7 @@ const getPlayersByGoalsScored = async (): Promise<Player[]> => {
     return 0;
   });
 
-  console.log('Players length:', players.length);
+  // console.log('Players length:', players.length);
   if (players.length >= 50) {
     return players.slice(0, 50);
   } else {

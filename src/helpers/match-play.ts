@@ -59,7 +59,7 @@ export const getStartingLineup = (team: Team): Player[] => {
       let bonus = 0;
 
       for (let i = 0; i < filteredPlayers.length; i++) {
-        console.log({ bonus });
+        // console.log({ bonus });
         diceResults.push(
           Math.floor(Math.random() * (100 - filteredPlayers[i].overall) - bonus)
         );
@@ -68,26 +68,26 @@ export const getStartingLineup = (team: Team): Player[] => {
         } else {
           bonus += 1;
         }
-        console.log(
-          filteredPlayers[i].name,
-          filteredPlayers[i].surname,
-          '-',
-          diceResults[i]
-        );
+        // console.log(
+        //   filteredPlayers[i].name,
+        //   filteredPlayers[i].surname,
+        //   '-',
+        //   diceResults[i]
+        // );
       }
       // Comprobamos el jugador que saco el dado más alto y lo añadimos como titular:
       const minDice = Math.min(...diceResults);
-      console.log({ minDice });
+      // console.log({ minDice });
       const minDiceIndex = diceResults.findIndex((d) => d === minDice);
-      console.log({ minDiceIndex });
-      console.log(filteredPlayers[minDiceIndex]);
+      // console.log({ minDiceIndex });
+      // console.log(filteredPlayers[minDiceIndex]);
       startingLineup.push(filteredPlayers[minDiceIndex]);
     }
   });
 
-  startingLineup.forEach((player) => {
-    console.log(player.position, player.shirtNumber, player.overall);
-  });
+  // startingLineup.forEach((player) => {
+  //   console.log(player.position, player.shirtNumber, player.overall);
+  // });
   return startingLineup;
 };
 
@@ -142,14 +142,14 @@ const getScorerByRate = (players: Player[]): Player => {
       //   break;
     }
     diceResults.push(dice);
-    console.log(player.position, player.surname, '-->', dice);
+    // console.log(player.position, player.surname, '-->', dice);
   });
   // Comprobamos el jugador que ha saco el dado más alto y lo retornamos como goleador:
   const maxDice = Math.max(...diceResults);
-  console.log({ maxDice });
+  // console.log({ maxDice });
   const maxDiceIndex = diceResults.findIndex((d) => d === maxDice);
-  console.log({ maxDiceIndex });
-  console.log(players[maxDiceIndex]);
+  // console.log({ maxDiceIndex });
+  // console.log(players[maxDiceIndex]);
 
   return players[maxDiceIndex];
 };

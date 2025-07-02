@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
-import {
-  teamsSpain1,
-  teamsEngland1,
-  teamsGermany1,
-  teamsItaly1,
-  teamsFrance1,
-} from 'src/data/teams';
 import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import { Leagues, Team } from 'src/models';
+import { Team } from 'src/models';
 import {
   getStartingLineup,
   getScorers,

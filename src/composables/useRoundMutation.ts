@@ -41,7 +41,7 @@ const deleteMyLeagueRounds = async (numRounds: number): Promise<void> => {
       (i + 1).toString()
     );
     await deleteDoc(docRef);
-    console.log('delete doc', i + 1);
+    // console.log('delete doc', i + 1);
   }
 };
 
@@ -55,7 +55,7 @@ const deleteRounds = async (league: Leagues): Promise<void> => {
       (i + 1).toString()
     );
     await deleteDoc(docRef);
-    console.log('delete doc', i + 1);
+    // console.log('delete doc', i + 1);
   }
 };
 
