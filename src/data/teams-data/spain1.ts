@@ -10,9 +10,9 @@ export const teamsSpain1: Team[] = [
   {
     ...initTeamData,
     id: i,
-    name: 'FC Barcelona',
-    shortName: 'fcb',
-    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    name: 'Valladolid',
+    shortName: 'vll',
+    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
     players: playersSpain1[i++],
   },
   {
@@ -129,9 +129,9 @@ export const teamsSpain1: Team[] = [
   {
     ...initTeamData,
     id: i,
-    name: 'Valladolid',
-    shortName: 'vll',
-    tactic: tactics.find((t) => t.name === TacticList['5-4-1']) as Tactic,
+    name: 'FC Barcelona',
+    shortName: 'fcb',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
     players: playersSpain1[i++],
   },
   {

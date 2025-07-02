@@ -180,6 +180,17 @@ const selectedTeamRating = computed(() => {
   );
 });
 
+const selectedTeamAverageAge = computed(() => {
+  return (
+    selectedTeamData.value.players.reduce(
+      (a, b) => a + getAge(b.birthDate || '0'),
+      0
+    ) /
+    selectedTeamData.value.players.length /
+    10
+  );
+});
+
 // const currentTeamData = computed(() => {
 //   let team: Team;
 //   if (currentTeams.value.data.value) {
@@ -1791,7 +1802,15 @@ const onReset = () => {
           class="q-pb-xs q-ml-xs q-mr-xs"
         />
         <span class="text-bold text-primary">{{
-          (selectedTeamRating * 10).toFixed(1)
+          selectedTeamRating > 0 ? (selectedTeamRating * 10).toFixed(1) : 0
+        }}</span>
+      </div>
+      <div class="footer-container">
+        Edad media de la plantilla (años):
+        <span class="text-bold text-primary q-pl-sm q-pr-xs">{{
+          selectedTeamAverageAge > 0
+            ? (selectedTeamAverageAge * 10).toFixed(1)
+            : 0
         }}</span>
       </div>
     </div>
