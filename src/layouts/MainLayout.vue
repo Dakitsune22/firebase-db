@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
-import { linksList } from './links/links-list';
+import {
+  linksList,
+  linksListManage,
+  linksListLeagues,
+} from './links/links-list';
 import useUI from 'src/composables/storeWrappers/useUI';
 
 defineOptions({
@@ -48,15 +52,29 @@ const pageKey = ref<number>(0);
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Menú </q-item-label>
-
+      <q-list class="q-mt-md">
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
           v-bind="link"
         />
+        <q-separator class="q-mt-md q-mb-sm" />
+        <q-item-label header> Mantenimiento </q-item-label>
 
+        <EssentialLink
+          v-for="link in linksListManage"
+          :key="link.title"
+          v-bind="link"
+        />
+        <q-separator class="q-mt-md q-mb-sm" />
+        <q-item-label header> Ligas </q-item-label>
+
+        <EssentialLink
+          v-for="link in linksListLeagues"
+          :key="link.title"
+          v-bind="link"
+        />
+        <q-separator class="q-mt-md" />
         <q-item-label header style="font-size: 80%; margin-top: 40px">
           ® ~by Dakitsune22, 2025
         </q-item-label>

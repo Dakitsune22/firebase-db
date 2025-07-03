@@ -14,6 +14,9 @@ export const linksList: EssentialLinkProps[] = [
   //   icon: 'favorite',
   //   link: '/fruits',
   // },
+];
+
+export const linksListManage: EssentialLinkProps[] = [
   // {
   //   title: 'Alta de jugador',
   //   caption: 'La Liga',
@@ -32,6 +35,9 @@ export const linksList: EssentialLinkProps[] = [
     icon: 'published_with_changes',
     link: '/myleague',
   },
+];
+
+export const linksListLeagues: EssentialLinkProps[] = [
   {
     title: 'My~League',
     caption: 'Liga personalizada',
