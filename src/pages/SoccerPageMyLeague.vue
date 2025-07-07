@@ -115,7 +115,9 @@ const restartLeague = async () => {
 const onRestartLeague = () => {
   $q.dialog({
     html: true,
-    title: '<span class="text-primary">Reiniciar MyLeague</span>',
+    // title: '<span class="text-primary">Reiniciar MyLeague</span>',
+    title:
+      '<span class="text-primary">Reiniciar My~League</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/myleague.png" /></div>',
     message:
       'Todos los datos actuales (clasificación, resultados, etc.) se eliminarán. <strong>¿Estás seguro de continuar?</strong>',
     cancel: { label: 'Volver', flat: true },
@@ -266,7 +268,14 @@ const onLastRound = async () => {
           height="30px"
           class="q-ma-sm"
         /> -->
-        <q-icon name="stars" />
+        <!-- <q-icon name="stars" /> -->
+        <q-img
+          src="/images/leagues/myleague.png"
+          spinner-color="white"
+          width="36px"
+          height="36px"
+          class="q-ma-sm"
+        />
         <span class="q-mr-sm text-bold text-primary"
           >JORNADA {{ getCurrentRound() }}</span
         >

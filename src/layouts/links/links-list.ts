@@ -41,7 +41,8 @@ export const linksListLeagues: EssentialLinkProps[] = [
   {
     title: 'My~League',
     caption: 'Liga personalizada',
-    icon: 'stars',
+    // icon: 'stars',
+    img: '/images/leagues/myleague.png',
     link: 'soccer-myleague',
   },
   {

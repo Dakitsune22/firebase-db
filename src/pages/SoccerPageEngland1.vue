@@ -127,7 +127,8 @@ const restartLeague = async () => {
 const onRestartLeague = () => {
   $q.dialog({
     html: true,
-    title: '<span class="text-primary">Reiniciar Premier League</span>',
+    title:
+      '<span class="text-primary">Reiniciar Premier League</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/england1.png" /></div>',
     message:
       'Todos los datos actuales (clasificación, resultados, etc.) se eliminarán. <strong>¿Estás seguro de continuar?</strong>',
     cancel: { label: 'Volver', flat: true },
