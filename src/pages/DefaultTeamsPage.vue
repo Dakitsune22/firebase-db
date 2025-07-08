@@ -1751,7 +1751,6 @@ const onReset = () => {
               <q-popup-edit
                 v-model.number="props.row.transfer"
                 style="width: 250px"
-                v-slot="scope"
                 @hide="
                   // Init data:
                   transferSelectedLeague = undefined;
