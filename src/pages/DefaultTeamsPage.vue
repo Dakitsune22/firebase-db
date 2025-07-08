@@ -912,7 +912,8 @@ const isSelectedTeamDataChanged = (): boolean => {
 //     });
 // };
 
-const onTransferPlayer = (squadIndex: number): void => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const onTransferPlayer = (squadIndex: number, scope: any): void => {
   // console.log({ squadIndex });
   const player = { ...selectedTeamData.value.players[squadIndex] };
   // console.log(player);
@@ -997,6 +998,8 @@ const onTransferPlayer = (squadIndex: number): void => {
       // Init data:
       transferSelectedLeague.value = undefined;
       transferSelectedTeamId.value = undefined;
+      // Cerramos la ventana principal de traspasos:
+      scope.set();
     })
     .onCancel(() => {
       return;
@@ -1048,7 +1051,7 @@ const onSubmit = () => {
       },
       persistent: true,
     })
-      .onOk(() => {
+      .onOk(async () => {
         let error = false;
         if (selectedLeague.value && selectedTeamId.value !== undefined) {
           selectedTeamData.value.players.forEach((p) => {
@@ -1071,6 +1074,7 @@ const onSubmit = () => {
             id: selectedTeamId.value,
             team: selectedTeamData.value,
           });
+          await sleep(200);
           refetchQueryLeague(selectedLeague.value);
 
           const selectedTeamDefaultPlayers: Player[] = [];
@@ -1777,8 +1781,8 @@ const onReset = () => {
                     :disable="transferSelectedTeamId === undefined"
                     @click="
                       {
-                        onTransferPlayer(props.rowIndex);
-                        scope.set;
+                        onTransferPlayer(props.rowIndex, scope);
+                        // scope.set;
                       }
                     "
                   />

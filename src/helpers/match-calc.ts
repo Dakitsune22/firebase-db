@@ -43,6 +43,17 @@ const getWinner = (localOverall: number, awayOverall: number): WinnerInfo => {
   //     overallDiff = overallDiff * -1;
   //   }
 
+  // Si alguno de los dos equipos (o ambos) no tienen jugadores, retornamos:
+  if (localOverall <= 0 && awayOverall <= 0) {
+    return { winner: 0, winnerOverallDiff: overallDiff };
+  }
+  if (awayOverall <= 0) {
+    return { winner: 1, winnerOverallDiff: overallDiff };
+  }
+  if (localOverall <= 0) {
+    return { winner: 2, winnerOverallDiff: overallDiff };
+  }
+
   // Calculamos, según diferencia de nivel, si el resultado es victoria, empate o derrota:
   const dice = Math.floor(Math.random() * 100);
   // console.log({ dice });
@@ -138,6 +149,10 @@ export const getResult = (
   switch (matchWinner) {
     // Empate:
     case 0:
+      if (localOverall <= 0 || awayOverall <= 0) {
+        // Si alguno de los equipos no tiene jugadores, no hay goles.
+        return { localScore: 0, awayScore: 0 };
+      }
       const drawDice = Math.floor(Math.random() * 100) + 1;
       if (drawDice > 90) {
         return { localScore: 3, awayScore: 3 };
@@ -166,6 +181,10 @@ export const getResult = (
       } else {
         winnerScore = Math.floor(Math.random() * 3) + 1;
         loserScore = Math.floor(Math.random() * winnerScore);
+      }
+      if (localOverall <= 0 || awayOverall <= 0) {
+        // Si alguno de los equipos no tiene jugadores (será el equipo perdedor), el resultado de ese equipo será 0.
+        loserScore = 0;
       }
       if (matchWinner === 1) {
         localScore = winnerScore;

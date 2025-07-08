@@ -68,6 +68,7 @@ export enum Flag {
   DominicanRepublic = 'do',
   Ecuador = 'ec',
   Egypt = 'eg',
+  ElSalvador = 'sv',
   England = 'gb-eng',
   Estonia = 'ee',
   FaroeIslands = 'fo',
@@ -188,7 +189,7 @@ flagMap.set('ca', 'Canadá');
 flagMap.set('cl', 'Chile');
 flagMap.set('cn', 'China');
 flagMap.set('co', 'Colombia');
-flagMap.set('km', 'Colombia');
+flagMap.set('km', 'Comoras');
 flagMap.set('cg', 'Congo');
 flagMap.set('kr', 'Corea del Sur');
 flagMap.set('ci', 'Costa de Marfil');
@@ -199,6 +200,7 @@ flagMap.set('cu', 'Cuba');
 flagMap.set('dk', 'Dinamarca');
 flagMap.set('ec', 'Ecuador');
 flagMap.set('eg', 'Egipto');
+flagMap.set('sv', 'El Salvador');
 flagMap.set('ae', 'Emiratos Árabes');
 flagMap.set('gb-sct', 'Escocia');
 flagMap.set('sk', 'Eslovaquia');
