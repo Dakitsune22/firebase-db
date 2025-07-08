@@ -16,7 +16,7 @@ import {
   teamsOthersEurope,
   teamsOthersWorld,
 } from 'src/data/teams';
-import { getAge, isValidBirthDate, sleep } from 'src/helpers/functions';
+import { getAge, isValidBirthDate } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
@@ -913,7 +913,7 @@ const isSelectedTeamDataChanged = (): boolean => {
 // };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const onTransferPlayer = (squadIndex: number, scope: any): void => {
+const onTransferPlayer = (squadIndex: number): void => {
   // console.log({ squadIndex });
   const player = { ...selectedTeamData.value.players[squadIndex] };
   // console.log(player);
