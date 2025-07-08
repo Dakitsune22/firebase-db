@@ -337,11 +337,13 @@ const useTeamMutation = () => {
         message: 'Equipo actualizado con éxito',
       });
     },
-    onError: () => {
+    onError: (e) => {
       $q.notify({
         type: 'negative',
         message: 'No se ha podido actualizar el equipo',
       });
+      console.error(e);
+      console.error(e.message);
     },
   });
 

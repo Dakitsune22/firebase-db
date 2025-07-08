@@ -977,29 +977,38 @@ const onTransferPlayer = (squadIndex: number, scope: any): void => {
         });
       }
       if (selectedLeague.value && selectedTeamId.value !== undefined) {
-        mutateTeamUpdate.mutate({
-          league: selectedLeague.value,
-          id: selectedTeamId.value,
-          team: selectedTeamData.value,
-        });
+        mutateTeamUpdate.mutate(
+          {
+            league: selectedLeague.value,
+            id: selectedTeamId.value,
+            team: selectedTeamData.value,
+          },
+          {
+            onSuccess: () => {
+              // console.log('Mutate team update successful');
+              if (
+                transferSelectedLeague.value &&
+                transferSelectedTeamId.value !== undefined
+              ) {
+                refetchQueryLeague(transferSelectedLeague.value);
+                console.log('Refetch target team league query');
+              }
+              if (selectedLeague.value && selectedTeamId.value !== undefined) {
+                refetchQueryLeague(selectedLeague.value);
+                console.log('Refetch source team league query');
+              }
+              // Init data:
+              transferSelectedLeague.value = undefined;
+              transferSelectedTeamId.value = undefined;
+              // Cerramos la ventana principal de traspasos:
+              // scope.set();
+            },
+          }
+        );
       }
-      await sleep(200);
-      if (
-        transferSelectedLeague.value &&
-        transferSelectedTeamId.value !== undefined
-      ) {
-        refetchQueryLeague(transferSelectedLeague.value);
-        console.log('Refetch target team league query');
-      }
-      if (selectedLeague.value && selectedTeamId.value !== undefined) {
-        refetchQueryLeague(selectedLeague.value);
-        console.log('Refetch source team league query');
-      }
-      // Init data:
-      transferSelectedLeague.value = undefined;
-      transferSelectedTeamId.value = undefined;
-      // Cerramos la ventana principal de traspasos:
-      scope.set();
+      // console.log('Before sleep');
+      // await sleep(200);
+      // console.log('After sleep');
     })
     .onCancel(() => {
       return;
@@ -1069,35 +1078,43 @@ const onSubmit = () => {
 
           if (error) return;
 
-          mutateTeamUpdate.mutate({
-            league: selectedLeague.value,
-            id: selectedTeamId.value,
-            team: selectedTeamData.value,
-          });
-          await sleep(200);
-          refetchQueryLeague(selectedLeague.value);
-
-          const selectedTeamDefaultPlayers: Player[] = [];
-          selectedTeamData.value.players.forEach((player) => {
-            selectedTeamDefaultPlayers.push({ ...player });
-          });
-
-          const selectedTeamDefaultFormation: Position[] = [];
-          selectedTeamData.value.tactic.formation.forEach((position) => {
-            selectedTeamDefaultFormation.push(position);
-          });
-
-          selectedTeamOriginalData.value = {
-            ...selectedTeamData.value,
-            // id: selectedTeamData.value.id,
-            // name: selectedTeamData.value.name,
-            // shortName: selectedTeamData.value.shortName,
-            players: selectedTeamDefaultPlayers,
-            tactic: {
-              name: selectedTeamData.value.tactic.name,
-              formation: selectedTeamDefaultFormation,
+          mutateTeamUpdate.mutate(
+            {
+              league: selectedLeague.value,
+              id: selectedTeamId.value,
+              team: selectedTeamData.value,
             },
-          };
+            {
+              onSuccess: () => {
+                if (selectedLeague.value) {
+                  refetchQueryLeague(selectedLeague.value);
+                }
+
+                const selectedTeamDefaultPlayers: Player[] = [];
+                selectedTeamData.value.players.forEach((player) => {
+                  selectedTeamDefaultPlayers.push({ ...player });
+                });
+
+                const selectedTeamDefaultFormation: Position[] = [];
+                selectedTeamData.value.tactic.formation.forEach((position) => {
+                  selectedTeamDefaultFormation.push(position);
+                });
+
+                selectedTeamOriginalData.value = {
+                  ...selectedTeamData.value,
+                  // id: selectedTeamData.value.id,
+                  // name: selectedTeamData.value.name,
+                  // shortName: selectedTeamData.value.shortName,
+                  players: selectedTeamDefaultPlayers,
+                  tactic: {
+                    name: selectedTeamData.value.tactic.name,
+                    formation: selectedTeamDefaultFormation,
+                  },
+                };
+              },
+            }
+          );
+          // await sleep(200);
         } else {
           console.error('Error: No se pueden guardar los datos');
         }
