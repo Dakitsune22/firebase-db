@@ -913,6 +913,7 @@ const isSelectedTeamDataChanged = (): boolean => {
 // };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// const onTransferPlayer = (squadIndex: number, scope: any): void => {
 const onTransferPlayer = (squadIndex: number): void => {
   // console.log({ squadIndex });
   const player = { ...selectedTeamData.value.players[squadIndex] };
@@ -1798,7 +1799,8 @@ const onReset = () => {
                     :disable="transferSelectedTeamId === undefined"
                     @click="
                       {
-                        onTransferPlayer(props.rowIndex, scope);
+                        onTransferPlayer(props.rowIndex);
+                        // onTransferPlayer(props.rowIndex, scope);
                         // scope.set;
                       }
                     "
