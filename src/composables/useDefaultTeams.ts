@@ -56,6 +56,7 @@ const useDefaultTeams = (league: Leagues, teamId?: number) => {
 
   const queryTeamById = useQuery({
     queryKey: [`default-team-${league}`, teamId],
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     queryFn: () => getTeamById(league, teamId!),
   });
 

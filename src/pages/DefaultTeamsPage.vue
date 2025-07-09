@@ -16,7 +16,11 @@ import {
   teamsOthersEurope,
   teamsOthersWorld,
 } from 'src/data/teams';
-import { getAge, isValidBirthDate } from 'src/helpers/functions';
+import {
+  getAge,
+  getPlayerPositionIndex,
+  isValidBirthDate,
+} from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
@@ -181,14 +185,40 @@ const selectedTeamRating = computed(() => {
 });
 
 const selectedTeamAverageAge = computed(() => {
-  return (
-    selectedTeamData.value.players.reduce(
-      (a, b) => a + getAge(b.birthDate || '0'),
-      0
-    ) /
-    selectedTeamData.value.players.length /
-    10
-  );
+  // return (
+  //   selectedTeamData.value.players.reduce(
+  //     (a, b) => a + getAge(b.birthDate || '0'),
+  //     0
+  //   ) /
+  //   selectedTeamData.value.players.length /
+  //   10
+  // );
+  let totalAge = 0;
+  let numAges = 0;
+  selectedTeamData.value.players.forEach((p) => {
+    if (p.birthDate) {
+      totalAge += getAge(p.birthDate);
+      numAges++;
+    }
+  });
+  return totalAge / numAges / 10;
+});
+
+const selectedTeamAverageHeight = computed(() => {
+  // return (
+  //   selectedTeamData.value.players.reduce((a, b) => a + (b.height || 0), 0) /
+  //   selectedTeamData.value.players.length /
+  //   10
+  // );
+  let totalHeight = 0;
+  let numHeights = 0;
+  selectedTeamData.value.players.forEach((p) => {
+    if (p.height && p.height > 0) {
+      totalHeight += p.height;
+      numHeights++;
+    }
+  });
+  return totalHeight / numHeights / 10;
 });
 
 // const currentTeamData = computed(() => {
@@ -270,11 +300,30 @@ const columns: QTableProps['columns'] = [
     align: 'center',
   },
   {
+    name: 'height',
+    label: 'Altura',
+    field: 'height',
+    align: 'center',
+    sortable: true,
+  },
+  {
     name: 'position',
     label: 'Pos.',
     field: 'position',
     align: 'center',
     sortable: true,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    sort(a, b, rowA, rowB) {
+      const aIdx = getPlayerPositionIndex(a);
+      const bIdx = getPlayerPositionIndex(b);
+      if (aIdx < bIdx) {
+        return -1;
+      }
+      if (aIdx > bIdx) {
+        return 1;
+      }
+      return 0;
+    },
   },
   {
     name: 'overall',
@@ -296,6 +345,28 @@ const columns: QTableProps['columns'] = [
     align: 'center',
   },
 ];
+
+const errorHeight = ref(false);
+const errorHeightMessage = ref('');
+
+const heightValidation = (val: number): boolean => {
+  console.log({ val });
+  if (val > 210 || val < 150) {
+    errorHeight.value = true;
+    errorHeightMessage.value =
+      'La altura ha de estar comprendida entre 150 y 210 cm';
+    return false;
+  } else {
+    errorHeight.value = false;
+    errorHeightMessage.value = '';
+    return true;
+  }
+};
+
+const heightErrorReset = (): void => {
+  errorHeight.value = false;
+  errorHeightMessage.value = '';
+};
 
 const errorBirthDate = ref(false);
 const errorBirthDateMessage = ref('');
@@ -827,6 +898,7 @@ const isSelectedTeamDataChanged = (): boolean => {
         p.surname +
         (p.nickname ? p.nickname : '') +
         (p.birthDate ? p.birthDate : '') +
+        (p.height ? p.height.toString() : '') +
         p.nationality +
         p.position +
         p.overall.toString())
@@ -847,6 +919,7 @@ const isSelectedTeamDataChanged = (): boolean => {
         p.surname +
         (p.nickname ? p.nickname : '') +
         (p.birthDate ? p.birthDate : '') +
+        (p.height ? p.height.toString() : '') +
         p.nationality +
         p.position +
         p.overall.toString())
@@ -1653,6 +1726,42 @@ const onReset = () => {
               </q-popup-edit>
             </q-td>
             <q-td
+              key="height"
+              :props="props"
+              class="table table-value table-col12"
+            >
+              {{
+                !isNaN(props.row.height)
+                  ? (props.row.height / 100).toFixed(2).replace('.', ',') + 'm'
+                  : '?'
+              }}
+              <!-- {{ props.row.height ? props.row.height : 1 }} -->
+              <q-popup-edit
+                v-model.number="props.row.height"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                :validate="heightValidation"
+                @before-show="heightErrorReset"
+                @update:model-value="heightValidation"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Altura (cm)
+                </q-badge>
+                <q-input
+                  type="number"
+                  v-model.number="scope.value"
+                  hint="Introduce la altura del jugador en centímetros"
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                  :error="errorHeight"
+                  :error-message="errorHeight ? errorHeightMessage : ''"
+                />
+              </q-popup-edit>
+            </q-td>
+            <q-td
               key="position"
               :props="props"
               class="table table-value table-col6"
@@ -1835,6 +1944,16 @@ const onReset = () => {
             : 0
         }}</span>
       </div>
+      <div class="footer-container">
+        Altura media de la plantilla:
+        <span class="text-bold text-primary q-pl-sm q-pr-xs"
+          >{{
+            selectedTeamAverageHeight > 0
+              ? (selectedTeamAverageHeight / 10).toFixed(2)
+              : 0
+          }}m</span
+        >
+      </div>
     </div>
     <div
       v-if="
@@ -2003,6 +2122,10 @@ const onReset = () => {
   &-col11 {
     width: 5%;
     cursor: default;
+  }
+  &-col12 {
+    width: 5%;
+    cursor: pointer;
   }
 }
 .transfer-btn {

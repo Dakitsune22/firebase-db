@@ -1,3 +1,5 @@
+import { Position } from 'src/models/player';
+
 export const sleep = async (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -30,4 +32,32 @@ export const isValidBirthDate = (dateStr: string): boolean => {
     Date.now() - reverseDateMS > 0 &&
     getAge(dateStr) < 100
   );
+};
+
+export const getPlayerPositionIndex = (position: Position): number => {
+  switch (position) {
+    case Position.POR:
+      return 1;
+    case Position.DF:
+      return 2;
+    case Position.LD:
+      return 3;
+    case Position.LI:
+      return 4;
+    case Position.MCD:
+      return 5;
+    case Position.MC:
+      return 6;
+    case Position.MCO:
+      return 7;
+    case Position.ED:
+      return 8;
+    case Position.EI:
+      return 9;
+    case Position.DC:
+      return 10;
+
+    default:
+      return 1;
+  }
 };

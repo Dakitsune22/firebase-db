@@ -5,6 +5,7 @@ export interface Player {
   nickname?: string;
   birthDate?: string;
   nationality: Flag;
+  height?: number;
   position: Position;
   overall: number;
   seasonStats: SeasonStats;
@@ -22,8 +23,8 @@ export enum Position {
   DF = 'DF',
   LD = 'LD',
   LI = 'LI',
-  MC = 'MC',
   MCD = 'MCD',
+  MC = 'MC',
   MCO = 'MCO',
   ED = 'ED',
   EI = 'EI',
@@ -107,6 +108,7 @@ export enum Flag {
   Lithuania = 'lt',
   Luxembourg = 'lu',
   Macedonia = 'mk',
+  Malaysia = 'my',
   Mali = 'ml',
   Malta = 'mt',
   Mexico = 'mx',
@@ -246,6 +248,7 @@ flagMap.set('li', 'Liechtenstein');
 flagMap.set('lt', 'Lituania');
 flagMap.set('lu', 'Luxemburgo');
 flagMap.set('mk', 'Macedonia');
+flagMap.set('my', 'Malasia');
 flagMap.set('ml', 'Mali');
 flagMap.set('mt', 'Malta');
 flagMap.set('ma', 'Marruecos');
