@@ -21,6 +21,7 @@ import {
   getAge,
   getPlayerPositionIndex,
   isValidBirthDate,
+  sleep,
 } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
@@ -990,8 +991,8 @@ const isSelectedTeamDataChanged = (): boolean => {
 // };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const onTransferPlayer = (squadIndex: number, scope: any): void => {
-const onTransferPlayer = (squadIndex: number): void => {
+const onTransferPlayer = (squadIndex: number, scope: any): void => {
+  // const onTransferPlayer = (squadIndex: number): void => {
   // console.log({ squadIndex });
   const player = { ...selectedTeamData.value.players[squadIndex] };
   // console.log(player);
@@ -1062,7 +1063,7 @@ const onTransferPlayer = (squadIndex: number): void => {
             team: selectedTeamData.value,
           },
           {
-            onSuccess: () => {
+            onSuccess: async () => {
               // console.log('Mutate team update successful');
               if (
                 transferSelectedLeague.value &&
@@ -1079,7 +1080,8 @@ const onTransferPlayer = (squadIndex: number): void => {
               transferSelectedLeague.value = undefined;
               transferSelectedTeamId.value = undefined;
               // Cerramos la ventana principal de traspasos:
-              // scope.set();
+              await sleep(500);
+              scope.set();
             },
           }
         );
@@ -1864,6 +1866,7 @@ const onReset = () => {
               <q-popup-edit
                 v-model.number="props.row.transfer"
                 style="width: 250px"
+                v-slot="scope"
                 @hide="
                   // Init data:
                   transferSelectedLeague = undefined;
@@ -1911,8 +1914,8 @@ const onReset = () => {
                     :disable="transferSelectedTeamId === undefined"
                     @click="
                       {
-                        onTransferPlayer(props.rowIndex);
-                        // onTransferPlayer(props.rowIndex, scope);
+                        // onTransferPlayer(props.rowIndex);
+                        onTransferPlayer(props.rowIndex, scope);
                         // scope.set;
                       }
                     "

@@ -120,6 +120,7 @@ export enum Flag {
   NewZealand = 'nz',
   Namibia = 'na',
   Nicaragua = 'ni',
+  Niger = 'ne',
   Nigeria = 'ng',
   NorthIreland = 'gb-nir',
   Norway = 'no',
@@ -258,6 +259,7 @@ flagMap.set('me', 'Montenegro');
 flagMap.set('mz', 'Mozambique');
 flagMap.set('na', 'Namibia');
 flagMap.set('ni', 'Nicaragua');
+flagMap.set('ne', 'Níger');
 flagMap.set('ng', 'Nigeria');
 flagMap.set('no', 'Noruega');
 flagMap.set('nz', 'Nueva Zelanda');
