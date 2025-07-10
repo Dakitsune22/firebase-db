@@ -95,6 +95,9 @@ const onSubmit = () => {
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
       <div class="user-body-title">Cambio de usuario</div>
       <div class="user-body-subtitle">
+        Usuario actual:
+        <span class="text-primary" style="font-weight: 500">{{ userId }}</span
+        ><br />
         Introduce el usuario al que quieres cambiar.<br /><br />
         Si se trata de un usuario existente, asegúrate de que introduces la
         contraseña correcta.<br />

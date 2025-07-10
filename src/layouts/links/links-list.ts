@@ -24,13 +24,13 @@ export const linksListManage: EssentialLinkProps[] = [
   //   link: '/add-player',
   // },
   {
-    title: 'Gestión de equipos',
+    title: 'Equipos',
     caption: 'Guardar o recuperar datos de BD',
     icon: 'groups',
     link: '/teams-db',
   },
   {
-    title: 'Gestión de My~League',
+    title: 'My~League',
     caption: 'Configurar My~League',
     icon: 'published_with_changes',
     link: '/myleague',

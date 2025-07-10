@@ -45,8 +45,10 @@ const pageKey = ref<number>(0);
         <!-- <div>Quasar v{{ $q.version }}</div> -->
         <router-link :to="{ name: 'user' }" class="user-menu">
           <div>
-            <q-icon name="account_circle" size="md" color="white" />
-            <span style="margin-left: 3px">{{ userId }}</span>
+            <q-icon name="account_circle" size="sm" color="amber-5" />
+            <span class="color-amber" style="margin-left: 3px">{{
+              userId
+            }}</span>
           </div>
         </router-link>
       </q-toolbar>
@@ -60,7 +62,7 @@ const pageKey = ref<number>(0);
           v-bind="link"
         />
         <q-separator class="q-mt-md q-mb-sm" />
-        <q-item-label header> Mantenimiento </q-item-label>
+        <q-item-label header> Gestión </q-item-label>
 
         <EssentialLink
           v-for="link in linksListManage"
@@ -92,5 +94,8 @@ const pageKey = ref<number>(0);
 .user-menu {
   color: white;
   text-decoration: none;
+}
+.color-amber {
+  color: $amber-4;
 }
 </style>

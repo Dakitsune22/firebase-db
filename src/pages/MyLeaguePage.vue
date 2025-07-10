@@ -82,6 +82,8 @@ const { mutateTeamAddMyLeague, mutateTeamDeleteMyLeague } = useTeamMutation();
 const { mutateUserInfo } = useUserInfoMutation();
 mutateUserInfo.mutate();
 
+const currentTeamsReady = ref<boolean>(false);
+
 const getCurrentMyLeagueTeams = (): void => {
   console.log('INSIDE GET CURRENT MYLEAGUE TEAMS...');
   if (queryTeamsMyLeague.data.value) {
@@ -114,6 +116,7 @@ const getCurrentMyLeagueTeams = (): void => {
       initialMyLeagueTeamsId.push(t.id);
     });
   }
+  currentTeamsReady.value = true;
 };
 onMounted(async () => {
   if (queryTeamsMyLeague.isFetching.value) {
@@ -385,6 +388,7 @@ const onReset = () => {
             flat
             rounded
             size="lg"
+            class="qlist-item4"
             @click="onDeleteTeam(idx)"
           />
         </div>
@@ -392,6 +396,19 @@ const onReset = () => {
     </div>
     <div class="my-spinner" v-if="queryTeamsMyLeague.isFetching.value">
       <q-spinner color="primary" size="48px" />
+    </div>
+    <div v-if="currentTeamsReady">
+      <div v-if="selectedMyLeagueTeams.length <= 0">
+        <div class="no-teams">
+          <q-icon name="info" size="72px" color="primary" />
+          <span style="margin-top: 10px">
+            No se ha añadido ningún equipo a My~League®.<br /><br />
+            Puedes seleccionar equipos de las diferentes ligas disponibles.<br />
+            El mínimo de equipos para iniciar una liga personalizada es de
+            <strong>4</strong>, y no pueden ser impares.
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -429,7 +446,8 @@ const onReset = () => {
       // background-color: aqua;
 
       &-item {
-        @include flexPosition(start, center);
+        // @include flexPosition(start, center);
+        @include flexPosition(center, center);
       }
     }
   }
@@ -458,15 +476,31 @@ const onReset = () => {
   }
   &-item3 {
     @include flexPosition(center, start);
-    width: 220px;
+    width: 230px;
     // background-color: aquamarine;
     // @include response('mobile') {
     //   width: 218px;
     // }
   }
+  &-item4 {
+    // background-color: red;
+    width: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 8px;
+  }
 }
 .my-spinner {
   @include flexPosition(center, center);
   margin-top: 30px;
+}
+.no-teams {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 50px;
 }
 </style>
