@@ -87,6 +87,7 @@ const useRounds = () => {
   const queryCountRounds = useQuery({
     queryKey: [`count-rounds-${getCurrentLeague()}`],
     queryFn: countTotalRounds,
+    enabled: false, // para que no se ejecute automáticamente al lanzar este composable
   });
 
   return {

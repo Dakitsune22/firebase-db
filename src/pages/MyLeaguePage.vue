@@ -5,12 +5,14 @@ import useRoundsMutation from 'src/composables/useRoundMutation';
 import useRounds from 'src/composables/useRounds';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
+import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 import { tactics } from 'src/data/tactics';
+import { sleep } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
 import { leaguesMap } from 'src/models/leagues';
 import { Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 defineOptions({
   name: 'MyLeaguePage',
@@ -74,40 +76,55 @@ const { setCurrentLeague } = useSoccer();
 setCurrentLeague(Leagues.MyLeague);
 const { queryCountRounds } = useRounds();
 const { mutateMyLeagueRoundsDelete } = useRoundsMutation();
-
-if (queryTeamsMyLeague.data.value) {
-  queryTeamsMyLeague.data.value.forEach((t) => {
-    selectedMyLeagueTeams.value.push({
-      ...t,
-      // country: t.country,
-      // draws: t.draws,
-      // goalDifference: t.goalDifference,
-      // goalsConceded: t.goalsConceded,
-      // goalsScored: t.goalsScored,
-      // id: t.id,
-      // losses: t.losses,
-      // matchesPlayed: t.matchesPlayed,
-      // name: t.name,
-      // points: t.points,
-      // shortName: t.shortName,
-      // wins: t.wins,
-      // tactic: { ...t.tactic },
-      players: [],
-    });
-    t.players.forEach((p) => {
-      selectedMyLeagueTeams.value[
-        selectedMyLeagueTeams.value.length - 1
-      ].players.push({ ...p });
-    });
-  });
-}
-selectedMyLeagueTeams.value.sort((a, b) => a.id - b.id);
-selectedMyLeagueTeams.value.forEach((t) => {
-  initialMyLeagueTeamsId.push(t.id);
-});
-
 // const { mutateTeamAddMyLeague } = useDefaultTeamsMutation();
 const { mutateTeamAddMyLeague, mutateTeamDeleteMyLeague } = useTeamMutation();
+
+const { mutateUserInfo } = useUserInfoMutation();
+mutateUserInfo.mutate();
+
+const getCurrentMyLeagueTeams = (): void => {
+  console.log('INSIDE GET CURRENT MYLEAGUE TEAMS...');
+  if (queryTeamsMyLeague.data.value) {
+    queryTeamsMyLeague.data.value.forEach((t) => {
+      selectedMyLeagueTeams.value.push({
+        ...t,
+        // country: t.country,
+        // draws: t.draws,
+        // goalDifference: t.goalDifference,
+        // goalsConceded: t.goalsConceded,
+        // goalsScored: t.goalsScored,
+        // id: t.id,
+        // losses: t.losses,
+        // matchesPlayed: t.matchesPlayed,
+        // name: t.name,
+        // points: t.points,
+        // shortName: t.shortName,
+        // wins: t.wins,
+        // tactic: { ...t.tactic },
+        players: [],
+      });
+      t.players.forEach((p) => {
+        selectedMyLeagueTeams.value[
+          selectedMyLeagueTeams.value.length - 1
+        ].players.push({ ...p });
+      });
+    });
+    selectedMyLeagueTeams.value.sort((a, b) => a.id - b.id);
+    selectedMyLeagueTeams.value.forEach((t) => {
+      initialMyLeagueTeamsId.push(t.id);
+    });
+  }
+};
+onMounted(async () => {
+  if (queryTeamsMyLeague.isFetching.value) {
+    while (queryTeamsMyLeague.isFetching.value) {
+      console.log('STILL FETCHING...', queryTeamsMyLeague.isFetching.value);
+      await sleep(200);
+    }
+    console.log('FINALLY FETCHED!');
+  }
+  getCurrentMyLeagueTeams();
+});
 
 const currentTeams = computed(() => {
   // console.log(selectedLeague.value);
@@ -322,8 +339,8 @@ const onReset = () => {
         />
       </div>
     </q-form>
-    <div v-if="selectedMyLeagueTeams.length > 0">
-      <div class="team-body-list">
+    <div v-if="queryTeamsMyLeague.isFetched.value">
+      <div v-if="selectedMyLeagueTeams.length > 0" class="team-body-list">
         <div
           v-for="(t, idx) in selectedMyLeagueTeams"
           :key="t.id"
@@ -372,6 +389,9 @@ const onReset = () => {
           />
         </div>
       </div>
+    </div>
+    <div class="my-spinner" v-if="queryTeamsMyLeague.isFetching.value">
+      <q-spinner color="primary" size="48px" />
     </div>
   </div>
 </template>
@@ -444,5 +464,9 @@ const onReset = () => {
     //   width: 218px;
     // }
   }
+}
+.my-spinner {
+  @include flexPosition(center, center);
+  margin-top: 30px;
 }
 </style>

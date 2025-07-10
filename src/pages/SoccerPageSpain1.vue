@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
@@ -35,7 +35,7 @@ const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 // const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
-const { queryRound, queryCountRounds } = useRounds();
+const { queryRound } = useRounds();
 
 const roundKey = ref<number>(0);
 // const leagueKey = ref<number>(0);
@@ -51,6 +51,11 @@ mutateUserInfo.mutate();
 onBeforeUnmount(async () => {
   // Refrescamos query antes de desmontar, para que esté actualizada a la vuelta:
   await queryRound.refetch();
+});
+
+onMounted(async () => {
+  await sleep(500);
+  console.log('*** TOTAL ROUNDS (computed):', totalRounds.value);
 });
 
 // onBeforeUpdate(() => {
@@ -70,6 +75,14 @@ onBeforeUnmount(async () => {
 //         }
 //       }
 // );
+
+const totalRounds = computed(() => {
+  if (queryTeamsByPoints.data.value) {
+    // Jornadas totales = Número de equipos -1 y x2 (ida y vuelta)
+    return (queryTeamsByPoints.data.value.length - 1) * 2;
+  }
+  return 0;
+});
 
 const restartLeague = async () => {
   // Rounds:
@@ -134,12 +147,14 @@ const restartLeague = async () => {
 
   // Esperamos para hacer refetch del contador de rondas hasta que
   // el mutate de rondas haya finalizado (sigue en curso al llegar aquí)
-  while (mutateRoundAdd.isPending.value) {
-    console.log('Mutate status:', mutateRoundAdd.status.value);
-    await sleep(200);
-  }
-  console.log('Mutate status:', mutateRoundAdd.status.value);
-  await queryCountRounds.refetch();
+  // while (mutateRoundAdd.isPending.value) {
+  //   console.log('Mutate status:', mutateRoundAdd.status.value);
+  //   await sleep(200);
+  // }
+  // console.log('Mutate status:', mutateRoundAdd.status.value);
+  // await queryCountRounds.refetch();
+
+  console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
 };
 
 const onRestartLeague = () => {
@@ -178,9 +193,11 @@ const onPreviousRound = async () => {
 };
 
 const onNextRound = async () => {
+  // console.log('*** TOTAL ROUNDS (computed):', totalRounds.value);
   if (
-    queryCountRounds.data.value &&
-    getCurrentRound() < queryCountRounds.data.value
+    // queryCountRounds.data.value &&
+    // getCurrentRound() < queryCountRounds.data.value
+    getCurrentRound() < totalRounds.value
   ) {
     // currentRound.value++;
     setCurrentRound(getCurrentRound() + 1);
@@ -197,8 +214,10 @@ const onFirstRound = async () => {
 };
 
 const onLastRound = async () => {
-  if (queryCountRounds.data.value) {
-    setCurrentRound(queryCountRounds.data.value);
+  // if (queryCountRounds.data.value) {
+  if (totalRounds.value > 0) {
+    // setCurrentRound(queryCountRounds.data.value);
+    setCurrentRound(totalRounds.value);
     await queryRound.refetch();
     forceRender();
   }
@@ -217,9 +236,10 @@ const onLastRound = async () => {
   <!-- <q-page class="row items-center justify-evenly"> -->
   <q-page
     v-if="
-      !queryTeamsByPoints.data.value ||
-      (queryTeamsByPoints.data.value &&
-        queryTeamsByPoints.data.value.length <= 0)
+      queryTeamsByPoints.isFetched.value &&
+      (!queryTeamsByPoints.data.value ||
+        (queryTeamsByPoints.data.value &&
+          queryTeamsByPoints.data.value.length <= 0))
     "
     class="no-teams"
   >
@@ -251,7 +271,9 @@ const onLastRound = async () => {
         <div class="teams-header-colvalaux">GF</div>
         <div class="teams-header-colvalaux">GC</div>
       </div>
-      <div v-if="queryTeamsByPoints.isLoading.value">CARGANDO...</div>
+      <div class="my-spinner" v-if="queryTeamsByPoints.isLoading.value">
+        <q-spinner color="primary" size="48px" />
+      </div>
       <div v-else>
         <TransitionGroup name="rank">
           <div
@@ -320,7 +342,7 @@ const onLastRound = async () => {
           icon="chevron_right"
           size="sm"
           color="primary"
-          :disable="getCurrentRound() === queryCountRounds.data.value"
+          :disable="getCurrentRound() === totalRounds"
           @click="onNextRound"
         />
         <q-btn
@@ -328,7 +350,7 @@ const onLastRound = async () => {
           size="sm"
           color="primary"
           class="q-ml-xs"
-          :disable="getCurrentRound() === queryCountRounds.data.value"
+          :disable="getCurrentRound() === totalRounds"
           @click="onLastRound"
         />
         <!-- <q-btn
@@ -339,7 +361,9 @@ const onLastRound = async () => {
           @click="onSaveRound"
         /> -->
       </div>
-      <div v-if="queryRound.isLoading.value">CARGANDO...</div>
+      <div class="my-spinner" v-if="queryRound.isLoading.value">
+        <q-spinner color="primary" size="48px" />
+      </div>
       <div v-else class="round-matches">
         <div v-for="match in queryRound.data.value?.matches" :key="match.id">
           <!-- {{ teamsSpain1[match.team1] }} {{ match.score1 }} -
@@ -361,7 +385,9 @@ const onLastRound = async () => {
       </div>
     </div>
     <div v-if="queryRound.data.value && queryRound.data.value?.round > 0">
-      <div v-if="queryTopScorers.isLoading.value">CARGANDO...</div>
+      <div class="my-spinner" v-if="queryTopScorers.isLoading.value">
+        <q-spinner color="primary" size="48px" />
+      </div>
       <div v-else>
         <div class="scorers-header q-ml-md">Máximos goleadores:</div>
         <TransitionGroup name="scorer">
@@ -489,5 +515,9 @@ const onLastRound = async () => {
 }
 .scorer-move {
   transition: all 1s ease;
+}
+.my-spinner {
+  @include flexPosition(center, center);
+  margin-top: 30px;
 }
 </style>

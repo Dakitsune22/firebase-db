@@ -6,6 +6,7 @@ import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
+import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 import { tactics } from 'src/data/tactics';
 import {
   teamsEngland1,
@@ -104,6 +105,9 @@ const { queryTeams: queryMDBTeamsOthersWorld } = useDefaultTeams(
 const { mutateTeamAdd: mutateMDBTeamAdd } = useDefaultTeamsMutation();
 
 const { mutateRoundsDelete } = useRoundsMutation();
+
+const { mutateUserInfo } = useUserInfoMutation();
+mutateUserInfo.mutate();
 
 // const nationalityOptions = Object.values(Flag);
 // interface nacOptions {
