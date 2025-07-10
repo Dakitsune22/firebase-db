@@ -343,7 +343,10 @@ const onLastRound = async () => {
             <soccer-player-scorer :player="player" :i-key="idx + 1" />
           </div>
         </TransitionGroup>
-        <div v-if="queryTopScorers.data.value!.length < 1">
+        <div
+          v-if="queryTopScorers.data.value!.length < 1"
+          style="display: flex; justify-content: center"
+        >
           <q-icon
             name="hourglass_top"
             size="lg"

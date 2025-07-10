@@ -39,6 +39,7 @@ const pageKey = ref<number>(0);
           @click="toggleLeftDrawer"
         />
 
+        <!-- <span style="margin-left: 10px">®</span> -->
         <q-toolbar-title> My~League </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
