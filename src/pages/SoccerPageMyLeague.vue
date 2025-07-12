@@ -266,7 +266,7 @@ const onLastRound = async () => {
           :disable="getCurrentRound() === 1"
           @click="onPreviousRound"
         />
-        <span class="text-primary q-mr-xs">················· [</span>
+        <span class="text-primary q-mr-xs">············ [</span>
         <!-- <q-img
           src="/images/leagues/england1.png"
           spinner-color="white"
@@ -285,7 +285,7 @@ const onLastRound = async () => {
         <span class="q-mr-sm text-bold text-primary"
           >JORNADA {{ getCurrentRound() }}</span
         >
-        <span class="text-primary">] ·················</span>
+        <span class="text-primary">] ············</span>
         <q-btn
           icon="chevron_right"
           size="sm"
@@ -401,7 +401,7 @@ const onLastRound = async () => {
   }
   &-colpts {
     width: 40px;
-    padding-left: 28px;
+    padding-left: 24px;
     // background-color: bisque;
     text-align: center;
   }

@@ -227,8 +227,9 @@ $midGrey: rgb(150, 150, 150);
     // background-color: aquamarine;
     align-items: start;
     width: 135px;
-    padding-left: 10px;
-    font-size: medium;
+    padding-left: 3px;
+    font-size: 13px;
+    padding-top: 2px;
     color: $darkGrey;
   }
   &-score {
@@ -236,7 +237,7 @@ $midGrey: rgb(150, 150, 150);
     color: whitesmoke;
     width: 30px;
     align-items: center;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
   }
   &-sim {

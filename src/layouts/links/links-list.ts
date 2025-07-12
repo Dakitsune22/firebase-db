@@ -25,7 +25,7 @@ export const linksListManage: EssentialLinkProps[] = [
   // },
   {
     title: 'Equipos',
-    caption: 'Guardar o recuperar datos de BD',
+    caption: 'Mantenimiento de equipos',
     icon: 'groups',
     link: '/teams-db',
   },

@@ -71,10 +71,12 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
 .section {
   &-rank {
-    align-items: end;
+    align-items: center;
     width: 28px;
-    font-size: 12px;
+    font-size: 11px;
+    padding-top: 1px;
     color: $darkGrey;
+    // background-color: antiquewhite;
   }
   &-nationality {
     width: 20px;
@@ -82,16 +84,19 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   &-position {
     align-items: start;
     width: 25px;
-    padding-left: 0px;
-    font-size: 10px;
+    padding-left: 5px;
+    font-size: 9px;
+    padding-top: 1px;
     color: $darkGrey;
+    // background-color: aqua;
   }
   &-name {
     align-items: start;
-    width: 180px;
-    padding-left: 0px;
-    font-size: medium;
+    width: 220px;
+    padding-left: 10px;
+    font-size: 13px;
     // font-weight: 500;
+    padding-top: 2px;
     color: $darkGrey;
   }
   &-team {
@@ -106,7 +111,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     height: 24px;
     background-color: $darkGrey;
     color: whitesmoke;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
   }
 }

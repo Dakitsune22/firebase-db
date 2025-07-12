@@ -162,10 +162,12 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
 .section {
   &-rank {
-    align-items: end;
+    align-items: center;
     width: 28px;
-    font-size: 12px;
+    font-size: 11px;
     color: $darkGrey;
+    padding-top: 2px;
+    // background-color: aquamarine;
   }
   //&-img {
   // width: 30px;
@@ -176,10 +178,11 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     // background-color: aquamarine;
     align-items: start;
     width: 140px;
-    padding-left: 5px;
-    font-size: larger;
+    padding-left: 3px;
+    font-size: 13px;
     // font-weight: 500;
     color: $darkGrey;
+    padding-top: 2px;
   }
 
   &-value {
@@ -196,7 +199,10 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
     &-others {
       // background-color: whitesmoke;
-      font-size: 14px;
+      // font-size: 14px;
+      font-size: small;
+      color: $darkGrey;
+      padding-top: 2px;
       // width: 10px;
     }
   }

@@ -402,7 +402,7 @@ const onReset = () => {
         <div class="no-teams">
           <q-icon name="info" size="72px" color="primary" />
           <span style="margin-top: 10px">
-            No se ha añadido ningún equipo a My~League®.<br /><br />
+            No se ha añadido ningún equipo a My~League.<br /><br />
             Puedes seleccionar equipos de las diferentes ligas disponibles.<br />
             El mínimo de equipos para iniciar una liga personalizada es de
             <strong>4</strong>, y no pueden ser impares.

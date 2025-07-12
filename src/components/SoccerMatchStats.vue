@@ -192,26 +192,35 @@ $midGrey: rgb(150, 150, 150);
     &-shirt {
       width: 8%;
       text-align: right;
+      font-size: 11px;
       // background-color: aqua;
     }
     &-position {
-      width: 9%;
+      width: 11%;
       font-size: 8px;
       text-align: center;
+      color: $darkGrey;
       // background-color: antiquewhite;
     }
     &-name {
       width: 55%;
-      font-size: 12px;
+      font-size: 11px;
+      text-align: left;
+      // background-color: aqua;
     }
     &-overall {
       width: 8%;
       color: $primary;
-      font-weight: bold;
+      font-size: 11px;
+      position: relative;
+      // font-weight: 500;
+      padding-top: 1px;
+      text-align: right;
+      // background-color: aqua;
     }
     &-goals {
-      font-size: 11px;
-      width: 20%;
+      font-size: 10px;
+      width: 18%;
     }
   }
 }

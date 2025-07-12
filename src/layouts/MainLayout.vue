@@ -40,15 +40,13 @@ const pageKey = ref<number>(0);
         />
 
         <!-- <span style="margin-left: 10px">®</span> -->
-        <q-toolbar-title> My~League </q-toolbar-title>
+        <q-toolbar-title class="title"> My~League </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
         <router-link :to="{ name: 'user' }" class="user-menu">
           <div>
             <q-icon name="account_circle" size="sm" color="amber-5" />
-            <span class="color-amber" style="margin-left: 3px">{{
-              userId
-            }}</span>
+            <span class="user-menu-text">{{ userId }}</span>
           </div>
         </router-link>
       </q-toolbar>
@@ -78,8 +76,19 @@ const pageKey = ref<number>(0);
           v-bind="link"
         />
         <q-separator class="q-mt-md" />
-        <q-item-label header style="font-size: 80%; margin-top: 40px">
-          ® ~by Dakitsune22, 2025
+        <q-item-label
+          header
+          style="font-size: 80%; margin-top: 20px; display: flex"
+        >
+          <div
+            style="
+              font-family: Verdana, Geneva, Tahoma, sans-serif;
+              margin-right: 2px;
+            "
+          >
+            ©
+          </div>
+          <div style="padding-top: 1px">2025, ~by Dakitsune22</div>
         </q-item-label>
       </q-list>
     </q-drawer>
@@ -91,11 +100,17 @@ const pageKey = ref<number>(0);
 </template>
 
 <style lang="scss" scoped>
+.title {
+  font-size: 20px;
+}
 .user-menu {
   color: white;
   text-decoration: none;
-}
-.color-amber {
-  color: $amber-4;
+  font-size: 11px;
+
+  &-text {
+    color: $amber-4;
+    margin-left: 3px;
+  }
 }
 </style>

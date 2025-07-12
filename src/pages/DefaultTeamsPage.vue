@@ -1432,7 +1432,7 @@ const onReset = () => {
               spinner-color="white"
               width="40px"
               height="40px"
-              style="margin-right: 10px; cursor: pointer"
+              style="margin-right: 10px; cursor: pointer; top: 4px"
             />
             <q-popup-edit
               v-model.number="selectedTeamData.shortName"
@@ -1468,39 +1468,42 @@ const onReset = () => {
               </q-select>
             </q-popup-edit>
           </div>
-          Plantilla del
-          <div style="font-weight: bold; margin-left: 7px; cursor: alias">
-            {{ selectedTeamData.name }}
-            <q-popup-edit
-              v-model.number="selectedTeamData.name"
-              buttons
-              label-set="Guardar"
-              label-cancel="Cerrar"
-              v-slot="scope"
-            >
-              <q-badge outline color="primary" class="q-mt-sm">
-                Nombre del equipo
-              </q-badge>
-              <q-input
-                type="text"
-                v-model.number="scope.value"
-                hint="Introduce el nombre del equipo"
-                bottom-slots
-                dense
-                autofocus
-                @keyup.enter="scope.set"
-              />
-            </q-popup-edit>
+          <div class="team-body-info-left-desc">
+            <div class="team-body-info-left-desc-title">Plantilla del</div>
+            <div class="team-body-info-left-desc-name">
+              {{ selectedTeamData.name }}
+              <q-popup-edit
+                v-model.number="selectedTeamData.name"
+                buttons
+                label-set="Guardar"
+                label-cancel="Cerrar"
+                v-slot="scope"
+              >
+                <q-badge outline color="primary" class="q-mt-sm">
+                  Nombre del equipo
+                </q-badge>
+                <q-input
+                  type="text"
+                  maxlength="16"
+                  v-model.number="scope.value"
+                  hint="Introduce el nombre del equipo (máximo 16 caracteres)"
+                  bottom-slots
+                  dense
+                  autofocus
+                  @keyup.enter="scope.set"
+                />
+              </q-popup-edit>
+            </div>
           </div>
+        </div>
+        <div class="team-body-info-right">
           <q-btn
             icon="person_add"
             color="primary"
             round
-            class="q-ml-lg add-player"
+            class="q-mr-sm add-player"
             @click="onAddPlayer"
           />
-        </div>
-        <div class="team-body-info-right">
           <q-img
             :src="`/images/tactics/${selectedTeamData.tactic.name}.png`"
             spinner-color="white"
@@ -1515,7 +1518,7 @@ const onReset = () => {
             options-dense
             label="Táctica actual"
             emit-value
-            style="width: 160px"
+            style="width: 190px"
             @update:model-value="
               (value: TacticList) => {
                 // console.log('selected value: ', value)
@@ -1593,8 +1596,9 @@ const onReset = () => {
                 </q-badge>
                 <q-input
                   type="text"
+                  maxlength="20"
                   v-model.number="scope.value"
-                  hint="Introduce el nombre del jugador"
+                  hint="Introduce el nombre del jugador (máximo 20 caracteres)"
                   dense
                   autofocus
                   @keyup.enter="scope.set"
@@ -1619,8 +1623,9 @@ const onReset = () => {
                 </q-badge>
                 <q-input
                   type="text"
+                  maxlength="20"
                   v-model.number="scope.value"
-                  hint="Introduce el apellido del jugador"
+                  hint="Introduce el apellido del jugador (máximo 20 caracteres)"
                   dense
                   autofocus
                   @keyup.enter="scope.set"
@@ -1645,8 +1650,9 @@ const onReset = () => {
                 </q-badge>
                 <q-input
                   type="text"
+                  maxlength="20"
                   v-model.number="scope.value"
-                  hint="Introduce el apodo del jugador (opcional)"
+                  hint="Introduce el apodo del jugador (opcional, máximo 20 caracteres)"
                   dense
                   autofocus
                   @keyup.enter="scope.set"
@@ -1989,6 +1995,8 @@ const onReset = () => {
 </template>
 
 <style lang="scss" scoped>
+$darkGrey: rgba(42, 42, 42, 0.692);
+
 .team {
   &-header {
     margin: 20px;
@@ -2048,18 +2056,37 @@ const onReset = () => {
 
       &-left {
         @include flexPosition(start, end);
-        width: 71%;
+        width: 50%;
         // background-color: bisque;
 
         @include response('mobile') {
           width: 100%;
+          margin-left: 10px;
           margin-bottom: 10px;
           // justify-content: space-around;
         }
+        &-desc {
+          display: column;
+          margin-left: 5px;
+
+          &-title {
+            color: $darkGrey;
+            font-size: 14px;
+            height: 15px;
+            // background-color: bisque;
+          }
+          &-name {
+            font-weight: bold;
+            // margin-left: 7px;
+            height: 25px;
+            cursor: alias;
+            // background-color: aqua;
+          }
+        }
       }
       &-right {
-        @include flexPosition(end, end);
-        width: 29%;
+        @include flexPosition(end, center);
+        width: 50%;
         // padding-bottom: 5px;
         // background-color: burlywood;
 
@@ -2067,6 +2094,7 @@ const onReset = () => {
           // display: flex;
           // flex-direction: row;
           // justify-content: end;
+          margin-top: 10px;
           width: 100%;
         }
       }
@@ -2074,6 +2102,9 @@ const onReset = () => {
   }
 }
 .table {
+  $darkGrey: rgba(42, 42, 42, 0.692);
+
+  color: $darkGrey;
   background-color: darken(whitesmoke, $amount: 0.5);
   &-header {
     background-color: darken(whitesmoke, $amount: 5.5);
@@ -2081,8 +2112,8 @@ const onReset = () => {
   &-value {
     &:hover {
       color: $primary;
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: bold;
       transition: 0.2s all;
     }
   }
@@ -2112,6 +2143,7 @@ const onReset = () => {
   }
   &-col7 {
     width: 5%;
+    font-weight: bold;
     cursor: pointer;
   }
   &-col8 {
@@ -2124,6 +2156,7 @@ const onReset = () => {
   }
   &-col10 {
     width: 15%;
+    font-size: 11px;
     cursor: alias;
   }
   &-col11 {
@@ -2160,7 +2193,7 @@ const onReset = () => {
 .add-player {
   @include response('mobile') {
     position: absolute;
-    right: 10px;
+    left: 27px;
   }
 }
 </style>
