@@ -2,7 +2,7 @@
 import { useQuasar } from 'quasar';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import useRoundsMutation from 'src/composables/useRoundMutation';
-import useRounds from 'src/composables/useRounds';
+// import useRounds from 'src/composables/useRounds';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
 import useUserInfoMutation from 'src/composables/useUserInfoMutation';
@@ -74,7 +74,7 @@ const { queryTeamsByName: queryTeamsMyLeague } = useTeams(Leagues.MyLeague);
 
 const { setCurrentLeague } = useSoccer();
 setCurrentLeague(Leagues.MyLeague);
-const { queryCountRounds } = useRounds();
+// const { queryCountRounds } = useRounds();
 const { mutateMyLeagueRoundsDelete } = useRoundsMutation();
 // const { mutateTeamAddMyLeague } = useDefaultTeamsMutation();
 const { mutateTeamAddMyLeague, mutateTeamDeleteMyLeague } = useTeamMutation();
@@ -256,20 +256,27 @@ const onSubmit = () => {
   // Delete current DB teams:
   initialMyLeagueTeamsId.forEach((teamId) => {
     // console.log('deleteTeamFromMyLeague');
-    mutateTeamDeleteMyLeague.mutate(teamId);
-    currentTeams.value.refetch();
-  });
-  // Add teams:
-  selectedMyLeagueTeams.value.forEach((team) => {
-    // console.log('addTeamToMyLeague');
-    mutateTeamAddMyLeague.mutate({ team });
+    mutateTeamDeleteMyLeague.mutate(teamId, {
+      onSuccess: () => {
+        // Add teams:
+        selectedMyLeagueTeams.value.forEach((team) => {
+          // console.log('addTeamToMyLeague');
+          mutateTeamAddMyLeague.mutate({ team });
+          // currentTeams.value.refetch();
+        });
+      },
+    });
     currentTeams.value.refetch();
   });
   // Delete current league rounds:
-  if (queryCountRounds.data.value) {
-    console.log('query round count:', queryCountRounds.data.value);
-    mutateMyLeagueRoundsDelete.mutate(queryCountRounds.data.value);
-  }
+  const initialMyLeagueTeamsRounds = initialMyLeagueTeamsId.length * 2 - 2;
+  console.log('Jornadas:', initialMyLeagueTeamsRounds);
+  mutateMyLeagueRoundsDelete.mutate(initialMyLeagueTeamsRounds);
+  // console.log('query rounds:', queryCountRounds.data.value);
+  // if (queryCountRounds.data.value) {
+  //   console.log('query round count:', queryCountRounds.data.value);
+  //   mutateMyLeagueRoundsDelete.mutate(queryCountRounds.data.value);
+  // }
 };
 
 const onReset = () => {

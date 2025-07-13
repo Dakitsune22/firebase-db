@@ -124,13 +124,13 @@ const useDefaultTeamsMutation = () => {
       refreshData();
       $q.notify({
         type: 'positive',
-        message: 'Equipo reiniciado con éxito',
+        message: 'Equipo añadido con éxito',
       });
     },
     onError: () => {
       $q.notify({
         type: 'negative',
-        message: 'No se ha podido reiniciar el equipo',
+        message: 'No se ha podido añadir el equipo',
       });
     },
   });
