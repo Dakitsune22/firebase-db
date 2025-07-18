@@ -484,7 +484,7 @@ const onRestoreTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a restaurar los equipos de <strong>${labelLeague}</strong>.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...), sustituyéndose por los datos por defecto de los equipos.<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a restaurar los equipos de <strong>${labelLeague}</strong>.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...), sustituyéndose por los datos por defecto de los equipos, que corresponden a los de la <strong>temporada 2024-2025</strong>.<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     persistent: true,

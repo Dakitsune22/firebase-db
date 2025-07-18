@@ -103,18 +103,25 @@ const onPlayMatch = () => {
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
 
-  mutateTeamUpdateStats.mutate({
-    league: getCurrentLeague(),
-    id: matchRef.value.team2,
-    newGoalsScored: matchRef.value.score2,
-    newGoalsConceded: matchRef.value.score1,
-    scorers: matchRef.value.scorers2,
-    team: qt2.data.value ? qt2.data.value : ({} as Team),
-  });
+  mutateTeamUpdateStats.mutate(
+    {
+      league: getCurrentLeague(),
+      id: matchRef.value.team2,
+      newGoalsScored: matchRef.value.score2,
+      newGoalsConceded: matchRef.value.score1,
+      scorers: matchRef.value.scorers2,
+      team: qt2.data.value ? qt2.data.value : ({} as Team),
+    },
+    {
+      onSuccess: async () => {
+        // console.log('Mutate team update successful');
 
-  // Actualizamos query de goleadores, para que se refresquen en pantalla:
-  queryTopScorers.refetch();
-  queryTeamsByPoints.refetch();
+        // Actualizamos query de goleadores, para que se refresquen en pantalla:
+        queryTopScorers.refetch();
+        queryTeamsByPoints.refetch();
+      },
+    }
+  );
 };
 </script>
 
