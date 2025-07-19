@@ -5,9 +5,14 @@ import { Player } from 'src/models';
 
 interface Props {
   player: Player;
+  roundNumber?: number;
+  roundGoals?: number;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+console.log(props.player.surname);
+console.log(props.roundNumber);
+console.log(props.roundGoals);
 
 // const player = ref<Player>({ ...props });
 // const player = ref<Player>({...props});
@@ -68,15 +73,25 @@ defineProps<Props>();
       </div>
     </q-card-section>
     <q-separator />
-    <q-card-section class="main-container-section3">
-      <span class="main-container-section3-span">Goles esta temporada:</span>
-      <div class="main-container-section3-goals">
-        {{ player.seasonStats.goals }}
+    <q-card-section>
+      <div v-if="roundNumber" class="main-container-section3">
+        <span class="main-container-section3-span"
+          >Goles hasta la jornada {{ roundNumber }}:</span
+        >
+        <div class="main-container-section3-goals">
+          {{ player.seasonStats.goals + (roundGoals || 0) }}
+        </div>
+      </div>
+      <div v-else class="main-container-section3">
+        <span class="main-container-section3-span">Goles esta temporada:</span>
+        <div class="main-container-section3-goals">
+          {{ player.seasonStats.goals }}
+        </div>
       </div>
     </q-card-section>
     <q-card-section class="main-container-section4">
       <q-icon name="info" size="16px" />
-      <div>Clica esta ventana para cerrar</div>
+      <div>Clica en esta ventana para cerrar</div>
     </q-card-section>
     <!-- <soccer-player-info class="matchstats-container-player-info" /> -->
     <!-- <q-separator />
@@ -138,6 +153,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     }
     &-goals {
       color: $primary;
+      //   font-weight: bold;
       //   font-size: 16px;
     }
   }

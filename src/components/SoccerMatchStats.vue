@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { Match, Player } from 'src/models';
 import SoccerPlayerInfo from './SoccerPlayerInfo.vue';
+import useSoccer from 'src/composables/storeWrappers/useSoccer';
+const { getCurrentRound } = useSoccer();
 // import { Flag, Position } from 'src/models/player';
 // import { initialSeasonStats } from 'src/data/players-data/initial-season-stats';
 
@@ -29,10 +31,12 @@ const ratingTeam2 = ref<number>(
 
 const showPlayerInfo = ref<boolean>(false);
 const playerInfo = ref<Player>();
+const isPlayerLocale = ref<boolean>(false);
 
-const onShowPlayerInfo = (selectedPlayer: Player): void => {
+const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
   showPlayerInfo.value = true;
   playerInfo.value = selectedPlayer;
+  isPlayerLocale.value = isLocale;
 };
 </script>
 
@@ -75,7 +79,7 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           </div>
           <div
             class="matchstats-container-player-name"
-            @click="onShowPlayerInfo(p)"
+            @click="onShowPlayerInfo(p, true)"
           >
             {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
@@ -93,7 +97,12 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           </div>
         </div>
       </div>
-      <q-dialog v-model="showPlayerInfo" auto-close persistent>
+      <q-dialog
+        v-if="isPlayerLocale"
+        v-model="showPlayerInfo"
+        auto-close
+        persistent
+      >
         <!-- <q-dialog v-model="showPlayerInfo" auto-close seamless> -->
         <!-- <soccer-player-info
           :key="playerInfo?.shirtNumber"
@@ -113,6 +122,11 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           v-if="playerInfo"
           :key="playerInfo?.shirtNumber"
           :player="playerInfo"
+          :round-number="getCurrentRound()"
+          :round-goals="
+            matchRef.scorers1.filter((s) => s === playerInfo?.shirtNumber)
+              .length
+          "
         />
       </q-dialog>
     </div>
@@ -153,7 +167,7 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           </div>
           <div
             class="matchstats-container-player-name"
-            @click="onShowPlayerInfo(p)"
+            @click="onShowPlayerInfo(p, false)"
           >
             {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
@@ -171,7 +185,12 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           </div>
         </div>
       </div>
-      <q-dialog v-model="showPlayerInfo" auto-close persistent>
+      <q-dialog
+        v-if="!isPlayerLocale"
+        v-model="showPlayerInfo"
+        auto-close
+        persistent
+      >
         <!-- <q-dialog v-model="showPlayerInfo" auto-close seamless> -->
         <!-- <soccer-player-info
           :key="playerInfo?.shirtNumber"
@@ -191,6 +210,11 @@ const onShowPlayerInfo = (selectedPlayer: Player): void => {
           v-if="playerInfo"
           :key="playerInfo?.shirtNumber"
           :player="playerInfo"
+          :round-number="getCurrentRound()"
+          :round-goals="
+            matchRef.scorers2.filter((s) => s === playerInfo?.shirtNumber)
+              .length
+          "
         />
       </q-dialog>
     </div>
