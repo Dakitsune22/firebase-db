@@ -7,6 +7,7 @@ interface Props {
   player: Player;
   roundNumber?: number;
   roundGoals?: number;
+  urlTeamCrest?: string;
 }
 
 const props = defineProps<Props>();
@@ -51,6 +52,17 @@ console.log(props.roundGoals);
     </q-card-section>
     <q-separator />
     <q-card-section class="main-container-section2">
+      <div
+        v-if="urlTeamCrest && urlTeamCrest?.length > 0"
+        class="main-container-section2-team"
+      >
+        <q-img
+          :src="urlTeamCrest"
+          spinner-color="white"
+          width="40px"
+          height="40px"
+        />
+      </div>
       <div class="main-container-section2-position">
         <q-badge outline color="primary" style="font-size: 13px">
           {{ player.position }}
@@ -136,7 +148,11 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     @include flexPosition(start, center);
     gap: 12px;
     font-size: 13px;
+    margin-right: 5px;
 
+    &-team {
+      margin-right: 2px;
+    }
     &-position {
       //   background-color: aqua;
       //   @include flexPosition(center, center);

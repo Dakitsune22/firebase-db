@@ -58,7 +58,11 @@ const showPlayerInfo = ref<boolean>(false);
         }}</q-item-section>
       </q-item>
       <q-dialog v-model="showPlayerInfo" auto-close persistent>
-        <soccer-player-info :key="props.iKey" :player="props.player" />
+        <soccer-player-info
+          :key="props.iKey"
+          :player="props.player"
+          :url-team-crest="`/images/teams-${queryTeamById.data.value?.country}/${queryTeamById.data.value?.shortName}.png`"
+        />
       </q-dialog>
     </q-list>
   </div>
