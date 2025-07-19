@@ -2,6 +2,8 @@
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
 import useTeams from 'src/composables/useTeams';
 import { Player } from 'src/models';
+import { ref } from 'vue';
+import SoccerPlayerInfo from './SoccerPlayerInfo.vue';
 
 interface Props {
   player: Player;
@@ -12,6 +14,8 @@ const props = defineProps<Props>();
 
 const { getCurrentLeague } = useSoccer();
 const { queryTeamById } = useTeams(getCurrentLeague(), props.player.teamId);
+
+const showPlayerInfo = ref<boolean>(false);
 </script>
 
 <template>
@@ -31,11 +35,16 @@ const { queryTeamById } = useTeams(getCurrentLeague(), props.player.teamId);
         <q-item-section side class="section-position">{{
           props.player.position
         }}</q-item-section>
-        <q-item-section side class="section-name">{{
-          props.player.nickname
-            ? props.player.nickname
-            : props.player.name + ' ' + props.player.surname
-        }}</q-item-section>
+        <q-item-section
+          side
+          class="section-name"
+          @click="showPlayerInfo = true"
+          >{{
+            props.player.nickname
+              ? props.player.nickname
+              : props.player.name + ' ' + props.player.surname
+          }}</q-item-section
+        >
         <div class="section-team">
           <q-img
             :src="`/images/teams-${queryTeamById.data.value?.country}/${queryTeamById.data.value?.shortName}.png`"
@@ -48,6 +57,9 @@ const { queryTeamById } = useTeams(getCurrentLeague(), props.player.teamId);
           props.player.seasonStats.goals
         }}</q-item-section>
       </q-item>
+      <q-dialog v-model="showPlayerInfo" auto-close persistent>
+        <soccer-player-info :key="props.iKey" :player="props.player" />
+      </q-dialog>
     </q-list>
   </div>
 </template>
@@ -97,6 +109,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     font-size: 13px;
     // font-weight: 500;
     padding-top: 2px;
+    cursor: pointer;
     color: $darkGrey;
   }
   &-team {

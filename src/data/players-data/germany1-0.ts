@@ -204,7 +204,7 @@ export const playersData: Player[] = [
     teamId: 0,
   },
   {
-    shirtNumber: 20,
+    shirtNumber: 19,
     name: 'Jean-Mattéo',
     surname: 'Bahoya',
     birthDate: '07/05/2005',

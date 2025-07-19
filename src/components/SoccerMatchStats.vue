@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Match } from 'src/models';
+import { Match, Player } from 'src/models';
+import SoccerPlayerInfo from './SoccerPlayerInfo.vue';
+// import { Flag, Position } from 'src/models/player';
+// import { initialSeasonStats } from 'src/data/players-data/initial-season-stats';
 
 const props = defineProps<Match>();
 
@@ -23,6 +26,14 @@ const ratingTeam1 = ref<number>(
 const ratingTeam2 = ref<number>(
   matchRef.value.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11 / 10
 );
+
+const showPlayerInfo = ref<boolean>(false);
+const playerInfo = ref<Player>();
+
+const onShowPlayerInfo = (selectedPlayer: Player): void => {
+  showPlayerInfo.value = true;
+  playerInfo.value = selectedPlayer;
+};
 </script>
 
 <template>
@@ -62,7 +73,10 @@ const ratingTeam2 = ref<number>(
           <div class="matchstats-container-player-position">
             {{ p.position }}
           </div>
-          <div class="matchstats-container-player-name">
+          <div
+            class="matchstats-container-player-name"
+            @click="onShowPlayerInfo(p)"
+          >
             {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
           <div class="matchstats-container-player-overall">
@@ -79,6 +93,28 @@ const ratingTeam2 = ref<number>(
           </div>
         </div>
       </div>
+      <q-dialog v-model="showPlayerInfo" auto-close persistent>
+        <!-- <q-dialog v-model="showPlayerInfo" auto-close seamless> -->
+        <!-- <soccer-player-info
+          :key="playerInfo?.shirtNumber"
+          :shirt-number="playerInfo?.shirtNumber || 99"
+          :name="playerInfo?.name || ''"
+          :surname="playerInfo?.surname || ''"
+          :nickname="playerInfo?.nickname || ''"
+          :position="playerInfo?.position || Position.POR"
+          :nationality="playerInfo?.nationality || Flag.Spain"
+          :overall="playerInfo?.overall || 0"
+          :birth-date="playerInfo?.birthDate"
+          :height="playerInfo?.height"
+          :season-stats="playerInfo?.seasonStats || initialSeasonStats"
+          :team-id="playerInfo?.teamId || 0"
+        /> -->
+        <soccer-player-info
+          v-if="playerInfo"
+          :key="playerInfo?.shirtNumber"
+          :player="playerInfo"
+        />
+      </q-dialog>
     </div>
     <div class="matchstats-container-right">
       <div class="matchstats-container-rating">
@@ -115,7 +151,10 @@ const ratingTeam2 = ref<number>(
           <div class="matchstats-container-player-position">
             {{ p.position }}
           </div>
-          <div class="matchstats-container-player-name">
+          <div
+            class="matchstats-container-player-name"
+            @click="onShowPlayerInfo(p)"
+          >
             {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
           </div>
           <div class="matchstats-container-player-overall">
@@ -132,6 +171,28 @@ const ratingTeam2 = ref<number>(
           </div>
         </div>
       </div>
+      <q-dialog v-model="showPlayerInfo" auto-close persistent>
+        <!-- <q-dialog v-model="showPlayerInfo" auto-close seamless> -->
+        <!-- <soccer-player-info
+          :key="playerInfo?.shirtNumber"
+          :shirt-number="playerInfo?.shirtNumber || 99"
+          :name="playerInfo?.name || ''"
+          :surname="playerInfo?.surname || ''"
+          :nickname="playerInfo?.nickname || ''"
+          :position="playerInfo?.position || Position.POR"
+          :nationality="playerInfo?.nationality || Flag.Spain"
+          :overall="playerInfo?.overall || 0"
+          :birth-date="playerInfo?.birthDate"
+          :height="playerInfo?.height"
+          :season-stats="playerInfo?.seasonStats || initialSeasonStats"
+          :team-id="playerInfo?.teamId || 0"
+        /> -->
+        <soccer-player-info
+          v-if="playerInfo"
+          :key="playerInfo?.shirtNumber"
+          :player="playerInfo"
+        />
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -187,10 +248,10 @@ $midGrey: rgb(150, 150, 150);
   &-player {
     @include flexPosition(start, center);
     // align-items: center;
-    gap: 5px;
+    gap: 4px;
 
     &-shirt {
-      width: 8%;
+      width: 9%;
       text-align: right;
       font-size: 11px;
       // background-color: aqua;
@@ -203,24 +264,26 @@ $midGrey: rgb(150, 150, 150);
       // background-color: antiquewhite;
     }
     &-name {
-      width: 55%;
+      width: 53%;
       font-size: 11px;
       text-align: left;
+      cursor: pointer;
       // background-color: aqua;
     }
     &-overall {
-      width: 8%;
+      width: 10%;
       color: $primary;
       font-size: 11px;
-      position: relative;
+      // position: relative;
       // font-weight: 500;
       padding-top: 1px;
-      text-align: right;
+      text-align: center;
       // background-color: aqua;
     }
     &-goals {
       font-size: 10px;
-      width: 18%;
+      width: 17%;
+      // background-color: pink;
     }
   }
 }
