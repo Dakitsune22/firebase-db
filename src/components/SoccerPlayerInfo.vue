@@ -10,10 +10,11 @@ interface Props {
   urlTeamCrest?: string;
 }
 
-const props = defineProps<Props>();
-console.log(props.player.surname);
-console.log(props.roundNumber);
-console.log(props.roundGoals);
+defineProps<Props>();
+// const props = defineProps<Props>();
+// console.log(props.player.surname);
+// console.log(props.roundNumber);
+// console.log(props.roundGoals);
 
 // const player = ref<Player>({ ...props });
 // const player = ref<Player>({...props});
@@ -23,7 +24,6 @@ console.log(props.roundGoals);
   <q-card class="main-container">
     <q-card-section class="main-container-section1">
       <div class="main-container-section1-shirt">
-        <!-- <q-icon name="numbers" size="12px" /> -->
         <span class="main-container-section1-shirt-span">#</span>
         {{ player.shirtNumber }}
       </div>
@@ -105,13 +105,6 @@ console.log(props.roundGoals);
       <q-icon name="info" size="16px" />
       <div>Clica en esta ventana para cerrar</div>
     </q-card-section>
-    <!-- <soccer-player-info class="matchstats-container-player-info" /> -->
-    <!-- <q-separator />
-
-          <q-card-actions align="right">
-            <q-btn flat label="Decline" color="primary" v-close-popup />
-            <q-btn flat label="Accept" color="primary" v-close-popup />
-          </q-card-actions> -->
   </q-card>
 </template>
 

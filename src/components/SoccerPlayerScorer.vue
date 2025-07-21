@@ -20,8 +20,14 @@ const showPlayerInfo = ref<boolean>(false);
 
 <template>
   <div>
-    <q-list bordered separator dense class="list">
-      <q-item class="item">
+    <q-list
+      bordered
+      separator
+      dense
+      class="list"
+      :class="iKey === 1 ? 'list-first' : ''"
+    >
+      <q-item class="item" :class="iKey === 1 ? 'item-first' : ''">
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-nationality">
           <q-img
@@ -76,6 +82,10 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   border-width: 1px 1px 1px 1px;
   border-radius: 0.2em;
   margin-top: 2px;
+
+  &-first {
+    border-color: darken($color: rgb(253, 206, 88), $amount: 25%);
+  }
 }
 
 .item {
@@ -83,6 +93,10 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   height: 30px;
   // border: 1px solid darkgrey;
   //   width: 400px;
+
+  &-first {
+    background-color: rgb(253, 206, 88);
+  }
 }
 
 .section {
