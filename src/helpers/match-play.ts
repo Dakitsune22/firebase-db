@@ -64,7 +64,7 @@ export const getStartingLineup = (team: Team): Player[] => {
           Math.floor(Math.random() * (100 - filteredPlayers[i].overall) - bonus)
         );
         if (filteredPlayers[i].position === Position.POR) {
-          bonus += 3;
+          bonus += 5;
         } else {
           bonus += 1;
         }
