@@ -351,6 +351,13 @@ const columns: QTableProps['columns'] = [
   },
 ];
 
+const initialPagination = {
+  sortBy: 'position',
+  descending: false,
+  // page: 2,
+  // rowsPerPage: 3
+};
+
 const errorHeight = ref(false);
 const errorHeightMessage = ref('');
 
@@ -990,6 +997,28 @@ const isSelectedTeamDataChanged = (): boolean => {
 //     });
 // };
 
+// const deletePlayerFromSelectedTeamData = (
+//   currentRowIndex: number,
+//   indexedPlayerShirtNumber: number
+// ) => {
+//   // console.log({ indexedPlayerShirtNumber });
+//   // console.log({ currentRowIndex });
+
+//   const realRowIndex = selectedTeamData.value.players.findIndex(
+//     (p) => p.shirtNumber === indexedPlayerShirtNumber
+//   );
+//   // console.log({ realRowIndex });
+//   selectedTeamData.value.players.splice(realRowIndex, 1);
+// };
+
+const getPlayerRealRowIndex = (indexedPlayerShirtNumber: number): number => {
+  // console.log({ indexedPlayerShirtNumber });
+
+  return selectedTeamData.value.players.findIndex(
+    (p) => p.shirtNumber === indexedPlayerShirtNumber
+  );
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onTransferPlayer = (squadIndex: number, scope: any): void => {
   // const onTransferPlayer = (squadIndex: number): void => {
@@ -1536,6 +1565,7 @@ const onReset = () => {
         :rows="selectedTeamData.players"
         :columns="columns"
         row-key="shirtNumber"
+        :pagination="initialPagination"
         dense
         bordered
         rows-per-page-label="Jugadores por página: "
@@ -1860,7 +1890,12 @@ const onReset = () => {
                 icon="delete"
                 color="primary"
                 flat
-                @click="selectedTeamData.players.splice(props.rowIndex, 1)"
+                @click="
+                  selectedTeamData.players.splice(
+                    getPlayerRealRowIndex(props.row.shirtNumber),
+                    1
+                  )
+                "
               />
             </q-td>
             <q-td
@@ -1921,7 +1956,10 @@ const onReset = () => {
                     @click="
                       {
                         // onTransferPlayer(props.rowIndex);
-                        onTransferPlayer(props.rowIndex, scope);
+                        onTransferPlayer(
+                          getPlayerRealRowIndex(props.row.shirtNumber),
+                          scope
+                        );
                         // scope.set;
                       }
                     "
