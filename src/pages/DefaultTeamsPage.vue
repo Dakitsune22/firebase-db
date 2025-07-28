@@ -451,6 +451,10 @@ const overallRangeValidation = (val: number): boolean => {
   }
 };
 
+const isShirtNumberAvailable = (shirtNumber: number, team: Team): boolean => {
+  return team.players.findIndex((p) => p.shirtNumber === shirtNumber) < 0;
+};
+
 const getNextAvailableShirtNumber = (team: Team): number => {
   let shirtNumber = 0;
   for (let i = 1; i < 100; i++) {
@@ -1064,8 +1068,14 @@ const onTransferPlayer = (squadIndex: number, scope: any): void => {
     persistent: true,
   })
     .onOk(async () => {
+      console.log('Player shirt number:', player.shirtNumber);
       player.teamId = transferTargetTeamData.id;
-      player.shirtNumber = getNextAvailableShirtNumber(transferTargetTeamData);
+      player.shirtNumber = isShirtNumberAvailable(
+        player.shirtNumber,
+        transferTargetTeamData
+      )
+        ? player.shirtNumber
+        : getNextAvailableShirtNumber(transferTargetTeamData);
       transferTargetTeamData.players.push(player);
       // console.log(transferTargetTeamData.name);
       // console.log(transferTargetTeamData.players);
