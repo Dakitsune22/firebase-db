@@ -1943,8 +1943,10 @@ const onReset = () => {
                   filled
                   v-model="transferSelectedTeamId"
                   :options="
-                    transferCurrentTeams.data.value?.filter(
-                      (t) => t.id !== selectedTeamData.id
+                    transferCurrentTeams.data.value?.filter((t) =>
+                      transferSelectedLeague === selectedLeague
+                        ? t.id !== selectedTeamData.id
+                        : t
                     )
                   "
                   option-value="id"
