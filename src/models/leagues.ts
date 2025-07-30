@@ -21,7 +21,7 @@ export enum CountryLeague {
 
 export const leaguesMap = [
   {
-    label: 'La Liga Primera Division',
+    label: 'LaLiga EA Sports',
     value: Leagues.LaLigaPrimeraDivision,
   },
   {

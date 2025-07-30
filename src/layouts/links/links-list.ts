@@ -46,7 +46,7 @@ export const linksListLeagues: EssentialLinkProps[] = [
     link: '/soccer-myleague',
   },
   {
-    title: 'La Liga: Primera División',
+    title: 'LaLiga EA Sports',
     caption: 'España',
     img: '/images/leagues/spain1.png',
     link: `/soccer/${Leagues.LaLigaPrimeraDivision}`,

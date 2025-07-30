@@ -134,7 +134,7 @@ const onSubmit = () => {
         <q-btn
           type="submit"
           color="primary"
-          icon="save"
+          icon="login"
           size="18px"
           flat
           class="q-ml-sm"

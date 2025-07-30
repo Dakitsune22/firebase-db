@@ -265,7 +265,7 @@ const leagueOptions = ref(leaguesMap);
 const columns: QTableProps['columns'] = [
   {
     name: 'shirtNumber',
-    label: 'Dorsal',
+    label: ' #',
     field: 'shirtNumber',
     align: 'center',
     sortable: true,
@@ -339,13 +339,13 @@ const columns: QTableProps['columns'] = [
   },
   {
     name: 'delete',
-    label: 'Eliminar',
+    label: 'Elim.',
     field: 'delete',
     align: 'center',
   },
   {
     name: 'transfer',
-    label: 'Traspasar',
+    label: 'Trasp.',
     field: 'transfer',
     align: 'center',
   },
@@ -1900,6 +1900,7 @@ const onReset = () => {
                 icon="delete"
                 color="primary"
                 flat
+                dense
                 @click="
                   selectedTeamData.players.splice(
                     getPlayerRealRowIndex(props.row.shirtNumber),
@@ -1913,7 +1914,7 @@ const onReset = () => {
               :props="props"
               class="table table-value table-col9"
             >
-              <q-btn icon="output" color="primary" flat />
+              <q-btn icon="output" color="primary" flat dense />
               <q-popup-edit
                 v-model.number="props.row.transfer"
                 style="width: 250px"
@@ -2172,11 +2173,11 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     cursor: alias;
   }
   &-col2 {
-    width: 20%;
+    width: 22%;
     cursor: alias;
   }
   &-col3 {
-    width: 20%;
+    width: 22%;
     cursor: alias;
   }
   &-col4 {
@@ -2184,7 +2185,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     cursor: alias;
   }
   &-col5 {
-    width: 5cm;
+    width: 4%;
     cursor: pointer;
   }
   &-col6 {
@@ -2197,20 +2198,23 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     cursor: pointer;
   }
   &-col8 {
-    width: 5%;
+    width: 4%;
     cursor: pointer;
   }
   &-col9 {
-    width: 5%;
+    width: 4%;
     cursor: pointer;
   }
   &-col10 {
-    width: 15%;
+    width: 10%;
     font-size: 11px;
     cursor: alias;
+    &:hover {
+      font-size: 13px;
+    }
   }
   &-col11 {
-    width: 5%;
+    width: 4%;
     cursor: default;
   }
   &-col12 {

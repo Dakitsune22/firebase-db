@@ -194,7 +194,7 @@ const onRestartLeague = () => {
   let leagueName = '';
   switch (getCurrentLeague()) {
     case Leagues.LaLigaPrimeraDivision:
-      leagueName = 'La Liga: Primera división';
+      leagueName = 'LaLiga EA Sports';
       break;
     case Leagues.PremierLeague:
       leagueName = 'Premier League';
