@@ -112,6 +112,7 @@ export enum Flag {
   Malaysia = 'my',
   Mali = 'ml',
   Malta = 'mt',
+  Martinique = 'mq',
   Mexico = 'mx',
   Moldavia = 'md',
   Montenegro = 'me',
@@ -255,6 +256,7 @@ flagMap.set('my', 'Malasia');
 flagMap.set('ml', 'Mali');
 flagMap.set('mt', 'Malta');
 flagMap.set('ma', 'Marruecos');
+flagMap.set('mq', 'Martinica');
 flagMap.set('mx', 'México');
 flagMap.set('md', 'Moldavia');
 flagMap.set('me', 'Montenegro');
