@@ -152,6 +152,9 @@ $darkGrey: rgba(42, 42, 42, 0.692);
       //   font-size: 18px;
       margin-right: 3px;
     }
+    &-nationality {
+      margin-bottom: 1px;
+    }
   }
   &-section3 {
     @include flexPosition(start, center);
