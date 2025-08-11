@@ -91,6 +91,7 @@ export enum Flag {
   Honduras = 'hn',
   Hungary = 'hu',
   Iceland = 'is',
+  Indonesia = 'id',
   Iran = 'ir',
   Iraq = 'iq',
   Ireland = 'ie',
@@ -231,6 +232,7 @@ flagMap.set('gq', 'Guinea Ecuatorial');
 flagMap.set('ht', 'Haití');
 flagMap.set('hn', 'Honduras');
 flagMap.set('hu', 'Hungría');
+flagMap.set('id', 'Indonesia');
 flagMap.set('gb-eng', 'Inglaterra');
 flagMap.set('ir', 'Irán');
 flagMap.set('iq', 'Iraq');
