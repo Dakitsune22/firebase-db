@@ -129,6 +129,7 @@ export enum Flag {
   Nigeria = 'ng',
   NorthIreland = 'gb-nir',
   Norway = 'no',
+  Palestine = 'ps',
   Panama = 'pa',
   Paraguay = 'py',
   Peru = 'pe',
@@ -274,6 +275,7 @@ flagMap.set('ng', 'Nigeria');
 flagMap.set('no', 'Noruega');
 flagMap.set('nz', 'Nueva Zelanda');
 flagMap.set('nl', 'Países Bajos');
+flagMap.set('ps', 'Palestina');
 flagMap.set('pa', 'Panamá');
 flagMap.set('py', 'Paraguay');
 flagMap.set('pe', 'Perú');
