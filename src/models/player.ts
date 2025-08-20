@@ -101,9 +101,11 @@ export enum Flag {
   Jamaica = 'jm',
   Japan = 'jp',
   Jordania = 'jo',
+  Kazajistan = 'kz',
   Kenia = 'kn',
   Kosovo = 'xk',
   Latvia = 'lv',
+  Liberia = 'lr',
   Libya = 'ly',
   Liechtenstein = 'li',
   Lithuania = 'lt',
@@ -245,9 +247,11 @@ flagMap.set('it', 'Italia');
 flagMap.set('jm', 'Jamaica');
 flagMap.set('jp', 'Japón');
 flagMap.set('jo', 'Jordania');
+flagMap.set('kz', 'Kazajistan');
 flagMap.set('ke', 'Kenia');
 flagMap.set('xk', 'Kosovo');
 flagMap.set('lv', 'Letonia');
+flagMap.set('lr', 'Liberia');
 flagMap.set('ly', 'Libia');
 flagMap.set('li', 'Liechtenstein');
 flagMap.set('lt', 'Lituania');
