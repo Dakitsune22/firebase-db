@@ -72,8 +72,8 @@ defineProps<Props>();
         <q-img
           :src="`/images/flags/h20/${player.nationality}.png`"
           spinner-color="white"
-          width="27px"
-          height="17px"
+          width="29px"
+          height="18px"
           style="border: 1px solid rgba(0, 0, 0, 65%)"
         />
       </div>
@@ -153,7 +153,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
       margin-right: 3px;
     }
     &-nationality {
-      margin-bottom: 1px;
+      margin-bottom: 2px;
     }
   }
   &-section3 {

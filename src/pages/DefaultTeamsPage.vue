@@ -1742,8 +1742,8 @@ const onReset = () => {
               <q-img
                 :src="`/images/flags/h20/${props.row.nationality}.png`"
                 spinner-color="white"
-                width="27px"
-                height="17px"
+                width="29px"
+                height="18px"
                 style="border: 1px solid rgba(0, 0, 0, 65%)"
               />
               <q-popup-edit
@@ -1766,7 +1766,7 @@ const onReset = () => {
                         :src="`/images/flags/h24/${scope.opt}.png`"
                         spinner-color="white"
                         height="24px"
-                        width="42px"
+                        width="40px"
                         class="q-mr-sm"
                         style="border: 1px solid rgba(0, 0, 0, 65%)"
                       />

@@ -33,8 +33,8 @@ const showPlayerInfo = ref<boolean>(false);
           <q-img
             :src="`/images/flags/h20/${props.player.nationality}.png`"
             spinner-color="white"
-            width="27px"
-            height="17px"
+            width="29px"
+            height="18px"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
         </q-item-section>
