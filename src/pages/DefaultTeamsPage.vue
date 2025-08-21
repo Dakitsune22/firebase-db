@@ -1744,6 +1744,7 @@ const onReset = () => {
                 spinner-color="white"
                 width="29px"
                 height="18px"
+                fit="fill"
                 style="border: 1px solid rgba(0, 0, 0, 65%)"
               />
               <q-popup-edit
@@ -1767,6 +1768,7 @@ const onReset = () => {
                         spinner-color="white"
                         height="24px"
                         width="40px"
+                        fit="fill"
                         class="q-mr-sm"
                         style="border: 1px solid rgba(0, 0, 0, 65%)"
                       />

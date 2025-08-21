@@ -67,8 +67,9 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
           <q-img
             :src="`/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="27px"
+            width="26px"
             height="14px"
+            fit="fill"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">
@@ -155,8 +156,9 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
           <q-img
             :src="`/images/flags/h20/${p.nationality}.png`"
             spinner-color="white"
-            width="27px"
+            width="26px"
             height="14px"
+            fit="fill"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
           <div class="matchstats-container-player-shirt">

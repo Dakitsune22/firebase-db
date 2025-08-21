@@ -35,6 +35,7 @@ const showPlayerInfo = ref<boolean>(false);
             spinner-color="white"
             width="29px"
             height="18px"
+            fit="fill"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
         </q-item-section>
