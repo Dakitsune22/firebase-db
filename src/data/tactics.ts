@@ -91,6 +91,22 @@ export const tactics: Tactic[] = [
       Position.DF,
       Position.DF,
       Position.LI,
+      Position.ED,
+      Position.MC,
+      Position.MC,
+      Position.EI,
+      Position.DC,
+      Position.DC,
+    ],
+  },
+  {
+    name: TacticList['4-4-2-Rombo'],
+    formation: [
+      Position.POR,
+      Position.LD,
+      Position.DF,
+      Position.DF,
+      Position.LI,
       Position.MCD,
       Position.MC,
       Position.MC,
@@ -217,8 +233,8 @@ export const positionReplacements: PositionReplacement[] = [
     replacements: [
       { position: Position.MCD, penalty: 3 },
       { position: Position.MCO, penalty: 3 },
-      { position: Position.ED, penalty: 6 },
-      { position: Position.EI, penalty: 6 },
+      // { position: Position.ED, penalty: 6 },
+      // { position: Position.EI, penalty: 6 },
     ],
   },
   {

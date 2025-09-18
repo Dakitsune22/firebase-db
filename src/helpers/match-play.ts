@@ -2,18 +2,27 @@ import { positionReplacements } from 'src/data/tactics';
 import { Team, Player } from 'src/models';
 import { getResult, type MatchResult } from './match-calc';
 import { Position } from 'src/models/player';
+import { TacticList } from 'src/models/tactic';
 
 export const getStartingLineup = (team: Team): Player[] => {
   const startingLineup: Player[] = [];
 
   //   console.log(team.tactic.formation);
-  team.tactic.formation.forEach((position) => {
+  team.tactic.formation.forEach((position, posIdx) => {
     const filteredPlayers = team.players.filter(
       (p) =>
-        p.position === position &&
+        (p.position === position || // El jugador juega en la posición iterada
+          ((team.tactic.name == TacticList['4-2-3-1'] || // Excepción 1: Aceptamos jugador MCD para posición MC en las tacticas señaladas
+            team.tactic.name == TacticList['4-4-2']) &&
+            position === Position.MC &&
+            p.position === Position.MCD) ||
+          (team.tactic.name == TacticList['5-3-2'] && // Excepción 2: Aceptamos jugador MCD para primera/segunda posición MC de un 5-3-2 y MCO para tercera posición MC
+            position === Position.MC &&
+            (((posIdx === 6 || posIdx === 7) && p.position === Position.MCD) ||
+              (posIdx === 8 && p.position === Position.MCO)))) &&
         startingLineup.findIndex((psl) => psl.shirtNumber === p.shirtNumber) < 0
     );
-
+    // console.log(filteredPlayers);
     // Si no hay ningún jugador de la posición requerida, o bien solo hay uno
     // y necesita "descanso", añadimos alternativas a la lista:
     if (

@@ -16,6 +16,7 @@ export enum TacticList {
   '4-3-3' = '4-3-3',
   '4-3-3-Defensivo' = '4-3-3-Defensivo',
   '4-4-2' = '4-4-2',
+  '4-4-2-Rombo' = '4-4-2-Rombo',
   '4-5-1' = '4-5-1',
   '4-5-1-Ofensivo' = '4-5-1-Ofensivo',
   '5-3-2' = '5-3-2',
