@@ -16,6 +16,7 @@
     "@quasar/extras": "^1.16.4",
     "@tanstack/vue-query": "^5.36.0",
     "@tanstack/vue-query-devtools": "^5.51.5",
+    "@vueuse/core": "^13.9.0",
     "axios": "^1.2.1",
     "firebase": "^10.9.0",
     "js-md5": "^0.8.3",

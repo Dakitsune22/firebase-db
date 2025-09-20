@@ -1290,7 +1290,17 @@ const onReset = () => {
   </div> -->
   <div class="team-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
-      <div class="team-body-title">Gestión de equipos</div>
+      <div class="team-body-title">
+        <div>Gestión de equipos</div>
+        <Router-link :to="{ name: 'stats' }">
+          <q-icon
+            name="leaderboard"
+            size="36px"
+            color="primary"
+            style="cursor: pointer"
+          />
+        </Router-link>
+      </div>
       <div class="team-body-league">
         <q-select
           class="team-body-league-left"
@@ -2068,10 +2078,15 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     }
 
     &-title {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
       font-size: 20px;
       border-left: 6px solid $primary;
       padding-left: 10px;
       margin-bottom: 16px;
+      // background-color: aqua;
     }
 
     &-league {
