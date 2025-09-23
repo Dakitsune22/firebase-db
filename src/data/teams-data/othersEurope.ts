@@ -475,4 +475,22 @@ export const teamsOthersEurope: Team[] = [
     tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
     players: [],
   },
+  {
+    ...initTeamData,
+    id: i++,
+    country: CountryLeague.OthersEurope,
+    name: 'Viktoria Plzen',
+    shortName: 'plz',
+    tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,
+    players: [],
+  },
+  {
+    ...initTeamData,
+    id: i++,
+    country: CountryLeague.OthersEurope,
+    name: 'Rijeka',
+    shortName: 'rjk',
+    tactic: tactics.find((t) => t.name === TacticList['4-4-2-Rombo']) as Tactic,
+    players: [],
+  },
 ];
