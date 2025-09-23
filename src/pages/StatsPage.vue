@@ -2,7 +2,14 @@
 import useTeams from 'src/composables/useTeams';
 import { Leagues, Player } from 'src/models';
 import { Team } from 'src/models';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { leaguesMap } from 'src/models/leagues';
+import { useWindowScroll } from '@vueuse/core';
+import { sleep } from 'src/helpers/functions';
+
+defineOptions({
+  name: 'StatsPage',
+});
 
 const { queryTeamsByName: queryTeamsSpain } = useTeams(
   Leagues.LaLigaPrimeraDivision
@@ -25,15 +32,41 @@ interface TeamExt {
   ovr: number;
 }
 
+const { y } = useWindowScroll();
 const loading = ref<boolean>(true);
 const expanded = ref<boolean[]>([]);
-const allTeams: TeamExt[] = [];
+const allTeams = ref<TeamExt[]>([]); // const allTeams: TeamExt[] = [];
+const selectedFilters = ref([
+  Leagues.LaLigaPrimeraDivision,
+  Leagues.PremierLeague,
+  Leagues.SerieA,
+  Leagues.Bundesliga,
+  Leagues.Ligue1,
+  Leagues.OthersEurope,
+  Leagues.OthersWorld,
+]);
+const filteredTeams = computed(() => {
+  const tExt: TeamExt[] = [];
+  // console.log(selectedFilters.value[0]);
+  selectedFilters.value.forEach((leagueFilter) => {
+    tExt.push(
+      ...allTeams.value.filter((te) =>
+        te.team.country.includes(leagueFilter.replace('-1', ''))
+      )
+    );
+  });
+  tExt.sort((teamA, teamB) => teamB.ovr - teamA.ovr);
+  return tExt;
+  // return allTeams.value.filter((te) =>
+  //   te.team.country.includes(selectedFilters.value[0].replace('-1', ''))
+  // );
+});
 
 const loadAllTeams = (): void => {
   console.log('loadAllTeams -> START');
   if (queryTeamsSpain.data.value) {
     queryTeamsSpain.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -44,7 +77,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsEngland.data.value) {
     queryTeamsEngland.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -55,7 +88,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsItaly.data.value) {
     queryTeamsItaly.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -66,7 +99,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsGermany.data.value) {
     queryTeamsGermany.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -77,7 +110,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsFrance.data.value) {
     queryTeamsFrance.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -88,7 +121,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsOthersWorld.data.value) {
     queryTeamsOthersWorld.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -99,7 +132,7 @@ const loadAllTeams = (): void => {
   }
   if (queryTeamsOthersEurope.data.value) {
     queryTeamsOthersEurope.data.value.forEach((team) => {
-      allTeams.push({
+      allTeams.value.push({
         team: { ...team },
         ovr:
           team.players.reduce((a, b) => a + b.overall, 0) /
@@ -113,7 +146,7 @@ const loadAllTeams = (): void => {
   //       teamB.players.reduce((a, b) => a + b.overall, 0) / teamB.players.length -
   //       teamA.players.reduce((a, b) => a + b.overall, 0) / teamA.players.length
   //   );
-  allTeams.sort((teamA, teamB) => teamB.ovr - teamA.ovr);
+  allTeams.value.sort((teamA, teamB) => teamB.ovr - teamA.ovr);
   console.log('loadAllTeams -> END');
 };
 
@@ -129,10 +162,15 @@ const getPlayersSortedbyOverall = (players: Player[]): Player[] => {
 //   return players.reduce((a, b) => a + b.overall, 0);
 // };
 
-onMounted(() => {
+onMounted(async () => {
   console.log('On mounted -> START');
+  while (queryTeamsOthersEurope.isFetching.value) {
+    console.log('STILL FETCHING...', queryTeamsOthersEurope.isFetching.value);
+    await sleep(200);
+  }
+  console.log('FINALLY FETCHED!');
   loadAllTeams();
-  //   console.log(allTeams);
+  console.log('Loaded teams:', allTeams.value.length);
   console.log('On mounted -> END');
   loading.value = false;
 });
@@ -151,22 +189,52 @@ onMounted(() => {
           ).toFixed(2)
         }}
       </div> -->
-      <q-btn
-        color="primary"
-        round
-        size="md"
-        style="position: fixed; top: 60px; right: 10px; z-index: 1"
-        :icon="'vertical_align_top'"
-        @click="
-          topElement?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'end',
-            inline: 'nearest',
-          })
-        "
-      />
+      <Transition name="scrollbtn">
+        <q-btn
+          v-show="y > 150"
+          color="primary"
+          round
+          size="md"
+          style="position: fixed; top: 60px; right: 10px; z-index: 1"
+          :icon="'vertical_align_top'"
+          @click="
+            topElement?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest',
+            })
+          "
+        />
+      </Transition>
+      <div class="my-filters">
+        <q-checkbox
+          v-for="(option, i) in leaguesMap.length"
+          :key="option"
+          v-model="selectedFilters"
+          :val="leaguesMap[i].value"
+          :label="leaguesMap[i].label"
+          color="primary"
+          dense
+          class="q-mb-sm q-mr-lg"
+        />
+        <!-- <q-checkbox
+          v-model="selectedFilters"
+          :val="leaguesMap[1].value"
+          :label="leaguesMap[1].label"
+          color="primary"
+        />
+        <q-checkbox
+          v-model="selectedFilters"
+          :val="leaguesMap[2].value"
+          :label="leaguesMap[2].label"
+          color="primary"
+        /> -->
+      </div>
+      <!-- <div>y: {{ y }}</div> -->
+      <!-- <div>{{ selectedFilters }}</div> -->
+      <!-- <TransitionGroup name="teamcards"> -->
       <q-card
-        v-for="(teamExt, rank) in allTeams"
+        v-for="(teamExt, rank) in filteredTeams"
         :key="rank"
         class="my-card q-mb-md"
         flat
@@ -204,11 +272,11 @@ onMounted(() => {
                   class="q-pb-xs q-ml-xs q-mr-xs"
                 />
                 <!-- {{
-                  (
-                    teamExt.team.players.reduce((a, b) => a + b.overall, 0) /
-                    teamExt.team.players.length
-                  ).toFixed(2)
-                }} -->
+                     (
+                       teamExt.team.players.reduce((a, b) => a + b.overall, 0) /
+                       teamExt.team.players.length
+                     ).toFixed(2)
+                   }} -->
                 {{ (teamExt.ovr * 10).toFixed(2) }}
               </div>
             </div>
@@ -216,10 +284,15 @@ onMounted(() => {
         </q-card-section>
 
         <q-card-actions>
-          <span style="color: grey; padding-left: 8px">Mejores jugadores</span>
+          <span style="color: grey; padding-left: 8px"
+            >Jugadores en plantilla:
+          </span>
+          <span style="margin-left: 5px" class="text-primary">{{
+            teamExt.team.players.length
+          }}</span>
 
           <q-space />
-
+          <span style="color: grey; padding-left: 8px">Destacados</span>
           <q-btn
             color="grey"
             round
@@ -298,7 +371,7 @@ onMounted(() => {
                         padding-bottom: 2px;
                         margin-right: 3px;
                         /* background-color: blueviolet;
-              border-radius: 50%; */
+                 border-radius: 50%; */
                       "
                     />
                     {{
@@ -308,18 +381,21 @@ onMounted(() => {
                 </div>
               </div>
               <!-- <div class="my-card-expand-player2">
-                {{ getPlayersSortedbyOverall(teamExt.team.players)[1].surname }}
-              </div>
-              <div class="my-card-expand-player3">
-                {{ getPlayersSortedbyOverall(teamExt.team.players)[2].surname }}
-              </div> -->
+                   {{ getPlayersSortedbyOverall(teamExt.team.players)[1].surname }}
+                 </div>
+                 <div class="my-card-expand-player3">
+                   {{ getPlayersSortedbyOverall(teamExt.team.players)[2].surname }}
+                 </div> -->
             </q-card-section>
           </div>
         </q-slide-transition>
       </q-card>
+      <!-- </TransitionGroup> -->
       <!-- {{ allTeams }} -->
     </div>
-    <div v-else><q-spinner color="primary" size="48px" /></div>
+    <div class="loading-container" v-else>
+      <q-spinner color="primary" size="48px" />
+    </div>
   </div>
 </template>
 
@@ -327,8 +403,16 @@ onMounted(() => {
 $darkGrey: rgba(42, 42, 42, 0.692);
 .stats {
   @include flexPosition(center, center);
-  margin-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.my-filters {
+  width: 370px;
+  padding-top: 8px;
+  padding-left: 16px;
   margin-bottom: 20px;
+  border-left: 6px solid $primary;
+  color: $darkGrey;
 }
 .my-card {
   width: 370px;
@@ -384,4 +468,39 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     // }
   }
 }
+.loading-container {
+  @include flexPosition(center, center);
+  margin-top: 30px;
+  // width: 100vw;
+  // height: fit-content;
+  // background-color: aquamarine;
+}
+/* Transition */
+.scrollbtn-enter-active,
+.scrollbtn-leave-active {
+  transition: all 1s ease;
+}
+.scrollbtn-enter-from,
+.scrollbtn-leave-to {
+  opacity: 0;
+  transform: translateX(80px);
+  transition: all 1s ease;
+}
+// .scrollbtn-move {
+//   transition: all 1s ease;
+// }
+/* Transition Group */
+// .teamcards-enter-active,
+// .teamcards-leave-active {
+//   transition: all 1s ease;
+// }
+// .teamcards-enter-from,
+// .teamcards-leave-to {
+//   opacity: 0;
+//   transform: translateX(80px);
+//   transition: all 1s ease;
+// }
+// .teamcards-move {
+//   transition: all 1s ease;
+// }
 </style>
