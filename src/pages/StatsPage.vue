@@ -246,6 +246,14 @@ onMounted(async () => {
         >
           {{ rank + 1 }}
         </q-badge>
+        <div class="my-card-leagueimg">
+          <q-img
+            :src="`/images/leagues/${teamExt.team.country}1.png`"
+            spinner-color="primary"
+            width="100%"
+            fit="fill"
+          />
+        </div>
         <q-card-section>
           <!-- <div class="text-overline text-orange-9">{{ '#' + (rank + 1) }}</div> -->
           <div class="my-card-content">
@@ -418,6 +426,15 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   width: 370px;
   color: $darkGrey;
   background-color: darken(whitesmoke, $amount: 0.5);
+
+  &-leagueimg {
+    // background-color: aqua;
+    position: absolute;
+    top: 22px;
+    right: 6px;
+    height: 36px;
+    width: 36px;
+  }
 
   &-content {
     @include flexPosition(start, center);
