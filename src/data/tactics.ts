@@ -250,6 +250,7 @@ export const positionReplacements: PositionReplacement[] = [
     replacements: [
       { position: Position.EI, penalty: 2 },
       { position: Position.MCO, penalty: 3 },
+      { position: Position.DC, penalty: 5 },
     ],
   },
   {
@@ -257,6 +258,7 @@ export const positionReplacements: PositionReplacement[] = [
     replacements: [
       { position: Position.ED, penalty: 2 },
       { position: Position.MCO, penalty: 3 },
+      { position: Position.DC, penalty: 5 },
     ],
   },
   {
