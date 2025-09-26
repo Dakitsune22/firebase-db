@@ -404,7 +404,7 @@ const getCupRoundName = (): string => {
   <q-page v-else class="page-body">
     <div>
       <div class="page-body-title">
-        <div>Equipos participantes</div>
+        <div class="page-body-title-text">Equipos participantes</div>
         <q-icon
           :name="showTeams ? 'visibility' : 'visibility_off'"
           size="30px"
@@ -650,12 +650,19 @@ const getCupRoundName = (): string => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 450px;
+    width: 500px;
     font-size: 20px;
-    margin-left: 26px;
-    border-left: 6px solid $primary;
-    padding-left: 10px;
+    // margin-left: 26px;
+    padding-right: 25px;
+    // border-left: 6px solid $primary;
+    padding-left: 25px;
     margin-bottom: 16px;
+    // background-color: aqua;
+
+    &-text {
+      border-left: 6px solid $primary;
+      padding-left: 10px;
+    }
   }
 
   @include response('mobile') {
