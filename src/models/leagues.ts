@@ -5,6 +5,7 @@ export enum Leagues {
   Bundesliga = 'germany-1',
   Ligue1 = 'france-1',
   MyLeague = 'myleague',
+  MyCup = 'mycup',
   OthersEurope = 'others-europe-1',
   OthersWorld = 'others-world-1',
 }

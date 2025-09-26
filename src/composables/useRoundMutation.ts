@@ -45,6 +45,19 @@ const deleteMyLeagueRounds = async (numRounds: number): Promise<void> => {
   }
 };
 
+const deleteMyCupRounds = async (numRounds: number): Promise<void> => {
+  for (let i = 0; i < numRounds; i++) {
+    // const element = queryCountRounds[i];
+    const docRef = doc(
+      db,
+      `${userId.value}-season-rounds-${Leagues.MyCup}`,
+      (i + 1).toString()
+    );
+    await deleteDoc(docRef);
+    // console.log('delete doc', i + 1);
+  }
+};
+
 const deleteRounds = async (league: Leagues): Promise<void> => {
   for (let i = 0; i < 18; i++) {
     // To Do: Cargar rondas según liga
@@ -94,6 +107,13 @@ const useRoundsMutation = () => {
     },
   });
 
+  const mutateMyCupRoundsDelete = useMutation({
+    mutationFn: (numRounds: number) => deleteMyCupRounds(numRounds),
+    onSuccess: () => {
+      refreshData();
+    },
+  });
+
   const mutateRoundsDelete = useMutation({
     mutationFn: (league: Leagues) => deleteRounds(league),
     onSuccess: () => {
@@ -105,6 +125,7 @@ const useRoundsMutation = () => {
     mutateRoundAdd,
     mutateRoundPlay,
     mutateMyLeagueRoundsDelete,
+    mutateMyCupRoundsDelete,
     mutateRoundsDelete,
   };
 };

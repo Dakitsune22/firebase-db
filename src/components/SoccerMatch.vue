@@ -16,6 +16,10 @@ import usePlayers from 'src/composables/usePlayers';
 
 const props = defineProps<Match>();
 
+const emit = defineEmits<{
+  (e: 'gamePlayed', matchId: number): void;
+}>();
+
 const matchRef = ref<Match>({
   id: props.id,
   played: props.played,
@@ -119,6 +123,9 @@ const onPlayMatch = () => {
         // Actualizamos query de goleadores, para que se refresquen en pantalla:
         queryTopScorers.refetch();
         queryTeamsByPoints.refetch();
+
+        // Lanzamos emit para que la página principalreciba evento de partido jugado:
+        emit('gamePlayed', matchRef.value.id);
       },
     }
   );

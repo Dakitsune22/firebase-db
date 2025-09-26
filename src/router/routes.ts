@@ -26,6 +26,11 @@ const routes: RouteRecordRaw[] = [
         path: '/soccer-myleague',
         component: () => import('pages/SoccerPageMyLeague.vue'),
       },
+      {
+        name: 'soccer-mycup',
+        path: '/soccer-mycup',
+        component: () => import('pages/SoccerPageMyCup.vue'),
+      },
       // {
       //   name: 'addPlayer',
       //   path: '/add-player',
@@ -39,6 +44,12 @@ const routes: RouteRecordRaw[] = [
       {
         name: 'myLeague',
         path: '/myleague',
+        component: () => import('pages/MyLeaguePage.vue'),
+      },
+      {
+        name: 'myCup',
+        path: '/mycup',
+        // component: () => import('pages/MyCupPage.vue'),
         component: () => import('pages/MyLeaguePage.vue'),
       },
       {

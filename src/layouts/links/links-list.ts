@@ -35,6 +35,12 @@ export const linksListManage: EssentialLinkProps[] = [
     icon: 'published_with_changes',
     link: '/myleague',
   },
+  {
+    title: 'My~Cup',
+    caption: 'Configurar My~Cup',
+    icon: 'published_with_changes',
+    link: '/mycup',
+  },
 ];
 
 export const linksListLeagues: EssentialLinkProps[] = [
@@ -74,5 +80,15 @@ export const linksListLeagues: EssentialLinkProps[] = [
     caption: 'Francia',
     img: '/images/leagues/france1.png',
     link: `/soccer/${Leagues.Ligue1}`,
+  },
+];
+
+export const linksListCups: EssentialLinkProps[] = [
+  {
+    title: 'My~Cup',
+    caption: 'Copa personalizada',
+    // icon: 'stars',
+    img: '/images/leagues/mycup.png',
+    link: '/soccer-mycup',
   },
 ];

@@ -79,10 +79,10 @@ const useRounds = () => {
     queryFn: getRound,
   });
 
-  // const queryTotalRounds = useQuery({
-  //   queryKey: [`total-rounds-${getCurrentLeague()}`],
-  //   queryFn: getTotalRounds,
-  // });
+  const queryTotalRounds = useQuery({
+    queryKey: [`total-rounds-${getCurrentLeague()}`],
+    queryFn: getTotalRounds,
+  });
 
   const queryCountRounds = useQuery({
     queryKey: [`count-rounds-${getCurrentLeague()}`],
@@ -92,7 +92,7 @@ const useRounds = () => {
 
   return {
     queryRound,
-    // queryTotalRounds,
+    queryTotalRounds,
     queryCountRounds,
   };
 };

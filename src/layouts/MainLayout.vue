@@ -5,6 +5,7 @@ import {
   linksList,
   linksListManage,
   linksListLeagues,
+  linksListCups,
 } from './links/links-list';
 import useUI from 'src/composables/storeWrappers/useUI';
 
@@ -72,6 +73,14 @@ const pageKey = ref<number>(0);
 
         <EssentialLink
           v-for="link in linksListLeagues"
+          :key="link.title"
+          v-bind="link"
+        />
+        <q-separator class="q-mt-md q-mb-sm" />
+        <q-item-label header> Eliminatorias </q-item-label>
+
+        <EssentialLink
+          v-for="link in linksListCups"
           :key="link.title"
           v-bind="link"
         />

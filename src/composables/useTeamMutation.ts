@@ -255,8 +255,27 @@ const addTeamToMyLeague = async (team: Team): Promise<void> => {
   });
 };
 
+const addTeamToMyCup = async (team: Team): Promise<void> => {
+  await setDoc(doc(db, `${userId.value}-teams-mycup`, team.id.toString()), {
+    ...team,
+    points: 0,
+    goalsScored: 0,
+    goalsConceded: 0,
+    goalDifference: 0,
+    matchesPlayed: 0,
+    wins: 0,
+    draws: 0,
+    losses: 0,
+  });
+};
+
 const deleteTeamMyLeague = async (teamId: number): Promise<void> => {
   const docRef = doc(db, `${userId.value}-teams-myleague`, teamId.toString());
+  await deleteDoc(docRef);
+};
+
+const deleteTeamMyCup = async (teamId: number): Promise<void> => {
+  const docRef = doc(db, `${userId.value}-teams-mycup`, teamId.toString());
   await deleteDoc(docRef);
 };
 
@@ -353,13 +372,30 @@ const useTeamMutation = () => {
       refreshData();
       $q.notify({
         type: 'positive',
-        message: 'Equipo añadido con éxito a MyLeague',
+        message: 'Equipo añadido con éxito a My~League',
       });
     },
     onError: () => {
       $q.notify({
         type: 'negative',
-        message: 'No se ha podido añadir el equipo a MyLeague',
+        message: 'No se ha podido añadir el equipo a My~League',
+      });
+    },
+  });
+
+  const mutateTeamAddMyCup = useMutation({
+    mutationFn: ({ team }: { team: Team }) => addTeamToMyCup(team),
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo añadido con éxito a My~Cup',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido añadir el equipo a My~Cup',
       });
     },
   });
@@ -371,13 +407,34 @@ const useTeamMutation = () => {
       refreshData();
       $q.notify({
         type: 'info',
-        message: 'Equipo eliminado de MyLeague',
+        message: 'Equipo eliminado de My~League',
       });
     },
     onError: () => {
       $q.notify({
         type: 'negative',
-        message: 'No se ha podido eliminar el equipo de MyLeague',
+        message: 'No se ha podido eliminar el equipo de My~League',
+      });
+    },
+    onSettled: () => {
+      // console.log('Team deleted');
+    },
+  });
+
+  const mutateTeamDeleteMyCup = useMutation({
+    mutationFn: (teamId: number) => deleteTeamMyCup(teamId),
+    // onSuccess: (fruit) => {
+    onSuccess: () => {
+      refreshData();
+      $q.notify({
+        type: 'info',
+        message: 'Equipo eliminado de My~Cup',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido eliminar el equipo de My~Cup',
       });
     },
     onSettled: () => {
@@ -390,7 +447,9 @@ const useTeamMutation = () => {
     mutateTeamUpdate,
     mutateTeamUpdateStats,
     mutateTeamAddMyLeague,
+    mutateTeamAddMyCup,
     mutateTeamDeleteMyLeague,
+    mutateTeamDeleteMyCup,
   };
 };
 
