@@ -5,7 +5,7 @@ import { Match } from 'src/models/season-round';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
 import useTeams from 'src/composables/useTeams';
-import { Team } from 'src/models';
+import { Leagues, Team } from 'src/models';
 import {
   getStartingLineup,
   getScorers,
@@ -13,12 +13,15 @@ import {
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
 import usePlayers from 'src/composables/usePlayers';
+import { useRoute } from 'vue-router';
 
 const props = defineProps<Match>();
 
 const emit = defineEmits<{
   (e: 'gamePlayed', matchId: number): void;
 }>();
+
+const route = useRoute();
 
 const matchRef = ref<Match>({
   id: props.id,
@@ -56,8 +59,21 @@ const showMatchStats = ref<boolean>(false);
 //   console.log(matchRef.value.startingLineup1);
 // };
 
-const onPlayMatch = () => {
+const onPlayMatch = async () => {
   if (matchRef.value.played) return;
+
+  // Si estamos en copa, actualizamos la query de datos de ambos equipos,
+  // para no perder nos goles del primer partido
+  if (
+    route.name?.toString().includes(Leagues.MyCup)
+    // && matchRef.value.id % 2 === 0
+  ) {
+    await qt1.refetch();
+    // console.log('*** Partido de copa: Esperamos QT1 refetch');
+    await qt2.refetch();
+    // console.log('*** Partido de copa: Esperamos QT2 refetch');
+  }
+  // console.log('*** onPlayMatch: Iniciamos tratamiento ***');
 
   // Obtener onces iniciales:
   matchRef.value.startingLineup1 = getStartingLineup(qt1.data.value as Team);

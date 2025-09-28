@@ -200,9 +200,13 @@ const onAdvanceCupRound = async (): Promise<void> => {
   onNextRound();
 };
 
-const deleteDBRounds = () => {
-  mutateMyCupRoundsDelete.mutate(totalRounds.value);
-};
+// const deleteDBRounds = () => {
+//   mutateMyCupRoundsDelete.mutate(totalRounds.value, {
+//     onSuccess: async () => {
+//       await queryTotalRounds.refetch();
+//     },
+//   });
+// };
 
 const restartCup = async () => {
   console.log('Total rounds query:', queryTotalRounds.data.value);
@@ -269,13 +273,25 @@ const restartCup = async () => {
 
   // Inicializamos ronda a 1 y refrescamos query:
   // currentRound.value = 1;
+  // sleep(2000);
   setCurrentRound(1);
   await queryRound.refetch();
   await queryTotalRounds.refetch();
+  await queryTeamsByName.refetch();
+  await queryTopScorers.refetch();
+  // sleep(1000);
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
 
-  console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
+  // console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
+  // console.log(
+  //   '*** TOTAL ROUNDS AFTER RESTART (query):',
+  //   queryTotalRounds.data.value
+  // );
+  // console.log(
+  //   '*** TOTAL ROUNDS AFTER 1s (query):',
+  //   queryTotalRounds.data.value
+  // );
 };
 
 const onRestartCup = () => {
@@ -291,11 +307,18 @@ const onRestartCup = () => {
     persistent: true,
   })
     .onOk(() => {
-      deleteDBRounds();
-      onFirstRound();
-      console.log(queryTotalRounds.data.value);
-      console.log(isCupRoundFinished.value);
-      // restartCup();
+      // deleteDBRounds();
+      mutateMyCupRoundsDelete.mutate(totalRounds.value, {
+        onSuccess: async () => {
+          await queryTotalRounds.refetch();
+          // onFirstRound();
+          console.log(queryTotalRounds.data.value);
+          console.log(isCupRoundFinished.value);
+          // sleep(1000);
+          // console.log(queryTotalRounds.data.value);
+          restartCup();
+        },
+      });
     })
     .onOk(() => {
       // console.log('>>>> second OK catcher')
@@ -320,7 +343,11 @@ const onPreviousRound = async () => {
 
 const onNextRound = async () => {
   // console.log('Count round:', queryTotalRounds.data.value);
-  if (getCurrentRound() < totalRounds.value) {
+  // if (getCurrentRound() < totalRounds.value) {
+  if (
+    queryTotalRounds.data.value &&
+    getCurrentRound() < queryTotalRounds.data.value
+  ) {
     // currentRound.value++;
     setCurrentRound(getCurrentRound() + 1);
     await queryRound.refetch();
@@ -336,8 +363,10 @@ const onFirstRound = async () => {
 };
 
 const onLastRound = async () => {
-  if (totalRounds.value > 0) {
-    setCurrentRound(totalRounds.value);
+  // if (totalRounds.value > 0) {
+  if (queryTotalRounds.data.value) {
+    // setCurrentRound(totalRounds.value);
+    setCurrentRound(queryTotalRounds.data.value);
     await queryRound.refetch();
     forceRender();
   }
@@ -438,7 +467,7 @@ const getCupRoundName = (): string => {
         <div class="restart-league">
           <q-btn
             v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-            label="Reiniciar competición"
+            label="Reiniciar copa (nuevo sorteo)"
             color="negative"
             icon="restart_alt"
             @click="onRestartCup"
