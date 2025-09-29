@@ -118,14 +118,62 @@ const getRoundWinnerIds = (): number[] => {
   let indexList: number[] = [];
 
   for (let i = 0; i < queryRound.data.value?.matches.length - 1; i += 2) {
-    const goalsT1 =
+    let goalsT1 =
       queryRound.data.value?.matches[i].score1 +
       queryRound.data.value?.matches[i + 1].score2;
-    const goalsT2 =
+    let goalsT2 =
       queryRound.data.value?.matches[i].score2 +
       queryRound.data.value?.matches[i + 1].score1;
 
-    if (goalsT1 >= goalsT2) {
+    // Si los equipos han empatado en la ida y en la vuelta, echamos a suerte el clasificado:
+    if (goalsT1 === goalsT2) {
+      let message = '';
+      let dice = Math.floor(Math.random() * 2);
+      console.log('Eliminatoria empatada. Clasificado (0 o 1):', { dice }); // 0 o 1
+      // dice === 0 ? goalsT1++ : goalsT2++;
+      // Informamos del clasificado, y de si ha sido por prórroga o penalties:
+      const extraTime = Math.floor(Math.random() * 2) === 0; // 0 = prórroga, 1 = penalties
+      // console.log('¿Prórroga (0) o penaltis (1)?:', { extraTime }); // 0 o 1
+      if (dice === 0) {
+        goalsT1++;
+        message = `<span><strong>${
+          // queryRound.data.value?.matches[i].team1
+          queryTeamsByName.data.value?.find(
+            (t) => t.id === queryRound.data.value?.matches[i].team1
+          )?.name
+        }</strong> ha eliminado a <strong>${
+          // queryRound.data.value?.matches[i].team2
+          queryTeamsByName.data.value?.find(
+            (t) => t.id === queryRound.data.value?.matches[i].team2
+          )?.name
+        }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
+      } else {
+        goalsT2++;
+        message = `<span><strong>${
+          // queryRound.data.value?.matches[i].team2
+          queryTeamsByName.data.value?.find(
+            (t) => t.id === queryRound.data.value?.matches[i].team2
+          )?.name
+        }</strong> ha eliminado a <strong>${
+          // queryRound.data.value?.matches[i].team1
+          queryTeamsByName.data.value?.find(
+            (t) => t.id === queryRound.data.value?.matches[i].team1
+          )?.name
+        }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
+      }
+      $q.notify({
+        type: 'info',
+        // icon: 'announcement',
+        // icon: 'info',
+        // color: 'primary',
+        // textColor: 'white',
+        html: true,
+        message,
+        progress: true,
+        timeout: 10000,
+      });
+    }
+    if (goalsT1 > goalsT2) {
       indexList.push(queryRound.data.value?.matches[i].team1);
     } else {
       indexList.push(queryRound.data.value?.matches[i].team2);
@@ -175,7 +223,17 @@ const onAdvanceCupRound = async (): Promise<void> => {
         });
       }
     }
-    mutateRoundAdd.mutate(sr);
+    mutateRoundAdd.mutate(sr, {
+      onSuccess: async () => {
+        // Incrementamos ronda y refrescamos query:
+        // setCurrentRound(getCurrentRound() + 1);
+        // await queryRound.refetch();
+        await queryTotalRounds.refetch();
+        // // Cambiamos valor a roundkey para forzar repintado de rondas:
+        // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+        onNextRound();
+      },
+    });
     // Teams:
     // console.log(
     //   '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
@@ -191,13 +249,6 @@ const onAdvanceCupRound = async (): Promise<void> => {
       '*** Error: No se han podido recuperar los equipos de la tabla maestra ***'
     );
   }
-  // Incrementamos ronda y refrescamos query:
-  // setCurrentRound(getCurrentRound() + 1);
-  // await queryRound.refetch();
-  await queryTotalRounds.refetch();
-  // // Cambiamos valor a roundkey para forzar repintado de rondas:
-  // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
-  onNextRound();
 };
 
 // const deleteDBRounds = () => {
@@ -208,7 +259,7 @@ const onAdvanceCupRound = async (): Promise<void> => {
 //   });
 // };
 
-const restartCup = async () => {
+const restartCup = () => {
   console.log('Total rounds query:', queryTotalRounds.data.value);
   console.log('Total rounds computed:', totalRounds.value);
   // Rounds:
@@ -253,18 +304,49 @@ const restartCup = async () => {
     }
     // console.log(sr);
     console.log('Jornadas generadas:', sr.matches.length);
-    mutateRoundAdd.mutate(sr);
-    // });
-    // Teams:
-    console.log(
-      '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
-    );
-    queryTeamsByName.data.value.forEach((team) => {
-      mutateTeamAdd.mutate({
-        league: getCurrentLeague(),
-        team,
-      });
+    mutateRoundAdd.mutate(sr, {
+      onSuccess: () => {
+        if (!queryTeamsByName.data.value) return;
+        // Teams:
+        console.log(
+          '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
+        );
+        queryTeamsByName.data.value.forEach((team) => {
+          mutateTeamAdd.mutate(
+            {
+              league: getCurrentLeague(),
+              team,
+            },
+            {
+              onSuccess: async () => {
+                // Inicializamos ronda a 1 y refrescamos query:
+                // currentRound.value = 1;
+                // sleep(2000);
+                setCurrentRound(1);
+                await queryRound.refetch();
+                await queryTotalRounds.refetch();
+                await queryTeamsByName.refetch();
+                await queryTopScorers.refetch();
+                // sleep(1000);
+                // Cambiamos valor a roundkey para forzar repintado de rondas:
+                roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+
+                // console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
+                // console.log(
+                //   '*** TOTAL ROUNDS AFTER RESTART (query):',
+                //   queryTotalRounds.data.value
+                // );
+                // console.log(
+                //   '*** TOTAL ROUNDS AFTER 1s (query):',
+                //   queryTotalRounds.data.value
+                // );
+              },
+            }
+          );
+        });
+      },
     });
+    // });
   } else {
     console.error(
       '*** Error: No se han podido recuperar los equipos de la tabla maestra ***'
@@ -274,14 +356,14 @@ const restartCup = async () => {
   // Inicializamos ronda a 1 y refrescamos query:
   // currentRound.value = 1;
   // sleep(2000);
-  setCurrentRound(1);
-  await queryRound.refetch();
-  await queryTotalRounds.refetch();
-  await queryTeamsByName.refetch();
-  await queryTopScorers.refetch();
+  // setCurrentRound(1);
+  // await queryRound.refetch();
+  // await queryTotalRounds.refetch();
+  // await queryTeamsByName.refetch();
+  // await queryTopScorers.refetch();
   // sleep(1000);
   // Cambiamos valor a roundkey para forzar repintado de rondas:
-  roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+  // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
 
   // console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
   // console.log(
@@ -467,14 +549,24 @@ const getCupRoundName = (): string => {
         <div class="restart-league">
           <q-btn
             v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-            label="Reiniciar copa (nuevo sorteo)"
+            :label="
+              queryTeamsByName.data.value &&
+              queryTeamsByName.data.value?.length > 2
+                ? 'Reiniciar copa (nuevo sorteo)'
+                : 'Reiniciar final'
+            "
             color="negative"
             icon="restart_alt"
             @click="onRestartCup"
           />
           <q-btn
             v-else
-            label="Iniciar sorteo"
+            :label="
+              queryTeamsByName.data.value &&
+              queryTeamsByName.data.value?.length > 2
+                ? 'Iniciar sorteo'
+                : 'Iniciar final'
+            "
             color="primary"
             icon="play_arrow"
             @click="restartCup"
@@ -596,36 +688,53 @@ const getCupRoundName = (): string => {
           "
           @click="onAdvanceCupRound"
         />
-        <div
-          class="champion-container"
-          v-if="
-            queryRound.data.value.round === totalRounds &&
-            queryRound.data.value.matches[0].played
-          "
-        >
-          <div>Campeón</div>
+        <Transition name="winner">
           <div
-            class="champion-container-subtitle"
+            class="champion-container"
             v-if="
-              queryRound.data.value.matches[0].score1 ===
-              queryRound.data.value.matches[0].score2
+              queryRound.data.value.round === totalRounds &&
+              queryRound.data.value.matches[0].played
             "
           >
-            (por penalties)
+            <div
+              class="champion-container-subtitle"
+              v-if="
+                queryRound.data.value.matches[0].score1 ===
+                queryRound.data.value.matches[0].score2
+              "
+            >
+              <span v-if="Math.floor(Math.random() * 2) === 0"
+                >(victoria en la prórroga)</span
+              >
+              <span v-else>(victoria por penaltis)</span>
+            </div>
+            <div class="champion-container-img">
+              <q-img
+                src="/images/leagues/cupwinner.png"
+                spinner-color="white"
+                width="256px"
+                fit="fill"
+              />
+              <!-- <q-icon name="crown" size="32px" color="primary" /> -->
+              <!-- Campeón -->
+              <!-- <q-icon name="crown" size="32px" color="primary" /> -->
+              <div class="champion-container-img-team">
+                <q-img
+                  v-if="queryTeamsByName.data.value"
+                  :src="`/images/teams-${
+                    queryTeamsByName.data.value[getCupWinnerIndex()].country
+                  }/${
+                    queryTeamsByName.data.value[getCupWinnerIndex()].shortName
+                  }.png`"
+                  spinner-color="white"
+                  width="40px"
+                  height="40px"
+                  class="champion-container-imgfront"
+                />
+              </div>
+            </div>
           </div>
-          <q-img
-            v-if="queryTeamsByName.data.value"
-            :src="`/images/teams-${
-              queryTeamsByName.data.value[getCupWinnerIndex()].country
-            }/${
-              queryTeamsByName.data.value[getCupWinnerIndex()].shortName
-            }.png`"
-            spinner-color="white"
-            width="40px"
-            height="40px"
-            class="q-mt-xs"
-          />
-        </div>
+        </Transition>
       </div>
     </div>
     <div v-if="queryRound.data.value && queryRound.data.value?.round > 0">
@@ -772,12 +881,28 @@ const getCupRoundName = (): string => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 5px;
   // gap: 3px;
   // background-color: aqua;
 
+  // &-title {
+  //   @include flexPosition(center, center);
+  // }
+  &-img {
+    // background-color: aqua;
+    // position: static;
+
+    &-team {
+      // background-color: blanchedalmond;
+      position: relative;
+      // top: 0px;
+      left: 108px;
+      top: -163px;
+    }
+  }
+
   &-subtitle {
-    font-size: 12px;
+    font-size: 13px;
     color: gray;
   }
 }
@@ -809,5 +934,16 @@ const getCupRoundName = (): string => {
 .my-spinner {
   @include flexPosition(center, center);
   margin-top: 30px;
+}
+/* Transition */
+.winner-enter-active,
+.winner-leave-active {
+  transition: all 2s ease;
+}
+.winner-enter-from,
+.winner-leave-to {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 2s ease;
 }
 </style>

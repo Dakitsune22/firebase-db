@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getAge } from 'src/helpers/functions';
-import { Player } from 'src/models';
+import { Leagues, Player } from 'src/models';
 // import { ref } from 'vue';
 
 interface Props {
@@ -88,15 +88,30 @@ defineProps<Props>();
     <q-separator />
     <q-card-section>
       <div v-if="roundNumber" class="main-container-section3">
-        <span class="main-container-section3-span"
-          >Goles hasta la jornada {{ roundNumber }}:</span
+        <span
+          v-if="$route.name?.toString().includes(Leagues.MyCup)"
+          class="main-container-section3-span"
+          >Goles tras este partido de copa:</span
+        >
+        <span v-else class="main-container-section3-span"
+          >Goles tras este partido (<span
+            class="main-container-section3-span-round"
+            >J{{ roundNumber }}</span
+          >):</span
         >
         <div class="main-container-section3-goals">
           {{ player.seasonStats.goals + (roundGoals || 0) }}
         </div>
       </div>
       <div v-else class="main-container-section3">
-        <span class="main-container-section3-span">Goles esta temporada:</span>
+        <span
+          v-if="$route.name?.toString().includes(Leagues.MyCup)"
+          class="main-container-section3-span"
+          >Total de goles en copa:</span
+        >
+        <span v-else class="main-container-section3-span"
+          >Total de goles en liga:</span
+        >
         <div class="main-container-section3-goals">
           {{ player.seasonStats.goals }}
         </div>
@@ -159,10 +174,19 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   }
   &-section3 {
     @include flexPosition(start, center);
+    // font-size: 15px;
     gap: 12px;
 
     &-span {
+      // padding-top: 2px;
       font-size: 13px;
+
+      &-round {
+        color: $primary;
+        font-size: 12px;
+        padding-left: 1px;
+        padding-right: 2px;
+      }
     }
     &-goals {
       color: $primary;
