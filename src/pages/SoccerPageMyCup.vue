@@ -517,7 +517,7 @@ const getCupRoundName = (): string => {
   <q-page v-else class="page-body">
     <div>
       <div class="page-body-title">
-        <div class="page-body-title-text">Equipos participantes</div>
+        <div class="page-body-title-text">Equipos clasificados</div>
         <q-icon
           :name="showTeams ? 'visibility' : 'visibility_off'"
           size="30px"
@@ -545,7 +545,18 @@ const getCupRoundName = (): string => {
             v-for="(team, idx) in queryTeamsByName.data.value"
             :key="team.id"
           >
-            <soccer-team-simple :team="team" :i-key="idx + 1" />
+            <soccer-team-simple
+              :team="team"
+              :i-key="idx + 1"
+              :classified="
+                queryRound.data.value &&
+                (queryRound.data.value?.matches.length === 0 ||
+                  queryRound.data.value?.matches.findIndex(
+                    (match) =>
+                      match.team1 === team.id || match.team2 === team.id
+                  ) >= 0)
+              "
+            />
           </div>
         </TransitionGroup>
         <div class="restart-league">
@@ -576,6 +587,15 @@ const getCupRoundName = (): string => {
         </div>
       </div>
     </div>
+    <!-- <div v-for="team in queryTeamsByName.data.value" :key="team.name">
+      <div v-if="queryRound.data.value">
+        {{
+          queryRound.data.value?.matches.findIndex(
+            (match) => match.team1 === team.id || match.team2 === team.id
+          ) >= 0
+        }}
+      </div>
+    </div> -->
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
       class="round"
@@ -649,7 +669,7 @@ const getCupRoundName = (): string => {
           <soccer-match
             @game-played="
               async (matchId) => {
-                console.log({ matchId });
+                // console.log({ matchId });
                 await queryRound.refetch();
               }
             "
@@ -809,9 +829,9 @@ const getCupRoundName = (): string => {
     width: 500px;
     font-size: 20px;
     // margin-left: 26px;
-    padding-right: 25px;
+    padding-right: 13px;
     // border-left: 6px solid $primary;
-    padding-left: 25px;
+    padding-left: 13px;
     margin-bottom: 16px;
     // background-color: aqua;
 

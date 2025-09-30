@@ -4,6 +4,7 @@ import { Team } from 'src/models/team';
 interface Props {
   team: Team;
   iKey: number;
+  classified?: boolean;
 }
 const props = defineProps<Props>();
 </script>
@@ -22,6 +23,22 @@ const props = defineProps<Props>();
           />
         </div>
         <div class="section-team">{{ props.team.name }}</div>
+        <div class="section-classified">
+          <q-icon
+            v-if="props.classified"
+            name="check"
+            size="20px"
+            color="positive"
+            style="font-weight: bold"
+          />
+          <q-icon
+            v-else
+            name="block"
+            size="16px"
+            color="negative"
+            style="font-weight: bold"
+          />
+        </div>
       </q-item>
     </q-list>
   </div>
@@ -39,7 +56,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 .item {
   background-color: lightgrey;
   // border: 1px solid darkgrey;
-  width: 220px;
+  width: 234px;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -65,6 +82,9 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     font-size: 13px;
     color: $darkGrey;
     padding-top: 2px;
+  }
+  &-classified {
+    @include flexPosition(center, center);
   }
 }
 </style>
