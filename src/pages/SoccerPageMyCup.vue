@@ -132,7 +132,7 @@ const getRoundWinnerIds = (): number[] => {
       console.log('Eliminatoria empatada. Clasificado (0 o 1):', { dice }); // 0 o 1
       // dice === 0 ? goalsT1++ : goalsT2++;
       // Informamos del clasificado, y de si ha sido por prórroga o penalties:
-      const extraTime = Math.floor(Math.random() * 2) === 0; // 0 = prórroga, 1 = penalties
+      // const extraTime = Math.floor(Math.random() * 2) === 0; // 0 = prórroga, 1 = penalties
       // console.log('¿Prórroga (0) o penaltis (1)?:', { extraTime }); // 0 o 1
       if (dice === 0) {
         goalsT1++;
@@ -146,7 +146,8 @@ const getRoundWinnerIds = (): number[] => {
           queryTeamsByName.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team2
           )?.name
-        }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
+        }</strong> en los penaltis</span>.`;
+        // }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
       } else {
         goalsT2++;
         message = `<span><strong>${
@@ -159,7 +160,8 @@ const getRoundWinnerIds = (): number[] => {
           queryTeamsByName.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team1
           )?.name
-        }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
+        }</strong> en los penaltis</span>.`;
+        // }</strong> en ${extraTime ? 'la prórroga' : 'los penaltis'}</span>.`;
       }
       $q.notify({
         type: 'info',
@@ -703,11 +705,23 @@ const getCupRoundName = (): string => {
                 queryRound.data.value.matches[0].score2
               "
             >
-              <span v-if="Math.floor(Math.random() * 2) === 0"
+              <!-- <span v-if="Math.floor(Math.random() * 2) === 0"
                 >(victoria en la prórroga)</span
-              >
-              <span v-else>(victoria por penaltis)</span>
+              > -->
+              <!-- <span v-else>(victoria por penaltis)</span> -->
+              <span>(victoria por penaltis)</span>
             </div>
+            <!-- <div
+              class="champion-container-subtitle"
+              v-else-if="
+                Math.abs(
+                  queryRound.data.value.matches[0].score1 -
+                    queryRound.data.value.matches[0].score2
+                ) === 1 && Math.floor(Math.random() * 3) === 0
+              "
+            >
+              <span>(victoria en la prórroga)</span>
+            </div> -->
             <div class="champion-container-img">
               <q-img
                 src="/images/leagues/cupwinner.png"

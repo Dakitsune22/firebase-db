@@ -72,7 +72,7 @@ export const shortenText = (text: string, maxChars: number): string => {
   const lOccurs = text.split('l').length - 1;
   // const tOccurs = text.split('t').length - 1;
   // console.log({ fOccurs }, { iOccurs }, { jOccurs }, { lOccurs }, { tOccurs });
-  console.log({ iOccurs }, { jOccurs }, { lOccurs });
+  // console.log({ iOccurs }, { jOccurs }, { lOccurs });
   // const narrowChars = fOccurs + iOccurs + jOccurs + lOccurs + tOccurs;
   const narrowChars = iOccurs + jOccurs + lOccurs;
   if (narrowChars >= 2) {
@@ -81,7 +81,7 @@ export const shortenText = (text: string, maxChars: number): string => {
   if (narrowChars === 0) {
     updatedMaxChars--;
   }
-  console.log({ text }, { maxChars }, { updatedMaxChars });
+  // console.log({ text }, { maxChars }, { updatedMaxChars });
 
   // Si el texto es menor o igual al máximo permitido, se retorna tal cual:
   if (text.length <= updatedMaxChars) return text;
