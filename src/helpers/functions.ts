@@ -87,7 +87,11 @@ export const shortenText = (text: string, maxChars: number): string => {
   if (text.length <= updatedMaxChars) return text;
 
   // Si es hasta 3 caracteres superior al máximo e incluye la inicial del nombre ('X. '), la eliminamos:
-  if (text.length > updatedMaxChars && text.length <= updatedMaxChars + 3) {
+  if (
+    text.includes('.') &&
+    text.length > updatedMaxChars &&
+    text.length <= updatedMaxChars + 3
+  ) {
     return text.substring(3);
   }
   // Para otros casos, se retorna el máximo permitido menos tres y se añaden puntos suspensivos:
