@@ -91,10 +91,10 @@ defineProps<Props>();
         <span
           v-if="$route.name?.toString().includes(Leagues.MyCup)"
           class="main-container-section3-span"
-          >Goles tras este partido de copa:</span
+          >Goles en copa tras este partido:</span
         >
         <span v-else class="main-container-section3-span"
-          >Goles tras este partido (<span
+          >Goles en liga tras este partido (<span
             class="main-container-section3-span-round"
             >J{{ roundNumber }}</span
           >):</span

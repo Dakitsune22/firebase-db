@@ -45,13 +45,6 @@ export const linksListManage: EssentialLinkProps[] = [
 
 export const linksListLeagues: EssentialLinkProps[] = [
   {
-    title: 'My~League',
-    caption: 'Liga personalizada',
-    // icon: 'stars',
-    img: '/images/leagues/myleague.png',
-    link: '/soccer-myleague',
-  },
-  {
     title: 'LaLiga EA Sports',
     caption: 'España',
     img: '/images/leagues/spain1.png',
@@ -80,6 +73,13 @@ export const linksListLeagues: EssentialLinkProps[] = [
     caption: 'Francia',
     img: '/images/leagues/france1.png',
     link: `/soccer/${Leagues.Ligue1}`,
+  },
+  {
+    title: 'My~League',
+    caption: 'Liga personalizada',
+    // icon: 'stars',
+    img: '/images/leagues/myleague.png',
+    link: '/soccer-myleague',
   },
 ];
 

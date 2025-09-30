@@ -732,6 +732,11 @@ const getCupRoundName = (): string => {
                   class="champion-container-imgfront"
                 />
               </div>
+              <div class="champion-container-img-tname">
+                <span v-if="queryTeamsByName.data.value">{{
+                  queryTeamsByName.data.value[getCupWinnerIndex()].name
+                }}</span>
+              </div>
             </div>
           </div>
         </Transition>
@@ -778,10 +783,9 @@ const getCupRoundName = (): string => {
   @include flexPosition(center, start);
   flex-wrap: wrap;
   gap: 34px;
-  top: 20px;
+  padding-top: 30px;
   padding-bottom: 10px;
   // padding: 16px;
-  padding-top: 20px;
   // padding-bottom: 0;
 
   &-title {
@@ -807,7 +811,7 @@ const getCupRoundName = (): string => {
     // display: flex;
     // flex-direction: column;
     // width: 497px;
-    top: 10px;
+    padding-top: 25px;
     // padding-left: 5px;
     zoom: 78%;
     // background-color: red;
@@ -898,6 +902,17 @@ const getCupRoundName = (): string => {
       // top: 0px;
       left: 108px;
       top: -163px;
+    }
+
+    &-tname {
+      position: relative;
+      top: -80px;
+      font-size: 20px;
+      text-align: center;
+      // background-color: rgb(245, 142, 8);
+      border-radius: 12px;
+      background-color: $primary;
+      color: gold;
     }
   }
 

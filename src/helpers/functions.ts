@@ -61,3 +61,37 @@ export const getPlayerPositionIndex = (position: Position): number => {
       return 1;
   }
 };
+
+export const shortenText = (text: string, maxChars: number): string => {
+  // Permitimos un caracter adicional por cada letra 'estrecha' encontrada en el texto (i, j, l), si hay 2 o más:
+  // Si no hay ninguna letra 'estrecha', permitimos un caracter menos.
+  let updatedMaxChars = maxChars;
+  // const fOccurs = text.split('f').length - 1;
+  const iOccurs = text.split('i').length - 1;
+  const jOccurs = text.split('j').length - 1;
+  const lOccurs = text.split('l').length - 1;
+  // const tOccurs = text.split('t').length - 1;
+  // console.log({ fOccurs }, { iOccurs }, { jOccurs }, { lOccurs }, { tOccurs });
+  console.log({ iOccurs }, { jOccurs }, { lOccurs });
+  // const narrowChars = fOccurs + iOccurs + jOccurs + lOccurs + tOccurs;
+  const narrowChars = iOccurs + jOccurs + lOccurs;
+  if (narrowChars >= 2) {
+    updatedMaxChars += Math.round(narrowChars / 2);
+  }
+  if (narrowChars === 0) {
+    updatedMaxChars--;
+  }
+  console.log({ text }, { maxChars }, { updatedMaxChars });
+
+  // Si el texto es menor o igual al máximo permitido, se retorna tal cual:
+  if (text.length <= updatedMaxChars) return text;
+
+  // Si es hasta 3 caracteres superior al máximo e incluye la inicial del nombre ('X. '), la eliminamos:
+  if (text.length > updatedMaxChars && text.length <= updatedMaxChars + 3) {
+    return text.substring(3);
+  }
+  // Para otros casos, se retorna el máximo permitido menos tres y se añaden puntos suspensivos:
+  return narrowChars === 0
+    ? text.substring(0, maxChars - 3).concat('...')
+    : text.substring(0, updatedMaxChars - 3).concat('...');
+};

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { Match, Player } from 'src/models';
 import SoccerPlayerInfo from './SoccerPlayerInfo.vue';
 import useSoccer from 'src/composables/storeWrappers/useSoccer';
+import { shortenText } from 'src/helpers/functions';
 const { getCurrentRound } = useSoccer();
 // import { Flag, Position } from 'src/models/player';
 // import { initialSeasonStats } from 'src/data/players-data/initial-season-stats';
@@ -82,7 +83,11 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             class="matchstats-container-player-name"
             @click="onShowPlayerInfo(p, true)"
           >
-            {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
+            {{
+              p.nickname
+                ? shortenText(p.nickname, 15)
+                : shortenText(p.name.charAt(0) + '. ' + p.surname, 15)
+            }}
           </div>
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
@@ -171,7 +176,12 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             class="matchstats-container-player-name"
             @click="onShowPlayerInfo(p, false)"
           >
-            {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }}
+            <!-- {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }} -->
+            {{
+              p.nickname
+                ? shortenText(p.nickname, 15)
+                : shortenText(p.name.charAt(0) + '. ' + p.surname, 15)
+            }}
           </div>
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
