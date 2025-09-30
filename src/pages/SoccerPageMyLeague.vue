@@ -340,7 +340,16 @@ const onLastRound = async () => {
             "
           >
             <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
-            <soccer-player-scorer :player="player" :i-key="idx + 1" />
+            <soccer-player-scorer
+              :player="player"
+              :i-key="idx + 1"
+              :top-scorer-goals="
+                idx > 0
+                  ? queryTopScorers.data.value &&
+                    queryTopScorers.data.value[0].seasonStats.goals
+                  : undefined
+              "
+            />
           </div>
         </TransitionGroup>
         <div

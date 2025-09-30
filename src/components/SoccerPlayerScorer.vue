@@ -8,6 +8,7 @@ import SoccerPlayerInfo from './SoccerPlayerInfo.vue';
 interface Props {
   player: Player;
   iKey: number;
+  topScorerGoals?: number;
 }
 
 const props = defineProps<Props>();
@@ -27,7 +28,14 @@ const showPlayerInfo = ref<boolean>(false);
       class="list"
       :class="iKey === 1 ? 'list-first' : ''"
     >
-      <q-item class="item" :class="iKey === 1 ? 'item-first' : ''">
+      <q-item
+        class="item"
+        :class="
+          iKey === 1 || props.player.seasonStats.goals === props.topScorerGoals
+            ? 'item-first'
+            : ''
+        "
+      >
         <q-item-section side class="section-rank">{{ iKey }}</q-item-section>
         <q-item-section class="section-nationality">
           <q-img
