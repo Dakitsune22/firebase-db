@@ -1527,6 +1527,7 @@ const onReset = () => {
                 label-set="Guardar"
                 label-cancel="Cerrar"
                 v-slot="scope"
+                @hide="selectedTeamData.name = selectedTeamData.name.trim()"
               >
                 <q-badge outline color="primary" class="q-mt-sm">
                   Nombre del equipo
@@ -1640,6 +1641,7 @@ const onReset = () => {
                 label-set="Guardar"
                 label-cancel="Cerrar"
                 v-slot="scope"
+                @hide="props.row.name = props.row.name.trim()"
               >
                 <q-badge outline color="primary" class="q-mt-sm">
                   Nombre
@@ -1667,6 +1669,7 @@ const onReset = () => {
                 label-set="Guardar"
                 label-cancel="Cerrar"
                 v-slot="scope"
+                @hide="props.row.surname = props.row.surname.trim()"
               >
                 <q-badge outline color="primary" class="q-mt-sm">
                   Apellido
@@ -1694,6 +1697,7 @@ const onReset = () => {
                 label-set="Guardar"
                 label-cancel="Cerrar"
                 v-slot="scope"
+                @hide="props.row.nickname = props.row.nickname.trim()"
               >
                 <q-badge outline color="primary" class="q-mt-sm">
                   Apodo
