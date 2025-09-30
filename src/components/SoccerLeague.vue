@@ -467,7 +467,7 @@ const onLastRound = async () => {
   @include flexPosition(center, start);
   flex-wrap: wrap;
   gap: 34px;
-  top: 20px;
+  padding-top: 20px;
   padding-bottom: 10px;
   // padding: 16px;
   // padding-top: 0;
@@ -477,7 +477,7 @@ const onLastRound = async () => {
     // display: flex;
     // flex-direction: column;
     // width: 497px;
-    top: 10px;
+    padding-top: 10px;
     // padding-left: 5px;
     zoom: 78%;
     // background-color: red;
