@@ -404,8 +404,10 @@ const onReset = () => {
       class="q-gutter-md q-mb-md"
     >
       <div class="team-body-title">
-        <div v-if="xIsMyCup">Gestión de My~Cup</div>
-        <div v-else>Gestión de My~League</div>
+        <div v-if="xIsMyCup">
+          Equipos participantes:<br /><strong>My~Cup</strong>
+        </div>
+        <div v-else>Equipos participantes:<br /><strong>My~League</strong></div>
         <q-img
           :src="
             xIsMyCup

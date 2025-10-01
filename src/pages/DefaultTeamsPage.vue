@@ -1291,7 +1291,7 @@ const onReset = () => {
   <div class="team-body">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-mb-md">
       <div class="team-body-title">
-        <div>Gestión de equipos</div>
+        <div>Mant. de equipos/jugadores</div>
         <Router-link :to="{ name: 'stats' }">
           <q-icon
             name="leaderboard"

@@ -570,6 +570,7 @@ const getCupRoundName = (): string => {
             "
             color="negative"
             icon="restart_alt"
+            unelevated
             @click="onRestartCup"
           />
           <q-btn
@@ -582,6 +583,7 @@ const getCupRoundName = (): string => {
             "
             color="primary"
             icon="play_arrow"
+            unelevated
             @click="restartCup"
           />
         </div>

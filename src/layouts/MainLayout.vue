@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import EssentialLink from 'components/EssentialLink.vue';
 import {
   linksList,
@@ -8,10 +9,13 @@ import {
   linksListCups,
 } from './links/links-list';
 import useUI from 'src/composables/storeWrappers/useUI';
+import { Leagues, leaguesMap } from 'src/models/leagues';
 
 defineOptions({
   name: 'MainLayout',
 });
+
+const route = useRoute();
 
 const leftDrawerOpen = ref(false);
 
@@ -25,6 +29,80 @@ const pageKey = ref<number>(0);
 // const forceRender = (): void => {
 //   pageKey.value++;
 // };
+
+const currentTitle = ref<string>('');
+
+const setCurrentTitle = (newPath: string): void => {
+  switch (newPath) {
+    case '/':
+      currentTitle.value = 'My~Soccer by Dak';
+      break;
+    case '/teams-db':
+      currentTitle.value = 'Gestión: Equipos';
+      break;
+    case '/mycup':
+      currentTitle.value = 'Gestión: My~Cup';
+      break;
+    case '/myleague':
+      currentTitle.value = 'Gestión: My~League';
+      break;
+    case '/soccer-myleague':
+      currentTitle.value = 'My~League';
+      break;
+    case '/soccer-mycup':
+      currentTitle.value = 'My~Cup';
+      break;
+    case '/soccer/spain-1':
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.LaLigaPrimeraDivision
+        )?.label
+      }`;
+      break;
+    case '/soccer/england-1':
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.PremierLeague
+        )?.label
+      }`;
+      break;
+    case '/soccer/italy-1':
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.SerieA
+        )?.label
+      }`;
+      break;
+    case '/soccer/germany-1':
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.Bundesliga
+        )?.label
+      }`;
+      break;
+    case '/soccer/france-1':
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.Ligue1
+        )?.label
+      }`;
+      break;
+    default:
+      break;
+  }
+};
+
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    console.log({ oldPath }, { newPath });
+    if (newPath !== oldPath) {
+      setCurrentTitle(newPath);
+    }
+  }
+);
+
+onBeforeMount(() => setCurrentTitle(route.path));
 </script>
 
 <template>
@@ -41,7 +119,7 @@ const pageKey = ref<number>(0);
         />
 
         <!-- <span style="margin-left: 10px">®</span> -->
-        <q-toolbar-title class="title"> My~League </q-toolbar-title>
+        <q-toolbar-title class="title"> {{ currentTitle }}</q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
         <router-link :to="{ name: 'user' }" class="user-menu">

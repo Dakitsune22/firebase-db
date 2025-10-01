@@ -275,15 +275,15 @@ $midGrey: rgb(150, 150, 150);
     // background-color: bisque;
 
     &-enabled {
-      color: $darkGrey;
+      color: $primary;
       cursor: pointer;
 
       :hover {
-        color: $primary;
+        color: lighten($color: $primary, $amount: 15%);
       }
     }
     &-disabled {
-      color: white;
+      color: lighten($color: grey, $amount: 20%);
       cursor: default;
     }
   }

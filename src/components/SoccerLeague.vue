@@ -331,6 +331,7 @@ const onLastRound = async () => {
             label="Reiniciar liga"
             color="negative"
             icon="restart_alt"
+            unelevated
             @click="onRestartLeague"
           />
           <q-btn
@@ -339,6 +340,7 @@ const onLastRound = async () => {
             color="primary"
             icon="restart_alt"
             @click="restartLeague"
+            unelevated
           />
         </div>
       </div>
