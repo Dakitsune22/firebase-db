@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { md5 } from 'js-md5';
 import { QTableProps, useQuasar } from 'quasar';
+import { computed, ref } from 'vue';
+import useUI from 'src/composables/storeWrappers/useUI';
 import useDefaultTeams from 'src/composables/useDefaultTeams';
 import useDefaultTeamsMutation from 'src/composables/useDefaultTeamsMutation';
 import useRoundsMutation from 'src/composables/useRoundMutation';
@@ -36,13 +38,13 @@ import {
   teamCrestOptionsOthersEurope,
   teamCrestOptionsOthersWorld,
 } from 'src/models/team';
-import { computed, ref } from 'vue';
 
 defineOptions({
   name: 'DefaultTeamsPage',
 });
 
 const $q = useQuasar();
+const { userId } = useUI();
 
 const initialTeamData: Team = {
   country: CountryLeague.Spain,
@@ -706,7 +708,7 @@ const onSetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Cualquier dato existente será reemplazado por los nuevos datos (nombres, escudos, tácticas, jugadores...).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
+    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Los datos actuales de la tabla serán reemplazados por los datos de <span class="text-primary">${userId.value}</span> (nombres, escudos, tácticas, jugadores...).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
     prompt: {
@@ -1162,7 +1164,7 @@ const onSubmit = () => {
     $q.notify({
       type: 'info',
       message:
-        'Ningún dato del equipo ni de ningún jugador ha variado, no guardarán en base de datos.',
+        'No se ha modificado ningún dato del equipo o de algún jugador, por lo que no se guardarán en base de datos.',
       progress: true,
     });
   } else {
@@ -1319,7 +1321,7 @@ const onReset = () => {
                 $q.notify({
                   type: 'warning',
                   message:
-                    'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otra liga, estos datos se perderán.',
+                    'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otra liga, los nuevos datos se perderán.',
                   progress: true,
                   position: 'top',
                 });
@@ -1401,7 +1403,7 @@ const onReset = () => {
               $q.notify({
                 type: 'warning',
                 message:
-                  'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otro equipo, estos datos se perderán.',
+                  'Se han modificado datos del equipo actual y no se han guardado. Si se selecciona otro equipo, los nuevos datos se perderán.',
                 progress: true,
                 position: 'top',
               });
