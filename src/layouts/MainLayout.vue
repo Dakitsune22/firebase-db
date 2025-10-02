@@ -65,10 +65,24 @@ const setCurrentTitle = (newPath: string): void => {
         )?.label
       }`;
       break;
+    case `/soccer/${Leagues.LaLigaSegundaDivision}`:
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.LaLigaSegundaDivision
+        )?.label
+      }`;
+      break;
     case `/soccer/${Leagues.PremierLeague}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.PremierLeague
+        )?.label
+      }`;
+      break;
+    case `/soccer/${Leagues.Championship}`:
+      currentTitle.value = `${
+        Object.values(leaguesMap).find(
+          (league) => league.value === Leagues.Championship
         )?.label
       }`;
       break;

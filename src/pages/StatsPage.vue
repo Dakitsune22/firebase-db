@@ -11,10 +11,16 @@ defineOptions({
   name: 'StatsPage',
 });
 
-const { queryTeamsByName: queryTeamsSpain } = useTeams(
+const { queryTeamsByName: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
-const { queryTeamsByName: queryTeamsEngland } = useTeams(Leagues.PremierLeague);
+const { queryTeamsByName: queryTeamsSpain2 } = useTeams(
+  Leagues.LaLigaSegundaDivision
+);
+const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
+  Leagues.PremierLeague
+);
+const { queryTeamsByName: queryTeamsEngland2 } = useTeams(Leagues.Championship);
 const { queryTeamsByName: queryTeamsItaly } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsGermany } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsFrance } = useTeams(Leagues.Ligue1);
@@ -38,7 +44,9 @@ const expanded = ref<boolean[]>([]);
 const allTeams = ref<TeamExt[]>([]); // const allTeams: TeamExt[] = [];
 const selectedFilters = ref([
   Leagues.LaLigaPrimeraDivision,
+  Leagues.LaLigaSegundaDivision,
   Leagues.PremierLeague,
+  Leagues.Championship,
   Leagues.SerieA,
   Leagues.Bundesliga,
   Leagues.Ligue1,
@@ -49,11 +57,26 @@ const filteredTeams = computed(() => {
   const tExt: TeamExt[] = [];
   // console.log(selectedFilters.value[0]);
   selectedFilters.value.forEach((leagueFilter) => {
-    tExt.push(
-      ...allTeams.value.filter((te) =>
-        te.team.country.includes(leagueFilter.replace('-1', ''))
-      )
-    );
+    if (
+      leagueFilter === Leagues.LaLigaSegundaDivision ||
+      leagueFilter === Leagues.Championship
+    ) {
+      tExt.push(
+        ...allTeams.value.filter(
+          (te) =>
+            te.team.country.includes(leagueFilter.replace('-2', '')) &&
+            te.team.division === 2
+        )
+      );
+    } else {
+      tExt.push(
+        ...allTeams.value.filter(
+          (te) =>
+            te.team.country.includes(leagueFilter.replace('-1', '')) &&
+            te.team.division === 1
+        )
+      );
+    }
   });
   tExt.sort((teamA, teamB) => teamB.ovr - teamA.ovr);
   return tExt;
@@ -64,80 +87,111 @@ const filteredTeams = computed(() => {
 
 const loadAllTeams = (): void => {
   console.log('loadAllTeams -> START');
-  if (queryTeamsSpain.data.value) {
-    queryTeamsSpain.data.value.forEach((team) => {
+  if (queryTeamsSpain1.data.value) {
+    queryTeamsSpain1.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
-  if (queryTeamsEngland.data.value) {
-    queryTeamsEngland.data.value.forEach((team) => {
+  if (queryTeamsSpain2.data.value) {
+    queryTeamsSpain2.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
+      });
+    });
+  }
+  if (queryTeamsEngland1.data.value) {
+    queryTeamsEngland1.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
+      allTeams.value.push({
+        team: { ...team },
+        ovr: isNaN(ovr) ? 0 : ovr,
+      });
+    });
+  }
+  if (queryTeamsEngland2.data.value) {
+    queryTeamsEngland2.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
+      allTeams.value.push({
+        team: { ...team },
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
   if (queryTeamsItaly.data.value) {
     queryTeamsItaly.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
   if (queryTeamsGermany.data.value) {
     queryTeamsGermany.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
   if (queryTeamsFrance.data.value) {
     queryTeamsFrance.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
   if (queryTeamsOthersWorld.data.value) {
     queryTeamsOthersWorld.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
   if (queryTeamsOthersEurope.data.value) {
     queryTeamsOthersEurope.data.value.forEach((team) => {
+      const ovr =
+        team.players.reduce((a, b) => a + b.overall, 0) /
+        team.players.length /
+        10;
       allTeams.value.push({
         team: { ...team },
-        ovr:
-          team.players.reduce((a, b) => a + b.overall, 0) /
-          team.players.length /
-          10,
+        ovr: isNaN(ovr) ? 0 : ovr,
       });
     });
   }
@@ -248,12 +302,17 @@ onMounted(async () => {
         </q-badge>
         <div class="my-card-leagueimg">
           <q-img
-            :src="`/images/leagues/${teamExt.team.country}1.png`"
+            :src="`/images/leagues/${teamExt.team.country.replace('-', '')}${
+              teamExt.team.division
+            }.png`"
             spinner-color="primary"
             width="100%"
             fit="fill"
           />
         </div>
+        <!-- <div>
+          {{ teamExt.team.division }}
+        </div> -->
         <q-card-section>
           <!-- <div class="text-overline text-orange-9">{{ '#' + (rank + 1) }}</div> -->
           <div class="my-card-content">
@@ -314,7 +373,10 @@ onMounted(async () => {
         <q-slide-transition>
           <div v-show="expanded[rank]">
             <q-separator />
-            <q-card-section class="my-card-expand text-subtitle2">
+            <q-card-section
+              v-if="teamExt.team.players.length > 0"
+              class="my-card-expand text-subtitle2"
+            >
               <div
                 v-for="(player, i) in 3"
                 :key="player"

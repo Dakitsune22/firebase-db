@@ -31,6 +31,7 @@ export const teamsItaly1: Team[] = [
     ...initTeamData,
     id: i,
     country: CountryLeague.Italy,
+    division: 1,
     name: 'Como',
     shortName: 'cmo',
     tactic: tactics.find((t) => t.name === TacticList['4-2-3-1']) as Tactic,

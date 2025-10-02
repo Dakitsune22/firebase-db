@@ -11,6 +11,7 @@ import { Tactic } from './tactic';
 
 export interface Team {
   country: CountryLeague;
+  division: 1 | 2;
   draws: number;
   goalDifference: number;
   goalsConceded: number;

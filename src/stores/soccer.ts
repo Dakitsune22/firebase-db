@@ -25,8 +25,17 @@ export const useSoccerStore = defineStore('soccerStore', () => {
   ) {
     localStorage.setItem(`current-round-${Leagues.LaLigaPrimeraDivision}`, '1');
   }
+  if (
+    localStorage.getItem(`current-round-${Leagues.LaLigaSegundaDivision}`) ===
+    null
+  ) {
+    localStorage.setItem(`current-round-${Leagues.LaLigaSegundaDivision}`, '1');
+  }
   if (localStorage.getItem(`current-round-${Leagues.PremierLeague}`) === null) {
     localStorage.setItem(`current-round-${Leagues.PremierLeague}`, '1');
+  }
+  if (localStorage.getItem(`current-round-${Leagues.Championship}`) === null) {
+    localStorage.setItem(`current-round-${Leagues.Championship}`, '1');
   }
   if (localStorage.getItem(`current-round-${Leagues.Bundesliga}`) === null) {
     localStorage.setItem(`current-round-${Leagues.Bundesliga}`, '1');

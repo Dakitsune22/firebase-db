@@ -7,6 +7,7 @@ export const initTeamData: Team = {
   name: '',
   shortName: '',
   country: CountryLeague.Spain,
+  division: 1,
   tactic: tactics.find((t) => t.name === TacticList['4-4-2']) as Tactic,
   matchesPlayed: 0,
   points: 0,

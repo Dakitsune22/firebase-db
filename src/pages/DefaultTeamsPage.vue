@@ -12,10 +12,12 @@ import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 import { tactics } from 'src/data/tactics';
 import {
   teamsEngland1,
+  teamsEngland2,
   teamsFrance1,
   teamsGermany1,
   teamsItaly1,
   teamsSpain1,
+  teamsSpain2,
   teamsOthersEurope,
   teamsOthersWorld,
 } from 'src/data/teams';
@@ -48,6 +50,7 @@ const { userId } = useUI();
 
 const initialTeamData: Team = {
   country: CountryLeague.Spain,
+  division: 1,
   draws: 0,
   goalDifference: 0,
   goalsConceded: 0,
@@ -74,9 +77,13 @@ const transferSelectedTeamId = ref<number>();
 const { queryTeamsByName: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
+const { queryTeamsByName: queryTeamsSpain2 } = useTeams(
+  Leagues.LaLigaSegundaDivision
+);
 const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
   Leagues.PremierLeague
 );
+const { queryTeamsByName: queryTeamsEngland2 } = useTeams(Leagues.Championship);
 const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
@@ -91,8 +98,14 @@ const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
 const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
   Leagues.LaLigaPrimeraDivision
 );
+const { queryTeams: queryMDBTeamsSpain2 } = useDefaultTeams(
+  Leagues.LaLigaSegundaDivision
+);
 const { queryTeams: queryMDBTeamsEngland1 } = useDefaultTeams(
   Leagues.PremierLeague
+);
+const { queryTeams: queryMDBTeamsEngland2 } = useDefaultTeams(
+  Leagues.Championship
 );
 const { queryTeams: queryMDBTeamsGermany1 } = useDefaultTeams(
   Leagues.Bundesliga
@@ -140,8 +153,12 @@ const currentTeams = computed(() => {
   switch (selectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
+    case Leagues.LaLigaSegundaDivision:
+      return queryTeamsSpain2;
     case Leagues.PremierLeague:
       return queryTeamsEngland1;
+    case Leagues.Championship:
+      return queryTeamsEngland2;
     case Leagues.Bundesliga:
       return queryTeamsGermany1;
     case Leagues.SerieA:
@@ -162,8 +179,12 @@ const transferCurrentTeams = computed(() => {
   switch (transferSelectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
+    case Leagues.LaLigaSegundaDivision:
+      return queryTeamsSpain2;
     case Leagues.PremierLeague:
       return queryTeamsEngland1;
+    case Leagues.Championship:
+      return queryTeamsEngland2;
     case Leagues.Bundesliga:
       return queryTeamsGermany1;
     case Leagues.SerieA:
@@ -513,10 +534,28 @@ const onRestoreTeams = () => {
           });
           break;
 
+        case Leagues.LaLigaSegundaDivision:
+          teamsSpain2.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.LaLigaSegundaDivision,
+              team,
+            });
+          });
+          break;
+
         case Leagues.PremierLeague:
           teamsEngland1.forEach((team) => {
             mutateTeamAdd.mutate({
               league: Leagues.PremierLeague,
+              team,
+            });
+          });
+          break;
+
+        case Leagues.Championship:
+          teamsEngland2.forEach((team) => {
+            mutateTeamAdd.mutate({
+              league: Leagues.Championship,
               team,
             });
           });
@@ -613,11 +652,33 @@ const onGetMasterDBTeams = () => {
           }
           break;
 
+        case Leagues.LaLigaSegundaDivision:
+          if (queryMDBTeamsSpain2.data.value) {
+            queryMDBTeamsSpain2.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.LaLigaPrimeraDivision,
+                team,
+              });
+            });
+          }
+          break;
+
         case Leagues.PremierLeague:
           if (queryMDBTeamsEngland1.data.value) {
             queryMDBTeamsEngland1.data.value.forEach((team) => {
               mutateTeamAdd.mutate({
                 league: Leagues.PremierLeague,
+                team,
+              });
+            });
+          }
+          break;
+
+        case Leagues.Championship:
+          if (queryMDBTeamsEngland2.data.value) {
+            queryMDBTeamsEngland2.data.value.forEach((team) => {
+              mutateTeamAdd.mutate({
+                league: Leagues.Championship,
                 team,
               });
             });
@@ -828,12 +889,12 @@ const updateCurrentTeamCrests = (): void => {
   teamCrestOptions = [];
   // console.log(selectedLeague.value);
   switch (selectedLeague.value) {
-    case Leagues.LaLigaPrimeraDivision:
+    case (Leagues.LaLigaPrimeraDivision, Leagues.LaLigaSegundaDivision):
       // crestMapSpain.keys().forEach((k) => teamCrestOptions.push(k));
       // teamCrestOptionsSpain.forEach(option => teamCrestOptions.push(option))
       teamCrestOptions = teamCrestOptionsSpain;
       break;
-    case Leagues.PremierLeague:
+    case (Leagues.PremierLeague, Leagues.Championship):
       //crestMapEngland.keys().forEach((k) => teamCrestOptions.push(k));
       teamCrestOptions = teamCrestOptionsEngland;
       break;
@@ -880,9 +941,15 @@ const refetchQueryLeague = (league: Leagues): void => {
     case Leagues.LaLigaPrimeraDivision:
       queryTeamsSpain1.refetch();
       queryMDBTeamsSpain1.refetch();
+    case Leagues.LaLigaSegundaDivision:
+      queryTeamsSpain2.refetch();
+      queryMDBTeamsSpain2.refetch();
     case Leagues.PremierLeague:
       queryTeamsEngland1.refetch();
       queryMDBTeamsEngland1.refetch();
+    case Leagues.Championship:
+      queryTeamsEngland2.refetch();
+      queryMDBTeamsEngland2.refetch();
     case Leagues.Bundesliga:
       queryTeamsGermany1.refetch();
       queryMDBTeamsGermany1.refetch();

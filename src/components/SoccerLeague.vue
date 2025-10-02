@@ -5,10 +5,12 @@ import { createCalendar } from 'src/helpers/league-calendar';
 import { Leagues, SeasonRound } from 'src/models';
 import {
   teamsEngland1,
+  teamsEngland2,
   teamsFrance1,
   teamsGermany1,
   teamsItaly1,
   teamsSpain1,
+  teamsSpain2,
 } from 'src/data/teams';
 import useRoundsMutation from 'src/composables/useRoundMutation';
 import useTeamMutation from 'src/composables/useTeamMutation';
@@ -113,8 +115,14 @@ const restartLeague = async () => {
     case Leagues.LaLigaPrimeraDivision:
       rounds = createCalendar(teamsSpain1.length);
       break;
+    case Leagues.LaLigaSegundaDivision:
+      rounds = createCalendar(teamsSpain2.length);
+      break;
     case Leagues.PremierLeague:
       rounds = createCalendar(teamsEngland1.length);
+      break;
+    case Leagues.Championship:
+      rounds = createCalendar(teamsEngland2.length);
       break;
     case Leagues.SerieA:
       rounds = createCalendar(teamsItaly1.length);
@@ -196,8 +204,14 @@ const onRestartLeague = () => {
     case Leagues.LaLigaPrimeraDivision:
       leagueName = 'LaLiga EA Sports';
       break;
+    case Leagues.LaLigaSegundaDivision:
+      leagueName = 'LaLiga 2a Div.';
+      break;
     case Leagues.PremierLeague:
       leagueName = 'Premier League';
+      break;
+    case Leagues.Championship:
+      leagueName = 'Championship';
       break;
     case Leagues.SerieA:
       leagueName = 'Serie A';

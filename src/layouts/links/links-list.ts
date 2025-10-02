@@ -51,10 +51,22 @@ export const linksListLeagues: EssentialLinkProps[] = [
     link: `/soccer/${Leagues.LaLigaPrimeraDivision}`,
   },
   {
+    title: 'LaLiga 2a Div.',
+    caption: 'España',
+    img: '/images/leagues/spain2.png',
+    link: `/soccer/${Leagues.LaLigaSegundaDivision}`,
+  },
+  {
     title: 'Premier League',
     caption: 'Inglaterra',
     img: '/images/leagues/england1.png',
     link: `/soccer/${Leagues.PremierLeague}`,
+  },
+  {
+    title: 'Championship',
+    caption: 'Inglaterra',
+    img: '/images/leagues/england2.png',
+    link: `/soccer/${Leagues.Championship}`,
   },
   {
     title: 'Serie A',

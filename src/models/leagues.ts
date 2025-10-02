@@ -1,6 +1,8 @@
 export enum Leagues {
   LaLigaPrimeraDivision = 'spain-1',
+  LaLigaSegundaDivision = 'spain-2',
   PremierLeague = 'england-1',
+  Championship = 'england-2',
   SerieA = 'italy-1',
   Bundesliga = 'germany-1',
   Ligue1 = 'france-1',
@@ -26,8 +28,16 @@ export const leaguesMap = [
     value: Leagues.LaLigaPrimeraDivision,
   },
   {
+    label: 'LaLiga 2a Div.',
+    value: Leagues.LaLigaSegundaDivision,
+  },
+  {
     label: 'Premier League',
     value: Leagues.PremierLeague,
+  },
+  {
+    label: 'Championship',
+    value: Leagues.Championship,
   },
   {
     label: 'Bundesliga',

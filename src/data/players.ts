@@ -125,6 +125,8 @@ export const playersSpain1: Player[][] = [
   spain1PlayersData19,
 ];
 
+export const playersSpain2: Player[][] = [];
+
 export const playersEngland1: Player[][] = [
   england1PlayersData0,
   england1PlayersData1,
@@ -147,6 +149,8 @@ export const playersEngland1: Player[][] = [
   england1PlayersData18,
   england1PlayersData19,
 ];
+
+export const playersEngland2: Player[][] = [];
 
 export const playersGermany1: Player[][] = [
   germany1PlayersData0,

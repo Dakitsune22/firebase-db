@@ -44,6 +44,7 @@ const xIsMyCup = route.name === 'myCup';
 
 const initialTeamData: Team = {
   country: CountryLeague.Spain,
+  division: 1,
   draws: 0,
   goalDifference: 0,
   goalsConceded: 0,
@@ -80,9 +81,13 @@ const initialMyXTeamsId: number[] = [];
 const { queryTeamsByName: queryTeamsSpain1 } = useTeams(
   Leagues.LaLigaPrimeraDivision
 );
+const { queryTeamsByName: queryTeamsSpain2 } = useTeams(
+  Leagues.LaLigaSegundaDivision
+);
 const { queryTeamsByName: queryTeamsEngland1 } = useTeams(
   Leagues.PremierLeague
 );
+const { queryTeamsByName: queryTeamsEngland2 } = useTeams(Leagues.Championship);
 const { queryTeamsByName: queryTeamsGermany1 } = useTeams(Leagues.Bundesliga);
 const { queryTeamsByName: queryTeamsItaly1 } = useTeams(Leagues.SerieA);
 const { queryTeamsByName: queryTeamsFrance1 } = useTeams(Leagues.Ligue1);
@@ -165,8 +170,12 @@ const currentTeams = computed(() => {
   switch (selectedLeague.value) {
     case Leagues.LaLigaPrimeraDivision:
       return queryTeamsSpain1;
+    case Leagues.LaLigaSegundaDivision:
+      return queryTeamsSpain2;
     case Leagues.PremierLeague:
       return queryTeamsEngland1;
+    case Leagues.Championship:
+      return queryTeamsEngland2;
     case Leagues.Bundesliga:
       return queryTeamsGermany1;
     case Leagues.SerieA:
