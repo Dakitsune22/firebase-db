@@ -358,6 +358,7 @@ const onLastRound = async () => {
           size="sm"
           color="primary"
           class="q-mr-xs"
+          unelevated
           :disable="getCurrentRound() === 1"
           @click="onFirstRound"
         />
@@ -365,6 +366,7 @@ const onLastRound = async () => {
           icon="chevron_left"
           size="sm"
           color="primary"
+          unelevated
           :disable="getCurrentRound() === 1"
           @click="onPreviousRound"
         />
@@ -386,6 +388,7 @@ const onLastRound = async () => {
           icon="chevron_right"
           size="sm"
           color="primary"
+          unelevated
           :disable="getCurrentRound() === totalRounds"
           @click="onNextRound"
         />
@@ -394,6 +397,7 @@ const onLastRound = async () => {
           size="sm"
           color="primary"
           class="q-ml-xs"
+          unelevated
           :disable="getCurrentRound() === totalRounds"
           @click="onLastRound"
         />

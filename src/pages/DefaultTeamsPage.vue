@@ -1551,6 +1551,7 @@ const onReset = () => {
             icon="person_add"
             color="primary"
             round
+            unelevated
             class="q-mr-sm add-player"
             @click="onAddPlayer"
           />

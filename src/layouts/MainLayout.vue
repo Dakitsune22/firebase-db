@@ -58,35 +58,35 @@ const setCurrentTitle = (newPath: string): void => {
     case '/soccer-mycup':
       currentTitle.value = 'My~Cup';
       break;
-    case '/soccer/spain-1':
+    case `/soccer/${Leagues.LaLigaPrimeraDivision}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.LaLigaPrimeraDivision
         )?.label
       }`;
       break;
-    case '/soccer/england-1':
+    case `/soccer/${Leagues.PremierLeague}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.PremierLeague
         )?.label
       }`;
       break;
-    case '/soccer/italy-1':
+    case `/soccer/${Leagues.SerieA}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.SerieA
         )?.label
       }`;
       break;
-    case '/soccer/germany-1':
+    case `/soccer/${Leagues.Bundesliga}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.Bundesliga
         )?.label
       }`;
       break;
-    case '/soccer/france-1':
+    case `/soccer/${Leagues.Ligue1}`:
       currentTitle.value = `${
         Object.values(leaguesMap).find(
           (league) => league.value === Leagues.Ligue1

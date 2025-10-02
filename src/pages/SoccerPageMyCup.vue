@@ -611,6 +611,7 @@ const getCupRoundName = (): string => {
           size="sm"
           color="primary"
           class="q-mr-xs"
+          unelevated
           :disable="getCurrentRound() === 1"
           @click="onFirstRound"
         />
@@ -618,6 +619,7 @@ const getCupRoundName = (): string => {
           icon="chevron_left"
           size="sm"
           color="primary"
+          unelevated
           :disable="getCurrentRound() === 1"
           @click="onPreviousRound"
         />
@@ -645,6 +647,7 @@ const getCupRoundName = (): string => {
           icon="chevron_right"
           size="sm"
           color="primary"
+          unelevated
           :disable="
             !queryTotalRounds.data.value ||
             getCurrentRound() >= queryTotalRounds.data.value
@@ -656,6 +659,7 @@ const getCupRoundName = (): string => {
           size="sm"
           color="primary"
           class="q-ml-xs"
+          unelevated
           :disable="
             !queryTotalRounds.data.value ||
             getCurrentRound() >= queryTotalRounds.data.value
@@ -704,6 +708,7 @@ const getCupRoundName = (): string => {
           "
           color="primary"
           icon="play_arrow"
+          unelevated
           :disable="
             !queryTotalRounds.data.value ||
             !isCupRoundFinished ||
