@@ -75,6 +75,20 @@ const getTeamsByName = async (league: Leagues): Promise<Team[]> => {
   return teams;
 };
 
+const getTeamsById = async (league: Leagues): Promise<Team[]> => {
+  const q = query(
+    collection(db, `${userId.value}-teams-${league}`),
+    orderBy('id', 'asc')
+  );
+  const docs = await getDocs(q);
+  const teams: Team[] = [];
+
+  docs.forEach((doc) => {
+    teams.push(doc.data() as Team);
+  });
+  return teams;
+};
+
 const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
   const docRef = doc(db, `${userId.value}-teams-${league}`, teamId.toString());
   const docSnap = await getDoc(docRef);
@@ -105,6 +119,11 @@ const useTeams = (league: Leagues, id?: number) => {
     queryFn: () => getTeamsByName(league),
   });
 
+  const queryTeamsById = useQuery({
+    queryKey: [`teams-id-${league}`],
+    queryFn: () => getTeamsById(league),
+  });
+
   const queryTeamById = useQuery({
     queryKey: [`teams-${league}`, id],
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -114,6 +133,7 @@ const useTeams = (league: Leagues, id?: number) => {
   return {
     queryTeamsByPoints,
     queryTeamsByName,
+    queryTeamsById,
     queryTeamById,
   };
 };

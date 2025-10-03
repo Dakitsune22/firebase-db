@@ -28,7 +28,7 @@ export const leaguesMap = [
     value: Leagues.LaLigaPrimeraDivision,
   },
   {
-    label: 'LaLiga 2a Div.',
+    label: 'LaLiga Hypermotion',
     value: Leagues.LaLigaSegundaDivision,
   },
   {

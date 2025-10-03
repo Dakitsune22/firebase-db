@@ -12,19 +12,36 @@ const props = defineProps<Props>();
 const { getCurrentLeague } = useSoccer();
 
 const getRankClass = (iKey: number) => {
-  if (iKey === 1) {
+  if (
+    iKey === 1 &&
+    getCurrentLeague() !== Leagues.LaLigaSegundaDivision &&
+    getCurrentLeague() !== Leagues.Championship
+  ) {
     return 'best';
   } else if (
     iKey >= 2 &&
     iKey <= 4 &&
-    getCurrentLeague() !== Leagues.MyLeague
+    getCurrentLeague() !== Leagues.MyLeague &&
+    getCurrentLeague() !== Leagues.LaLigaSegundaDivision &&
+    getCurrentLeague() !== Leagues.Championship
   ) {
     return 'champions';
   } else if (iKey === 2 && getCurrentLeague() === Leagues.MyLeague) {
     return 'champions';
-  } else if (iKey === 5 && getCurrentLeague() !== Leagues.MyLeague) {
+  } else if (
+    (iKey === 5 && getCurrentLeague() !== Leagues.MyLeague) ||
+    (iKey >= 3 &&
+      iKey <= 6 &&
+      (getCurrentLeague() === Leagues.LaLigaSegundaDivision ||
+        getCurrentLeague() === Leagues.Championship))
+  ) {
     return 'uefa';
-  } else if (iKey === 6 && getCurrentLeague() !== Leagues.MyLeague) {
+  } else if (
+    (iKey === 6 && getCurrentLeague() !== Leagues.MyLeague) ||
+    (iKey <= 2 &&
+      (getCurrentLeague() === Leagues.LaLigaSegundaDivision ||
+        getCurrentLeague() === Leagues.Championship))
+  ) {
     return 'conference';
   } else if (
     iKey === 16 &&
@@ -36,10 +53,14 @@ const getRankClass = (iKey: number) => {
     (iKey >= 18 &&
       getCurrentLeague() !== Leagues.Bundesliga &&
       getCurrentLeague() !== Leagues.Ligue1 &&
+      getCurrentLeague() !== Leagues.LaLigaSegundaDivision &&
+      getCurrentLeague() !== Leagues.Championship &&
       getCurrentLeague() !== Leagues.MyLeague) ||
     (iKey >= 17 &&
       (getCurrentLeague() === Leagues.Bundesliga ||
-        getCurrentLeague() === Leagues.Ligue1))
+        getCurrentLeague() === Leagues.Ligue1)) ||
+    (iKey >= 19 && getCurrentLeague() === Leagues.LaLigaSegundaDivision) ||
+    (iKey >= 22 && getCurrentLeague() === Leagues.Championship)
   ) {
     return 'relegation';
   }

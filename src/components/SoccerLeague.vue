@@ -205,7 +205,7 @@ const onRestartLeague = () => {
       leagueName = 'LaLiga EA Sports';
       break;
     case Leagues.LaLigaSegundaDivision:
-      leagueName = 'LaLiga 2a Div.';
+      leagueName = 'LaLiga Hypermotion';
       break;
     case Leagues.PremierLeague:
       leagueName = 'Premier League';

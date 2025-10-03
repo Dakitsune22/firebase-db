@@ -51,7 +51,7 @@ export const linksListLeagues: EssentialLinkProps[] = [
     link: `/soccer/${Leagues.LaLigaPrimeraDivision}`,
   },
   {
-    title: 'LaLiga 2a Div.',
+    title: 'LaLiga Hypermotion',
     caption: 'España',
     img: '/images/leagues/spain2.png',
     link: `/soccer/${Leagues.LaLigaSegundaDivision}`,

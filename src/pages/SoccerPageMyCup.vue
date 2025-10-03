@@ -28,7 +28,7 @@ setCurrentLeague(Leagues.MyCup);
 
 const { mutateRoundAdd, mutateMyCupRoundsDelete } = useRoundsMutation();
 const { mutateTeamAdd } = useTeamMutation();
-const { queryTeamsByName } = useTeams(getCurrentLeague());
+const { queryTeamsById: queryCupTeams } = useTeams(getCurrentLeague());
 // const { queryTeams: queryTeamsMasterDB } = useDefaultTeams(getCurrentLeague());
 // const { queryTeamById } = useTeams(2);
 const { queryTopScorers } = usePlayers();
@@ -37,6 +37,7 @@ const { queryRound, queryTotalRounds } = useRounds();
 const roundKey = ref<number>(0);
 // const leagueKey = ref<number>(0);
 const showTeams = ref<boolean>(true);
+const isLottery = ref<boolean>(true);
 
 const forceRender = (): void => {
   // leagueKey.value++;
@@ -57,10 +58,10 @@ onMounted(async () => {
 });
 
 const totalRounds = computed(() => {
-  if (queryTeamsByName.data.value) {
+  if (queryCupTeams.data.value) {
     // Jornadas totales depende de los equipos participantes en copa:
-    // return (queryTeamsByName.data.value.length - 1) * 2;
-    switch (queryTeamsByName.data.value.length) {
+    // return (queryCupTeams.data.value.length - 1) * 2;
+    switch (queryCupTeams.data.value.length) {
       case 2:
         return 1; // 1 ronda: Final
 
@@ -103,11 +104,15 @@ const isCupRoundFinished = computed(() => {
 const lottery = (): number[] => {
   let indexList: number[] = [];
 
-  // Generar lista de índices y barajarla
-  queryTeamsByName.data.value?.forEach((t) => {
+  // Generamos lista de índices:
+  queryCupTeams.data.value?.forEach((t) => {
     indexList.push(t.id);
   });
-
+  // Si está desmarcado el checkbox de sortear, devolvemos la lista en el orden original:
+  if (!isLottery.value) {
+    return indexList;
+  }
+  // Si está marcado el checkbox de sortear, devolvemos la lista barajada:
   return indexList.sort(() => Math.random() - 0.5); // shuffle
 
   // console.log(indexList);
@@ -138,12 +143,12 @@ const getRoundWinnerIds = (): number[] => {
         goalsT1++;
         message = `<span><strong>${
           // queryRound.data.value?.matches[i].team1
-          queryTeamsByName.data.value?.find(
+          queryCupTeams.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team1
           )?.name
         }</strong> ha eliminado a <strong>${
           // queryRound.data.value?.matches[i].team2
-          queryTeamsByName.data.value?.find(
+          queryCupTeams.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team2
           )?.name
         }</strong> en los penaltis</span>.`;
@@ -152,12 +157,12 @@ const getRoundWinnerIds = (): number[] => {
         goalsT2++;
         message = `<span><strong>${
           // queryRound.data.value?.matches[i].team2
-          queryTeamsByName.data.value?.find(
+          queryCupTeams.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team2
           )?.name
         }</strong> ha eliminado a <strong>${
           // queryRound.data.value?.matches[i].team1
-          queryTeamsByName.data.value?.find(
+          queryCupTeams.data.value?.find(
             (t) => t.id === queryRound.data.value?.matches[i].team1
           )?.name
         }</strong> en los penaltis</span>.`;
@@ -184,12 +189,17 @@ const getRoundWinnerIds = (): number[] => {
   // console.log(indexList);
   // console.log(indexList.sort(() => Math.random() - 0.5));
 
+  // Si está desmarcado el checkbox de sortear, devolvemos la lista en el orden original:
+  if (!isLottery.value) {
+    return indexList;
+  }
+  // Si está marcado el checkbox de sortear, devolvemos la lista barajada:
   return indexList.sort(() => Math.random() - 0.5); // shuffle
 };
 
 const onAdvanceCupRound = async (): Promise<void> => {
   // Rounds:
-  if (queryTeamsByName.data.value) {
+  if (queryCupTeams.data.value) {
     const teamsIdSortedList = getRoundWinnerIds();
     const sr: SeasonRound = {
       round: getCurrentRound() + 1,
@@ -240,7 +250,7 @@ const onAdvanceCupRound = async (): Promise<void> => {
     // console.log(
     //   '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
     // );
-    // queryTeamsByName.data.value.forEach((team) => {
+    // queryCupTeams.data.value.forEach((team) => {
     //   mutateTeamAdd.mutate({
     //     league: getCurrentLeague(),
     //     team,
@@ -265,9 +275,9 @@ const restartCup = () => {
   console.log('Total rounds query:', queryTotalRounds.data.value);
   console.log('Total rounds computed:', totalRounds.value);
   // Rounds:
-  if (queryTeamsByName.data.value) {
+  if (queryCupTeams.data.value) {
     const teamsIdSortedList = lottery();
-    // const rounds = createCalendar(queryTeamsByName.data.value.length);
+    // const rounds = createCalendar(queryCupTeams.data.value.length);
     // console.log('Jornadas a generar:', rounds);
     // rounds.forEach((r, index) => {
     const sr: SeasonRound = {
@@ -308,12 +318,12 @@ const restartCup = () => {
     console.log('Jornadas generadas:', sr.matches.length);
     mutateRoundAdd.mutate(sr, {
       onSuccess: () => {
-        if (!queryTeamsByName.data.value) return;
+        if (!queryCupTeams.data.value) return;
         // Teams:
         console.log(
           '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
         );
-        queryTeamsByName.data.value.forEach((team) => {
+        queryCupTeams.data.value.forEach((team) => {
           mutateTeamAdd.mutate(
             {
               league: getCurrentLeague(),
@@ -327,7 +337,7 @@ const restartCup = () => {
                 setCurrentRound(1);
                 await queryRound.refetch();
                 await queryTotalRounds.refetch();
-                await queryTeamsByName.refetch();
+                await queryCupTeams.refetch();
                 await queryTopScorers.refetch();
                 // sleep(1000);
                 // Cambiamos valor a roundkey para forzar repintado de rondas:
@@ -361,7 +371,7 @@ const restartCup = () => {
   // setCurrentRound(1);
   // await queryRound.refetch();
   // await queryTotalRounds.refetch();
-  // await queryTeamsByName.refetch();
+  // await queryCupTeams.refetch();
   // await queryTopScorers.refetch();
   // sleep(1000);
   // Cambiamos valor a roundkey para forzar repintado de rondas:
@@ -464,10 +474,10 @@ const getCupWinnerIndex = (): number => {
     queryRound.data.value?.matches[0].score2;
 
   const teamWinnerIdx = teamOneWinner
-    ? queryTeamsByName.data.value?.findIndex(
+    ? queryCupTeams.data.value?.findIndex(
         (t) => t.id === queryRound.data.value?.matches[0].team1
       )
-    : queryTeamsByName.data.value?.findIndex(
+    : queryCupTeams.data.value?.findIndex(
         (t) => t.id === queryRound.data.value?.matches[0].team2
       );
 
@@ -498,10 +508,9 @@ const getCupRoundName = (): string => {
   <!-- <q-page class="row items-center justify-evenly"> -->
   <q-page
     v-if="
-      queryTeamsByName.isFetched.value &&
-      (!queryTeamsByName.data.value ||
-        (queryTeamsByName.data.value &&
-          queryTeamsByName.data.value.length <= 0))
+      queryCupTeams.isFetched.value &&
+      (!queryCupTeams.data.value ||
+        (queryCupTeams.data.value && queryCupTeams.data.value.length <= 0))
     "
     class="no-teams"
   >
@@ -536,15 +545,12 @@ const getCupRoundName = (): string => {
         <div class="teams-header-colvalaux">GF</div>
         <div class="teams-header-colvalaux">GC</div>
       </div> -->
-      <div class="my-spinner" v-if="queryTeamsByName.isLoading.value">
+      <div class="my-spinner" v-if="queryCupTeams.isLoading.value">
         <q-spinner color="primary" size="48px" />
       </div>
       <div v-else-if="showTeams" class="teams-list">
         <TransitionGroup name="rank">
-          <div
-            v-for="(team, idx) in queryTeamsByName.data.value"
-            :key="team.id"
-          >
+          <div v-for="(team, idx) in queryCupTeams.data.value" :key="team.id">
             <soccer-team-simple
               :team="team"
               :i-key="idx + 1"
@@ -563,9 +569,8 @@ const getCupRoundName = (): string => {
           <q-btn
             v-if="queryRound.data.value && queryRound.data.value?.round > 0"
             :label="
-              queryTeamsByName.data.value &&
-              queryTeamsByName.data.value?.length > 2
-                ? 'Reiniciar copa (nuevo sorteo)'
+              queryCupTeams.data.value && queryCupTeams.data.value?.length > 2
+                ? 'Reiniciar copa'
                 : 'Reiniciar final'
             "
             color="negative"
@@ -576,9 +581,8 @@ const getCupRoundName = (): string => {
           <q-btn
             v-else
             :label="
-              queryTeamsByName.data.value &&
-              queryTeamsByName.data.value?.length > 2
-                ? 'Iniciar sorteo'
+              queryCupTeams.data.value && queryCupTeams.data.value?.length > 2
+                ? 'Iniciar copa'
                 : 'Iniciar final'
             "
             color="primary"
@@ -586,10 +590,19 @@ const getCupRoundName = (): string => {
             unelevated
             @click="restartCup"
           />
+          <q-checkbox
+            v-model="isLottery"
+            :label="isLottery ? 'Sorteo activo' : 'Sorteo inactivo'"
+            color="primary"
+            dense
+            left-label
+            size="lg"
+            checked-icon="shuffle_on"
+          />
         </div>
       </div>
     </div>
-    <!-- <div v-for="team in queryTeamsByName.data.value" :key="team.name">
+    <!-- <div v-for="team in queryCupTeams.data.value" :key="team.name">
       <div v-if="queryRound.data.value">
         {{
           queryRound.data.value?.matches.findIndex(
@@ -694,7 +707,7 @@ const getCupRoundName = (): string => {
           />
         </div>
       </div>
-      <div class="restart-league">
+      <div class="next-round">
         <q-btn
           v-show="
             queryTotalRounds.data.value &&
@@ -704,7 +717,7 @@ const getCupRoundName = (): string => {
           :label="
             getCurrentRound() >= totalRounds - 1
               ? 'Avanzar a la final'
-              : 'Iniciar sorteo de siguiente ronda'
+              : 'Avanzar a la siguiente ronda'
           "
           color="primary"
           icon="play_arrow"
@@ -761,11 +774,11 @@ const getCupRoundName = (): string => {
               <!-- <q-icon name="crown" size="32px" color="primary" /> -->
               <div class="champion-container-img-team">
                 <q-img
-                  v-if="queryTeamsByName.data.value"
+                  v-if="queryCupTeams.data.value"
                   :src="`/images/teams-${
-                    queryTeamsByName.data.value[getCupWinnerIndex()].country
+                    queryCupTeams.data.value[getCupWinnerIndex()].country
                   }/${
-                    queryTeamsByName.data.value[getCupWinnerIndex()].shortName
+                    queryCupTeams.data.value[getCupWinnerIndex()].shortName
                   }.png`"
                   spinner-color="white"
                   width="40px"
@@ -774,8 +787,8 @@ const getCupRoundName = (): string => {
                 />
               </div>
               <div class="champion-container-img-tname">
-                <span v-if="queryTeamsByName.data.value">{{
-                  queryTeamsByName.data.value[getCupWinnerIndex()].name
+                <span v-if="queryCupTeams.data.value">{{
+                  queryCupTeams.data.value[getCupWinnerIndex()].name
                 }}</span>
               </div>
             </div>
@@ -927,6 +940,12 @@ const getCupRoundName = (): string => {
   }
 }
 .restart-league {
+  @include flexPosition(space-between, center);
+  width: 476px;
+  padding-top: 10px;
+  // background-color: aqua;
+}
+.next-round {
   @include flexPosition(center, center);
   padding-top: 10px;
 }
