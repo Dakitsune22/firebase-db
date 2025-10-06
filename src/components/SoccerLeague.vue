@@ -25,7 +25,7 @@ import SoccerPlayerScorer from 'src/components/SoccerPlayerScorer.vue';
 import useUserInfoMutation from 'src/composables/useUserInfoMutation';
 import { leaguesMap } from 'src/models/leagues';
 import { sleep } from 'src/helpers/functions';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 defineOptions({
   name: 'SoccerLeague',
@@ -33,6 +33,7 @@ defineOptions({
 
 const $q = useQuasar();
 const route = useRoute();
+const $router = useRouter();
 
 const { setCurrentLeague, getCurrentLeague, getCurrentRound, setCurrentRound } =
   useSoccer();
@@ -108,6 +109,7 @@ const totalRounds = computed(() => {
     return (queryTeamsByPoints.data.value.length - 1) * 2;
   }
   return 0;
+  // return 2;
 });
 
 const restartLeague = async () => {
@@ -370,7 +372,11 @@ const startPlayoff = () => {
     default:
       break;
   }
-  mutateMyCupRoundsDelete.mutate(currentMyCupNumRounds);
+  mutateMyCupRoundsDelete.mutate(currentMyCupNumRounds, {
+    onSuccess: () => {
+      $router.push({ name: 'soccer-mycup' });
+    },
+  });
 };
 
 const onPreviousRound = async () => {

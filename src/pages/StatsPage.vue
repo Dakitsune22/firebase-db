@@ -40,6 +40,7 @@ interface TeamExt {
 
 const { y } = useWindowScroll();
 const loading = ref<boolean>(true);
+const reloading = ref<boolean>(false);
 const expanded = ref<boolean[]>([]);
 const allTeams = ref<TeamExt[]>([]); // const allTeams: TeamExt[] = [];
 const selectedFilters = ref([
@@ -216,6 +217,25 @@ const getPlayersSortedbyOverall = (players: Player[]): Player[] => {
 //   return players.reduce((a, b) => a + b.overall, 0);
 // };
 
+const onSelectAllLeagues = async () => {
+  reloading.value = true;
+  console.log(reloading.value);
+  await sleep(500);
+  selectedFilters.value = [
+    Leagues.LaLigaPrimeraDivision,
+    Leagues.LaLigaSegundaDivision,
+    Leagues.PremierLeague,
+    Leagues.Championship,
+    Leagues.SerieA,
+    Leagues.Bundesliga,
+    Leagues.Ligue1,
+    Leagues.OthersEurope,
+    Leagues.OthersWorld,
+  ];
+  reloading.value = false;
+  console.log(reloading.value);
+};
+
 onMounted(async () => {
   console.log('On mounted -> START');
   while (queryTeamsOthersEurope.isFetching.value) {
@@ -283,6 +303,22 @@ onMounted(async () => {
           :label="leaguesMap[2].label"
           color="primary"
         /> -->
+        <div class="q-mt-xs">
+          <q-btn
+            color="primary"
+            label="Seleccionar todas"
+            class="q-mr-sm"
+            unelevated
+            @click="onSelectAllLeagues()"
+            :loading="reloading"
+          />
+          <q-btn
+            color="primary"
+            label="Ninguna"
+            unelevated
+            @click="selectedFilters = []"
+          />
+        </div>
       </div>
       <!-- <div>y: {{ y }}</div> -->
       <!-- <div>{{ selectedFilters }}</div> -->
