@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { createCalendar } from 'src/helpers/league-calendar';
-import { Leagues, SeasonRound } from 'src/models';
+import { Leagues, SeasonRound, Team } from 'src/models';
 import {
   teamsEngland1,
   teamsEngland2,
@@ -63,6 +63,9 @@ const { mutateTeamAdd } = useTeamMutation();
 const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 const { queryTopScorers } = usePlayers();
 const { queryRound } = useRounds();
+const { queryTeamsByName: queryTeamsMyCup } = useTeams(Leagues.MyCup);
+const { mutateTeamAddMyCup, mutateTeamDeleteMyCup } = useTeamMutation();
+const { mutateMyCupRoundsDelete } = useRoundsMutation();
 
 const roundKey = ref<number>(0);
 const pageKey = ref<number>(0);
@@ -250,6 +253,126 @@ const onRestartLeague = () => {
     });
 };
 
+const onStartPlayoff = () => {
+  console.log('ON START PLAYOFF');
+  console.log(queryTeamsMyCup.data.value?.length);
+
+  // console.log(
+  //   'Finisher teams:',
+  //   queryTeamsByPoints.data.value?.filter((t) => t.matchesPlayed === 1).length
+  // );
+  // return;
+
+  $q.dialog({
+    html: true,
+    title: `<span class="text-primary">Playoff: ${
+      Object.values(leaguesMap).find(
+        (league) => league.value === getCurrentLeague()
+      )?.label
+    }</span> <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><img style="width: 30%; height: 30%; margin-top: 15px;" src="/images/leagues/${route.params.id
+      .toString()
+      .replace('-', '')}.png" /></div>`,
+    message:
+      'Se usará <strong>My~Cup</strong> para simular el playoff de ascenso.<br><br>Se perderán todos los datos de la actual competición <strong>My~Cup</strong> (en caso de haberla), y los equipos participantes se sustituirán por los clasificados para el playoff de esta liga.<br><br><strong>¿Estás seguro de continuar?</strong>',
+    cancel: { label: 'Volver', flat: true },
+    ok: { icon: 'warning', label: 'Continuar', flat: true },
+    persistent: true,
+  })
+    .onOk(() => {
+      startPlayoff();
+    })
+    .onOk(() => {
+      // console.log('>>>> second OK catcher')
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
+
+const startPlayoff = () => {
+  const addTeamsToPlayoff = () => {
+    if (queryTeamsByPoints.data.value) {
+      let teamToAdd: Team = { ...queryTeamsByPoints.data.value[5] };
+      teamToAdd.id = 0;
+      mutateTeamAddMyCup.mutate({
+        team: teamToAdd,
+      });
+      teamToAdd = { ...queryTeamsByPoints.data.value[2] };
+      teamToAdd.id = 1;
+      mutateTeamAddMyCup.mutate({
+        team: teamToAdd,
+      });
+      teamToAdd = { ...queryTeamsByPoints.data.value[4] };
+      teamToAdd.id = 2;
+      mutateTeamAddMyCup.mutate({
+        team: teamToAdd,
+      });
+      teamToAdd = { ...queryTeamsByPoints.data.value[3] };
+      teamToAdd.id = 3;
+      mutateTeamAddMyCup.mutate(
+        {
+          team: teamToAdd,
+        },
+        {
+          onSuccess: () => {
+            queryTeamsMyCup.refetch();
+          },
+        }
+      );
+    }
+  };
+
+  if (!queryTeamsMyCup.data.value) {
+    console.error('No se han podido recuperar los datos originales de MyCup');
+    return;
+  }
+  const currentMyCupNumTeams = queryTeamsMyCup.data.value.length;
+
+  if (currentMyCupNumTeams > 0) {
+    // Delete current DB teams:
+    queryTeamsMyCup.data.value.forEach((team, idx) => {
+      mutateTeamDeleteMyCup.mutate(team.id, {
+        onSuccess: () => {
+          // Add new teams on last index succeed:
+          if (idx + 1 === currentMyCupNumTeams) {
+            addTeamsToPlayoff();
+          }
+        },
+      });
+    });
+  } else {
+    addTeamsToPlayoff();
+  }
+
+  let currentMyCupNumRounds = 0;
+  switch (currentMyCupNumTeams) {
+    case 2:
+      currentMyCupNumRounds = 1;
+      break;
+    case 4:
+      currentMyCupNumRounds = 2;
+      break;
+    case 8:
+      currentMyCupNumRounds = 3;
+      break;
+    case 16:
+      currentMyCupNumRounds = 4;
+      break;
+    case 32:
+      currentMyCupNumRounds = 5;
+      break;
+    case 64:
+      currentMyCupNumRounds = 6;
+      break;
+    default:
+      break;
+  }
+  mutateMyCupRoundsDelete.mutate(currentMyCupNumRounds);
+};
+
 const onPreviousRound = async () => {
   if (getCurrentRound() > 1) {
     // currentRound.value--;
@@ -354,6 +477,22 @@ const onLastRound = async () => {
             color="primary"
             icon="restart_alt"
             @click="restartLeague"
+            unelevated
+          />
+          <q-btn
+            v-if="
+              getCurrentLeague() === Leagues.LaLigaSegundaDivision ||
+              getCurrentLeague() === Leagues.Championship
+            "
+            label="Jugar playoff ascenso"
+            color="primary"
+            icon="play_arrow"
+            @click="onStartPlayoff"
+            :disable="
+              queryTeamsByPoints.data.value?.filter(
+                (t) => t.matchesPlayed === totalRounds
+              ).length !== queryTeamsByPoints.data.value?.length
+            "
             unelevated
           />
         </div>
@@ -555,6 +694,8 @@ const onLastRound = async () => {
 .restart-league {
   @include flexPosition(center, center);
   padding-top: 10px;
+  gap: 6px;
+  // background-color: aqua;
 }
 .no-teams {
   display: flex;
