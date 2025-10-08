@@ -66,6 +66,7 @@ export enum Flag {
   Croatia = 'hr',
   Cyprus = 'cy',
   Cuba = 'cu',
+  Curazao = 'cw',
   CzechRepublic = 'cz',
   Denmark = 'dk',
   DominicanRepublic = 'do',
@@ -211,6 +212,7 @@ flagMap.set('cr', 'Costa Rica');
 flagMap.set('hr', 'Croacia');
 flagMap.set('cy', 'Chipre');
 flagMap.set('cu', 'Cuba');
+flagMap.set('cw', 'Curazao');
 flagMap.set('dk', 'Dinamarca');
 flagMap.set('ec', 'Ecuador');
 flagMap.set('eg', 'Egipto');
