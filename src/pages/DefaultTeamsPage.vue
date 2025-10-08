@@ -489,6 +489,25 @@ const getNextAvailableShirtNumber = (team: Team): number => {
   return shirtNumber;
 };
 
+const getNewPlayerFlag = (): Flag => {
+  switch (selectedLeague.value) {
+    case Leagues.LaLigaPrimeraDivision:
+    case Leagues.LaLigaSegundaDivision:
+      return Flag.Spain;
+    case Leagues.PremierLeague:
+    case Leagues.Championship:
+      return Flag.England;
+    case Leagues.SerieA:
+      return Flag.Italy;
+    case Leagues.Bundesliga:
+      return Flag.Germany;
+    case Leagues.Ligue1:
+      return Flag.France;
+    default:
+      return Flag.Spain;
+  }
+};
+
 const onAddPlayer = (): void => {
   selectedTeamData.value.players.push({
     teamId: selectedTeamData.value.id,
@@ -498,7 +517,7 @@ const onAddPlayer = (): void => {
     nickname: '',
     overall: 75,
     position: Position.POR,
-    nationality: Flag.Spain,
+    nationality: getNewPlayerFlag(),
     seasonStats: {
       assists: 0,
       goals: 0,
@@ -889,12 +908,14 @@ const updateCurrentTeamCrests = (): void => {
   teamCrestOptions = [];
   // console.log(selectedLeague.value);
   switch (selectedLeague.value) {
-    case (Leagues.LaLigaPrimeraDivision, Leagues.LaLigaSegundaDivision):
+    case Leagues.LaLigaPrimeraDivision:
+    case Leagues.LaLigaSegundaDivision:
       // crestMapSpain.keys().forEach((k) => teamCrestOptions.push(k));
       // teamCrestOptionsSpain.forEach(option => teamCrestOptions.push(option))
       teamCrestOptions = teamCrestOptionsSpain;
       break;
-    case (Leagues.PremierLeague, Leagues.Championship):
+    case Leagues.PremierLeague:
+    case Leagues.Championship:
       //crestMapEngland.keys().forEach((k) => teamCrestOptions.push(k));
       teamCrestOptions = teamCrestOptionsEngland;
       break;
