@@ -42,6 +42,7 @@ export enum Flag {
   Australia = 'au',
   Austria = 'at',
   Azerbayan = 'az',
+  Bangladesh = 'bd',
   Belarus = 'by',
   Belgium = 'be',
   Benin = 'bj',
@@ -186,6 +187,7 @@ flagMap.set('am', 'Armenia');
 flagMap.set('au', 'Australia');
 flagMap.set('at', 'Austria');
 flagMap.set('az', 'Azerbayán');
+flagMap.set('bd', 'Bangladés');
 flagMap.set('be', 'Bélgica');
 flagMap.set('bj', 'Benin');
 flagMap.set('by', 'Bielorrusia');
