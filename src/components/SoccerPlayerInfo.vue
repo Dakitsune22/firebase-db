@@ -310,7 +310,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     &-percent {
       color: $darkGrey;
       font-size: 11px;
-      // padding-top: 2px;
+      padding-top: 2px;
     }
   }
   &-section4 {
