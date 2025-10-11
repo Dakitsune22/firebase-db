@@ -7,6 +7,7 @@ import {
   linksListManage,
   linksListLeagues,
   linksListCups,
+  linksListRankings,
 } from './links/links-list';
 import useUI from 'src/composables/storeWrappers/useUI';
 import { Leagues, leaguesMap } from 'src/models/leagues';
@@ -166,6 +167,15 @@ onBeforeMount(() => setCurrentTitle(route.path));
           :key="link.title"
           v-bind="link"
         />
+        <q-separator class="q-mt-md q-mb-sm" />
+        <q-item-label header> Rankings </q-item-label>
+
+        <EssentialLink
+          v-for="link in linksListRankings"
+          :key="link.title"
+          v-bind="link"
+        />
+
         <q-separator class="q-mt-md q-mb-sm" />
         <q-item-label header> Ligas </q-item-label>
 

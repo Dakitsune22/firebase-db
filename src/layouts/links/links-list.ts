@@ -43,6 +43,21 @@ export const linksListManage: EssentialLinkProps[] = [
   },
 ];
 
+export const linksListRankings: EssentialLinkProps[] = [
+  {
+    title: 'Equipos',
+    caption: 'Ranking de equipos',
+    icon: 'leaderboard',
+    link: '/stats',
+  },
+  {
+    title: 'Jugadores',
+    caption: 'Ranking de jugadores',
+    icon: 'leaderboard',
+    link: '/players',
+  },
+];
+
 export const linksListLeagues: EssentialLinkProps[] = [
   {
     title: 'LaLiga EA Sports',
