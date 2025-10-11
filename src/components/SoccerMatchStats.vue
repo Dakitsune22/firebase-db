@@ -356,13 +356,16 @@ $midGrey: rgb(150, 150, 150);
       // background-color: aqua;
     }
     &-goals {
+      @include flexPosition(start, center);
       font-size: 10px;
       width: 17%;
       // background-color: pink;
 
       &-number {
-        font-size: 12px;
+        font-size: 11px;
         padding-left: 1px;
+        // translate: 0p 12px;
+        // background-color: aqua;
       }
     }
   }
