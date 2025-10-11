@@ -176,13 +176,13 @@ const loadAllPlayers = () => {
   console.log('loadAllPlayers -> END');
 };
 
-const getPlayersSortedbyOverall = (players: Player[]): Player[] => {
-  const p: Player[] = [];
-  players.forEach((player) => {
-    p.push(player);
-  });
-  return p.sort((a, b) => b.overall - a.overall);
-};
+// const getPlayersSortedbyOverall = (players: Player[]): Player[] => {
+//   const p: Player[] = [];
+//   players.forEach((player) => {
+//     p.push(player);
+//   });
+//   return p.sort((a, b) => b.overall - a.overall);
+// };
 
 const onSelectAllLeagues = async () => {
   reloading.value = true;
