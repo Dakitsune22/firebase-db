@@ -76,7 +76,7 @@ export const shortenText = (text: string, maxChars: number): string => {
   // const narrowChars = fOccurs + iOccurs + jOccurs + lOccurs + tOccurs;
   const narrowChars = iOccurs + jOccurs + lOccurs;
   if (narrowChars >= 2) {
-    updatedMaxChars += Math.round(narrowChars / 2);
+    updatedMaxChars += Math.floor(narrowChars / 2);
   }
   if (narrowChars === 0 || (narrowChars === 2 && text.includes('-'))) {
     updatedMaxChars--;
