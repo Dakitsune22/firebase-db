@@ -92,7 +92,12 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
           </div>
-          <div class="matchstats-container-player-goals">
+          <div
+            v-if="
+              matchRef.scorers1.filter((s) => s === p.shirtNumber).length < 4
+            "
+            class="matchstats-container-player-goals"
+          >
             <q-icon
               v-for="g in matchRef.scorers1.filter((s) => s === p.shirtNumber)
                 .length"
@@ -100,6 +105,15 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               name="sports_soccer"
               color="grey-9"
             ></q-icon>
+          </div>
+          <div v-else class="matchstats-container-player-goals">
+            <q-icon name="sports_soccer" color="grey-9" />
+            <span class="text-grey-9 matchstats-container-player-goals-number"
+              ><span style="font-size: 10px">x</span
+              >{{
+                matchRef.scorers1.filter((s) => s === p.shirtNumber).length
+              }}</span
+            >
           </div>
         </div>
       </div>
@@ -133,6 +147,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             matchRef.scorers1.filter((s) => s === playerInfo?.shirtNumber)
               .length
           "
+          :round-goals-conceded="matchRef.score2"
         />
       </q-dialog>
     </div>
@@ -186,7 +201,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
           </div>
-          <div class="matchstats-container-player-goals">
+          <!-- <div class="matchstats-container-player-goals">
             <q-icon
               v-for="g in matchRef.scorers2.filter((s) => s === p.shirtNumber)
                 .length"
@@ -194,6 +209,29 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               name="sports_soccer"
               color="grey-9"
             ></q-icon>
+          </div> -->
+          <div
+            v-if="
+              matchRef.scorers2.filter((s) => s === p.shirtNumber).length < 4
+            "
+            class="matchstats-container-player-goals"
+          >
+            <q-icon
+              v-for="g in matchRef.scorers2.filter((s) => s === p.shirtNumber)
+                .length"
+              :key="g"
+              name="sports_soccer"
+              color="grey-9"
+            ></q-icon>
+          </div>
+          <div v-else class="matchstats-container-player-goals">
+            <q-icon name="sports_soccer" color="grey-9" />
+            <span class="text-grey-9 matchstats-container-player-goals-number"
+              ><span style="font-size: 10px">x</span
+              >{{
+                matchRef.scorers2.filter((s) => s === p.shirtNumber).length
+              }}</span
+            >
           </div>
         </div>
       </div>
@@ -227,6 +265,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             matchRef.scorers2.filter((s) => s === playerInfo?.shirtNumber)
               .length
           "
+          :round-goals-conceded="matchRef.score1"
         />
       </q-dialog>
     </div>
@@ -320,6 +359,11 @@ $midGrey: rgb(150, 150, 150);
       font-size: 10px;
       width: 17%;
       // background-color: pink;
+
+      &-number {
+        font-size: 12px;
+        padding-left: 1px;
+      }
     }
   }
 }

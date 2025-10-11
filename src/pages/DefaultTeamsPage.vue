@@ -519,6 +519,8 @@ const onAddPlayer = (): void => {
     position: Position.POR,
     nationality: getNewPlayerFlag(),
     seasonStats: {
+      playedGames: 0,
+      goalsConceded: 0,
       assists: 0,
       goals: 0,
       injured: 0,

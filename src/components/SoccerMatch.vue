@@ -119,6 +119,7 @@ const onPlayMatch = async () => {
     id: matchRef.value.team1,
     newGoalsScored: matchRef.value.score1,
     newGoalsConceded: matchRef.value.score2,
+    startingLineup: matchRef.value.startingLineup1,
     scorers: matchRef.value.scorers1,
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
@@ -129,6 +130,7 @@ const onPlayMatch = async () => {
       id: matchRef.value.team2,
       newGoalsScored: matchRef.value.score2,
       newGoalsConceded: matchRef.value.score1,
+      startingLineup: matchRef.value.startingLineup2,
       scorers: matchRef.value.scorers2,
       team: qt2.data.value ? qt2.data.value : ({} as Team),
     },

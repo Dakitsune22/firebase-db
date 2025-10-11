@@ -5,6 +5,7 @@ import { useQuasar } from 'quasar';
 import { Leagues, Team, Player } from 'src/models';
 import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
+import { Position } from 'src/models/player';
 
 // let numTeam = 0;
 
@@ -19,6 +20,7 @@ interface teamUpdateStatsData {
   id: number;
   newGoalsScored: number;
   newGoalsConceded: number;
+  startingLineup: Player[];
   scorers: number[];
   team: Team;
 }
@@ -148,6 +150,8 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
     players.push({
       ...p,
       seasonStats: {
+        playedGames: 0,
+        goalsConceded: 0,
         assists: 0,
         goals: 0,
         injured: 0,
@@ -210,6 +214,22 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
     ut.players[pIdx].seasonStats = {
       ...ut.players[pIdx].seasonStats,
       goals: ut.players[pIdx].seasonStats.goals + 1,
+    };
+  });
+  // Incrementamos en uno los partidos jugados del jugador en BD e
+  // Incrementamos al portero titular los goles encajados:
+  t.startingLineup.forEach((slPlayer) => {
+    const pIdx = ut.players.findIndex(
+      (p) => p.shirtNumber === slPlayer.shirtNumber
+    );
+    if (pIdx === -1) return;
+    ut.players[pIdx].seasonStats = {
+      ...ut.players[pIdx].seasonStats,
+      playedGames: ut.players[pIdx].seasonStats.playedGames + 1,
+      goalsConceded:
+        ut.players[pIdx].position === Position.POR
+          ? ut.players[pIdx].seasonStats.goalsConceded + t.newGoalsConceded
+          : ut.players[pIdx].seasonStats.goalsConceded,
     };
   });
 
@@ -326,6 +346,7 @@ const useTeamMutation = () => {
       id,
       newGoalsScored,
       newGoalsConceded,
+      startingLineup,
       scorers,
       team,
     }: teamUpdateStatsData) =>
@@ -334,6 +355,7 @@ const useTeamMutation = () => {
         id,
         newGoalsScored,
         newGoalsConceded,
+        startingLineup,
         scorers,
         team,
       }),

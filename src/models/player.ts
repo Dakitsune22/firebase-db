@@ -13,6 +13,8 @@ export interface Player {
 }
 
 interface SeasonStats {
+  playedGames: number;
+  goalsConceded: number;
   goals: number;
   assists: number;
   injured: number;

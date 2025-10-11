@@ -81,7 +81,7 @@ export const shortenText = (text: string, maxChars: number): string => {
   if (narrowChars === 0 || (narrowChars === 2 && text.includes('-'))) {
     updatedMaxChars--;
   }
-  console.log({ text }, { maxChars }, { updatedMaxChars });
+  // console.log({ text }, { maxChars }, { updatedMaxChars });
 
   // Si el texto es menor o igual al máximo permitido, se retorna tal cual:
   if (text.length <= updatedMaxChars) return text;

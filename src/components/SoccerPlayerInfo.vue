@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { getAge } from 'src/helpers/functions';
 import { Leagues, Player } from 'src/models';
+import { Position } from 'src/models/player';
 // import { ref } from 'vue';
 
 interface Props {
   player: Player;
   roundNumber?: number;
   roundGoals?: number;
+  roundGoalsConceded?: number;
   urlTeamCrest?: string;
 }
 
@@ -87,34 +89,144 @@ defineProps<Props>();
     </q-card-section>
     <q-separator />
     <q-card-section>
-      <div v-if="roundNumber" class="main-container-section3">
-        <span
-          v-if="$route.name?.toString().includes(Leagues.MyCup)"
-          class="main-container-section3-span"
-          >Goles en copa tras este partido:</span
+      <div v-if="roundNumber">
+        <div class="main-container-section3 q-pb-xs">
+          <span
+            v-if="$route.name?.toString().includes(Leagues.MyCup)"
+            class="main-container-section3-span"
+            >Estadísticas en copa tras este partido:</span
+          >
+          <span v-else class="main-container-section3-span"
+            >Estadísticas en liga tras
+            <span class="main-container-section3-span-round"
+              >Jornada {{ roundNumber }}</span
+            >:</span
+          >
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Partidos disputados:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.playedGames + 1 }}
+          </div>
+          <span class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              ((player.seasonStats.playedGames + 1) / roundNumber) * 100
+            }}%<span class="text-primary">)</span></span
+          >
+        </div>
+        <div
+          v-if="player.position !== Position.POR"
+          class="main-container-section3"
         >
-        <span v-else class="main-container-section3-span"
-          >Goles en liga tras este partido (<span
-            class="main-container-section3-span-round"
-            >J{{ roundNumber }}</span
-          >):</span
-        >
-        <div class="main-container-section3-goals">
-          {{ player.seasonStats.goals + (roundGoals || 0) }}
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Goles:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.goals + (roundGoals || 0) }}
+          </div>
+          <span
+            v-if="player.seasonStats.goals + (roundGoals || 0) > 0"
+            class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              (
+                (player.seasonStats.goals + (roundGoals || 0)) /
+                (player.seasonStats.playedGames + 1)
+              ).toFixed(2)
+            }}
+            p.p.<span class="text-primary">)</span></span
+          >
+        </div>
+        <div v-else class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Goles encajados:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.goalsConceded + (roundGoalsConceded || 0) }}
+          </div>
+          <span
+            v-if="
+              player.seasonStats.goalsConceded + (roundGoalsConceded || 0) > 0
+            "
+            class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              (
+                (player.seasonStats.goalsConceded + (roundGoalsConceded || 0)) /
+                (player.seasonStats.playedGames + 1)
+              ).toFixed(2)
+            }}
+            p.p.<span class="text-primary">)</span></span
+          >
         </div>
       </div>
-      <div v-else class="main-container-section3">
-        <span
-          v-if="$route.name?.toString().includes(Leagues.MyCup)"
-          class="main-container-section3-span"
-          >Total de goles en copa:</span
-        >
-        <span v-else class="main-container-section3-span"
-          >Total de goles en liga:</span
-        >
-        <div class="main-container-section3-goals">
-          {{ player.seasonStats.goals }}
+      <div v-else>
+        <div class="main-container-section3 q-pb-xs">
+          <span
+            v-if="$route.name?.toString().includes(Leagues.MyCup)"
+            class="main-container-section3-span"
+            >Estadísticas totales en copa:</span
+          >
+          <span v-else class="main-container-section3-span"
+            >Estadísticas totales en liga:</span
+          >
         </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Partidos disputados:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.playedGames }}
+          </div>
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Goles:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.goals }}
+          </div>
+          <span
+            v-if="player.seasonStats.goals > 0"
+            class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              (
+                player.seasonStats.goals / player.seasonStats.playedGames
+              ).toFixed(2)
+            }}
+            p.p.<span class="text-primary">)</span></span
+          >
+        </div>
+        <!-- <div v-else class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Goles encajados:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.goalsConceded }}
+          </div>
+        </div> -->
       </div>
     </q-card-section>
     <q-card-section class="main-container-section4">
@@ -180,6 +292,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     &-span {
       // padding-top: 2px;
       font-size: 13px;
+      // padding-top: 3px;
 
       &-round {
         color: $primary;
@@ -192,6 +305,12 @@ $darkGrey: rgba(42, 42, 42, 0.692);
       color: $primary;
       //   font-weight: bold;
       //   font-size: 16px;
+      // padding-top: 3px;
+    }
+    &-percent {
+      color: $darkGrey;
+      font-size: 11px;
+      // padding-top: 2px;
     }
   }
   &-section4 {
