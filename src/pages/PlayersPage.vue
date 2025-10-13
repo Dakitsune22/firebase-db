@@ -6,7 +6,7 @@ import { computed, onMounted, ref } from 'vue';
 import { leaguesMap } from 'src/models/leagues';
 import { useWindowScroll } from '@vueuse/core';
 import { sleep } from 'src/helpers/functions';
-import { Position } from 'src/models/player';
+import { flagMap, Position } from 'src/models/player';
 
 defineOptions({
   name: 'PlayersPage',
@@ -60,6 +60,11 @@ const allPlayers = ref<PlayerExt[]>([]);
 //   Leagues.OthersWorld,
 // ]);
 
+const selectedNationality = ref<string>();
+const nationalityOptions: string[] = [];
+const x = Array.from(flagMap.keys());
+x.forEach((k) => nationalityOptions.push(k));
+
 const selectedFiltersLeague = ref([Leagues.LaLigaPrimeraDivision]);
 const selectedFiltersPosition = ref([Position.DC]);
 
@@ -95,15 +100,28 @@ const filteredPlayers = computed(() => {
   const p: PlayerExt[] = [];
   // console.log(selectedFiltersLeague.value[0]);
   selectedFiltersLeague.value.forEach((filter) => {
-    p.push(
-      ...allPlayers.value.filter(
-        (pe) =>
-          filter === pe.leagueCountry + '-' + pe.leagueDivision &&
-          selectedFiltersPosition.value.findIndex(
-            (pos) => pos === pe.player.position
-          ) >= 0
-      )
-    );
+    if (selectedNationality.value) {
+      p.push(
+        ...allPlayers.value.filter(
+          (pe) =>
+            filter === pe.leagueCountry + '-' + pe.leagueDivision &&
+            selectedFiltersPosition.value.findIndex(
+              (pos) => pos === pe.player.position
+            ) >= 0 &&
+            pe.player.nationality === selectedNationality.value
+        )
+      );
+    } else {
+      p.push(
+        ...allPlayers.value.filter(
+          (pe) =>
+            filter === pe.leagueCountry + '-' + pe.leagueDivision &&
+            selectedFiltersPosition.value.findIndex(
+              (pos) => pos === pe.player.position
+            ) >= 0
+        )
+      );
+    }
   });
   p.sort((a, b) => b.player.overall - a.player.overall);
   return p;
@@ -299,7 +317,7 @@ onMounted(async () => {
           dense
           class="q-mb-sm q-mr-lg"
         />
-        <div class="q-mt-xs">
+        <div class="q-mt-xs q-mb-md">
           <q-btn
             color="primary"
             label="Seleccionar todas"
@@ -314,6 +332,34 @@ onMounted(async () => {
             unelevated
             @click="selectedFiltersPosition = []"
           />
+        </div>
+        <span class="text-primary">Nacionalidad:</span><br />
+        <div>
+          <q-select
+            v-model="selectedNationality"
+            :options="nationalityOptions"
+            :display-value="
+              selectedNationality ? flagMap.get(selectedNationality) : ''
+            "
+            options-dense
+            dense
+            clearable
+          >
+            <template v-slot:option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-img
+                  :src="`/images/flags/h24/${scope.opt}.png`"
+                  spinner-color="white"
+                  height="24px"
+                  width="40px"
+                  fit="fill"
+                  class="q-mr-sm"
+                  style="border: 1px solid rgba(0, 0, 0, 65%)"
+                />
+                {{ flagMap.get(scope.opt) }}
+              </q-item>
+            </template>
+          </q-select>
         </div>
       </div>
       <q-card

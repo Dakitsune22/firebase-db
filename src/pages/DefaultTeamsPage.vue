@@ -1864,6 +1864,7 @@ const onReset = () => {
                 <q-select
                   v-model="props.row.nationality"
                   :options="nationalityOptions"
+                  :display-value="flagMap.get(props.row.nationality)"
                   options-dense
                   dense
                   @update:model-value="scope.set"
