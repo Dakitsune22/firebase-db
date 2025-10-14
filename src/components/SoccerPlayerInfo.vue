@@ -84,7 +84,7 @@ defineProps<Props>();
         {{ getAge(player.birthDate) + ' años' }}
       </div>
       <div v-if="player.height" class="main-container-section2-height">
-        {{ (player.height / 100).toFixed(2) + 'm' }}
+        {{ (player.height / 100).toFixed(2).replace('.', ',') + 'm' }}
       </div>
     </q-card-section>
     <q-separator />
@@ -141,7 +141,9 @@ defineProps<Props>();
               (
                 (player.seasonStats.goals + (roundGoals || 0)) /
                 (player.seasonStats.playedGames + 1)
-              ).toFixed(2)
+              )
+                .toFixed(2)
+                .replace('.', ',')
             }}
             p.p.<span class="text-primary">)</span></span
           >
@@ -166,7 +168,9 @@ defineProps<Props>();
               (
                 (player.seasonStats.goalsConceded + (roundGoalsConceded || 0)) /
                 (player.seasonStats.playedGames + 1)
-              ).toFixed(2)
+              )
+                .toFixed(2)
+                .replace('.', ',')
             }}
             p.p.<span class="text-primary">)</span></span
           >
@@ -209,9 +213,9 @@ defineProps<Props>();
             class="main-container-section3-percent"
             ><span class="text-primary">(</span
             >{{
-              (
-                player.seasonStats.goals / player.seasonStats.playedGames
-              ).toFixed(2)
+              (player.seasonStats.goals / player.seasonStats.playedGames)
+                .toFixed(2)
+                .replace('.', ',')
             }}
             p.p.<span class="text-primary">)</span></span
           >

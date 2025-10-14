@@ -380,7 +380,7 @@ onMounted(async () => {
                        teamExt.team.players.length
                      ).toFixed(2)
                    }} -->
-                {{ (teamExt.ovr * 10).toFixed(2) }}
+                {{ (teamExt.ovr * 10).toFixed(2).replace('.', ',') }}
               </div>
             </div>
           </div>

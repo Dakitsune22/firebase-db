@@ -5,7 +5,7 @@ import { Team } from 'src/models';
 import { computed, onMounted, ref } from 'vue';
 import { leaguesMap } from 'src/models/leagues';
 import { useWindowScroll } from '@vueuse/core';
-import { sleep } from 'src/helpers/functions';
+import { getAge, sleep } from 'src/helpers/functions';
 import { flagMap, Position } from 'src/models/player';
 
 defineOptions({
@@ -376,84 +376,91 @@ onMounted(async () => {
           {{ rank + 1 }}
         </q-badge>
 
-        <q-card-section>
-          <div class="my-card-row">
-            <div class="my-card-col1">
+        <q-card-section class="q-pa-sm">
+          <div class="my-card-section">
+            <div class="my-card-section-left">
               <q-img
                 :src="`/images/leagues/${item.leagueCountry.replace('-', '')}${
                   item.leagueDivision
                 }.png`"
                 spinner-color="primary"
-                width="24px"
+                width="40px"
                 fit="fill"
               />
               <q-img
                 :src="`/images/teams-${item.leagueCountry}/${item.teamShortName}.png`"
                 spinner-color="white"
-                width="26px"
-                height="26px"
-              />
-              <q-img
-                :src="`/images/flags/h20/${item.player.nationality}.png`"
-                spinner-color="white"
-                width="29px"
-                height="18px"
-                fit="fill"
-                style="border: 1px solid rgba(0, 0, 0, 65%)"
+                width="40px"
+                height="40px"
               />
             </div>
-            <div class="my-card-col2">
-              <div v-if="item.player.nickname">
-                {{ item.player.nickname }}
+            <div class="my-card-section-right">
+              <div class="my-card-row">
+                <div>
+                  <q-img
+                    :src="`/images/flags/h20/${item.player.nationality}.png`"
+                    spinner-color="white"
+                    width="29px"
+                    height="18px"
+                    fit="fill"
+                    style="border: 1px solid rgba(0, 0, 0, 65%)"
+                  />
+                </div>
+                <div class="my-card-section-right-col2w">
+                  <div v-if="item.player.nickname">
+                    {{ item.player.nickname }}
+                  </div>
+                  <div v-else>
+                    {{ item.player.name + ' ' + item.player.surname }}
+                  </div>
+                </div>
               </div>
-              <div v-else>
-                {{ item.player.name + ' ' + item.player.surname }}
-              </div>
-            </div>
-            <div class="my-card-col3">
-              <q-badge outline color="primary" style="font-size: 11px">
-                {{ item.player.position }}
-              </q-badge>
-            </div>
-            <div class="my-card-col4">
-              <q-badge
-                color="primary"
-                style="
-                  font-size: 11px;
-                  /* margin-top: 3px; */
-                  /* padding-right: 8px; */
-                  min-width: 46px;
-                "
-              >
-                <q-icon
-                  name="star_rate"
-                  color="amber-6"
-                  size="12px"
-                  style="
-                    padding-bottom: 2px;
-                    margin-right: 3px;
-                    /* background-color: blueviolet;
+              <div class="my-card-row q-mt-xs">
+                <div class="my-card-section-right-col1"></div>
+                <div class="my-card-section-right-col2">
+                  <!-- <div> -->
+                  <span v-if="item.player.birthDate"
+                    >{{ getAge(item.player.birthDate) }} años</span
+                  >
+                  <span v-if="item.player.height" class="q-ml-sm"
+                    >{{
+                      (item.player.height / 100).toFixed(2).replace('.', ',')
+                    }}m</span
+                  >
+                  <!-- </div> -->
+                </div>
+                <div class="my-card-section-right-col3">
+                  <q-badge outline color="primary" style="font-size: 11px">
+                    {{ item.player.position }}
+                  </q-badge>
+                </div>
+                <div class="my-card-section-right-col4">
+                  <q-badge
+                    color="primary"
+                    style="
+                      font-size: 11px;
+                      /* margin-top: 3px; */
+                      /* padding-right: 8px; */
+                      min-width: 46px;
+                    "
+                  >
+                    <q-icon
+                      name="star_rate"
+                      color="amber-6"
+                      size="12px"
+                      style="
+                        padding-bottom: 2px;
+                        margin-right: 3px;
+                        /* background-color: blueviolet;
                  border-radius: 50%; */
-                  "
-                />
-                {{ item.player.overall }}
-              </q-badge>
+                      "
+                    />
+                    {{ item.player.overall }}
+                  </q-badge>
+                </div>
+              </div>
             </div>
           </div>
-          <!-- <div class="my-card-footer">
-            <q-img
-              :src="`/images/teams-${item.leagueCountry}/${item.teamShortName}.png`"
-              spinner-color="white"
-              width="40px"
-              height="40px"
-            />
-            <q-img
-              :src="`/images/leagues/${item.leagueCountry}${item.leagueDivision}.png`"
-              spinner-color="primary"
-              width="40px"
-              fit="fill"
-            />
-          </div> -->
         </q-card-section>
       </q-card>
     </div>
@@ -483,6 +490,63 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   color: $darkGrey;
   background-color: darken(whitesmoke, $amount: 0.5);
 
+  &-section {
+    @include flexPosition(center, center);
+    // height: 100%;
+    // width: 100%;
+    // background-color: greenyellow;
+    gap: 10px;
+
+    &-left {
+      @include flexPosition(center, center);
+      width: 30%;
+      padding-left: 4px;
+      gap: 8px;
+      // background-color: pink;
+    }
+    &-right {
+      width: 70%;
+      // background-color: palevioletred;
+
+      &-col1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 10%;
+        // gap: 5px;
+        // background-color: aqua;
+      }
+      &-col2 {
+        width: 50%;
+        // padding-top: 3px;
+        padding-left: 9px;
+        font-size: 11px;
+        color: lighten($color: grey, $amount: 10%);
+        // background-color: aquamarine;
+      }
+      &-col2w {
+        // width: 50%;
+        margin-top: 1px;
+        padding-left: 2px;
+      }
+      &-col3 {
+        width: 46px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        // background-color: aquamarine;
+      }
+      &-col4 {
+        // width: 40px;
+        // height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // background-color: aqua;
+      }
+    }
+  }
+
   &-row {
     display: flex;
     flex-direction: row;
@@ -490,34 +554,6 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     // align-items: center;
     //   background-color: aqua;
     gap: 5px;
-  }
-  &-col1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 35%;
-    // gap: 5px;
-    // background-color: aqua;
-  }
-  &-col2 {
-    width: 55%;
-    padding-top: 3px;
-    padding-left: 3px;
-  }
-  &-col3 {
-    width: 46px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    // background-color: aquamarine;
-  }
-  &-col4 {
-    // width: 40px;
-    // height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    // background-color: aqua;
   }
   // &-footer {
   //   @include flexPosition(center, center);

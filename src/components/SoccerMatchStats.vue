@@ -57,9 +57,9 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
         />
         <div class="matchstats-container-rating-overall">
           {{
-            (
-              matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11
-            ).toFixed(1)
+            (matchRef.startingLineup1.reduce((a, b) => a + b.overall, 0) / 11)
+              .toFixed(1)
+              .replace('.', ',')
           }}
         </div>
       </div>
@@ -165,9 +165,9 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
         />
         <div class="matchstats-container-rating-overall">
           {{
-            (
-              matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11
-            ).toFixed(1)
+            (matchRef.startingLineup2.reduce((a, b) => a + b.overall, 0) / 11)
+              .toFixed(1)
+              .replace('.', ',')
           }}
         </div>
       </div>

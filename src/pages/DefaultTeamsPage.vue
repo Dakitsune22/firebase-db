@@ -2107,14 +2107,16 @@ const onReset = () => {
           class="q-pb-xs q-ml-xs q-mr-xs"
         />
         <span class="text-bold text-primary">{{
-          selectedTeamRating > 0 ? (selectedTeamRating * 10).toFixed(1) : 0
+          selectedTeamRating > 0
+            ? (selectedTeamRating * 10).toFixed(1).replace('.', ',')
+            : 0
         }}</span>
       </div>
       <div class="footer-container">
         Edad media de la plantilla (años):
         <span class="text-bold text-primary q-pl-sm q-pr-xs">{{
           selectedTeamAverageAge > 0
-            ? (selectedTeamAverageAge * 10).toFixed(1)
+            ? (selectedTeamAverageAge * 10).toFixed(1).replace('.', ',')
             : 0
         }}</span>
       </div>
@@ -2123,7 +2125,7 @@ const onReset = () => {
         <span class="text-bold text-primary q-pl-sm q-pr-xs"
           >{{
             selectedTeamAverageHeight > 0
-              ? (selectedTeamAverageHeight / 10).toFixed(2)
+              ? (selectedTeamAverageHeight / 10).toFixed(2).replace('.', ',')
               : 0
           }}m</span
         >
