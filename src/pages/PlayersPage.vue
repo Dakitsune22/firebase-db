@@ -68,6 +68,23 @@ x.forEach((k) => nationalityOptions.push(k));
 const selectedFiltersLeague = ref([Leagues.LaLigaPrimeraDivision]);
 const selectedFiltersPosition = ref([Position.DC]);
 
+const ageFilter = ref({
+  min: 15,
+  max: 49,
+});
+const ageRange = ref({
+  min: 15,
+  max: 49,
+});
+const heightFilter = ref({
+  min: 160,
+  max: 210,
+});
+const heightRange = ref({
+  min: 160,
+  max: 210,
+});
+
 // const filteredTeams = computed(() => {
 //   const t: Team[] = [];
 //   // console.log(selectedFiltersLeague.value[0]);
@@ -108,7 +125,15 @@ const filteredPlayers = computed(() => {
             selectedFiltersPosition.value.findIndex(
               (pos) => pos === pe.player.position
             ) >= 0 &&
-            pe.player.nationality === selectedNationality.value
+            pe.player.nationality === selectedNationality.value &&
+            ((pe.player.height &&
+              pe.player.height >= heightFilter.value.min &&
+              pe.player.height <= heightFilter.value.max) ||
+              pe.player.height === undefined) &&
+            ((pe.player.birthDate &&
+              getAge(pe.player.birthDate) >= ageFilter.value.min &&
+              getAge(pe.player.birthDate) <= ageFilter.value.max) ||
+              pe.player.birthDate === undefined)
         )
       );
     } else {
@@ -118,7 +143,15 @@ const filteredPlayers = computed(() => {
             filter === pe.leagueCountry + '-' + pe.leagueDivision &&
             selectedFiltersPosition.value.findIndex(
               (pos) => pos === pe.player.position
-            ) >= 0
+            ) >= 0 &&
+            ((pe.player.height &&
+              pe.player.height >= heightFilter.value.min &&
+              pe.player.height <= heightFilter.value.max) ||
+              pe.player.height === undefined) &&
+            ((pe.player.birthDate &&
+              getAge(pe.player.birthDate) >= ageFilter.value.min &&
+              getAge(pe.player.birthDate) <= ageFilter.value.max) ||
+              pe.player.birthDate === undefined)
         )
       );
     }
@@ -333,8 +366,8 @@ onMounted(async () => {
             @click="selectedFiltersPosition = []"
           />
         </div>
-        <span class="text-primary">Nacionalidad:</span><br />
-        <div>
+        <span class="text-primary">Nacionalidad:</span>
+        <div class="q-mb-md">
           <q-select
             v-model="selectedNationality"
             :options="nationalityOptions"
@@ -361,6 +394,44 @@ onMounted(async () => {
             </template>
           </q-select>
         </div>
+        <span class="text-primary">Edad:</span>
+        <div>
+          <q-range
+            v-model="ageRange"
+            :min="15"
+            :max="49"
+            :step="1"
+            style="width: 340px; padding-top: 30px; padding-left: 10px"
+            label-always
+            @change="
+              (val) => {
+                // console.log(val);
+                ageFilter = val;
+              }
+            "
+            color="primary"
+          />
+        </div>
+        <span class="text-primary">Altura (cm):</span>
+        <div>
+          <q-range
+            v-model="heightRange"
+            :min="160"
+            :max="210"
+            :step="1"
+            style="width: 340px; padding-top: 30px; padding-left: 10px"
+            label-always
+            @change="
+              (val) => {
+                // console.log(val);
+                heightFilter = val;
+              }
+            "
+            color="primary"
+          />
+        </div>
+        <!-- {{ heightRange }}
+        {{ heightFilter }} -->
       </div>
       <q-card
         v-for="(item, rank) in filteredPlayers"
