@@ -294,7 +294,7 @@ onMounted(async () => {
 <template>
   <div ref="topElement" id="topElement" />
   <div class="stats">
-    <div v-if="!loading">
+    <div v-if="!loading" class="stats-container">
       <Transition name="scrollbtn">
         <q-btn
           v-show="(y > 650 && showFilters) || (y > 150 && !showFilters)"
@@ -319,9 +319,10 @@ onMounted(async () => {
         size="md"
         :style="
           showFilters
-            ? 'position: absolute; translate: 310px 2px; transition: translate .5s ease;'
-            : 'position: absolute; translate: 0px -2px; transition: translate .5s ease; z-index: 1;'
+            ? 'position: absolute; left: 13px; translate: 310px 2px; transition: translate .5s ease;'
+            : 'position: absolute; left: 13px; translate: 0px -2px; transition: translate .5s ease; z-index: 1;'
         "
+        class="filterbtn"
         :icon="showFilters ? 'filter_alt' : 'filter_alt_off'"
         @click="showFilters = !showFilters"
       />
@@ -566,14 +567,27 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   @include flexPosition(center, center);
   margin-top: 20px;
   margin-bottom: 10px;
+
+  &-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    // align-items: center;
+    gap: 0px 50px;
+
+    @include response('mobile') {
+      display: block;
+    }
+  }
 }
 .my-filters {
   width: 370px;
-  // padding-top: 8px;
+  padding-top: 5px;
   padding-left: 16px;
   margin-bottom: 30px;
   border-left: 6px solid $primary;
   color: $darkGrey;
+  height: fit-content;
 }
 .my-card {
   width: 370px;
@@ -652,6 +666,15 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   //   // background-color: aqua;
   // }
 }
+
+.filterbtn {
+  visibility: hidden;
+
+  @include response('mobile') {
+    visibility: visible;
+  }
+}
+
 .loading-container {
   @include flexPosition(center, center);
   margin-top: 30px;
