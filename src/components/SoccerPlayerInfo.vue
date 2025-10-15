@@ -2,6 +2,7 @@
 import { getAge } from 'src/helpers/functions';
 import { Leagues, Player } from 'src/models';
 import { Position } from 'src/models/player';
+import { ref } from 'vue';
 // import { ref } from 'vue';
 
 interface Props {
@@ -12,7 +13,7 @@ interface Props {
   urlTeamCrest?: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 // const props = defineProps<Props>();
 // console.log(props.player.surname);
 // console.log(props.roundNumber);
@@ -20,6 +21,11 @@ defineProps<Props>();
 
 // const player = ref<Player>({ ...props });
 // const player = ref<Player>({...props});
+const percentPlayedGames = ref<number>(
+  ((props.player.seasonStats.playedGames + 1) /
+    (props.roundNumber ? props.roundNumber : 0)) *
+    100
+);
 </script>
 
 <template>
@@ -113,12 +119,26 @@ defineProps<Props>();
           <div class="main-container-section3-goals">
             {{ player.seasonStats.playedGames + 1 }}
           </div>
-          <span class="main-container-section3-percent"
+          <!-- <span class="main-container-section3-percent"
             ><span class="text-primary">(</span
             >{{
               ((player.seasonStats.playedGames + 1) / roundNumber) * 100
             }}%<span class="text-primary">)</span></span
+          > -->
+          <q-knob
+            show-value
+            font-size="10px"
+            v-model="percentPlayedGames"
+            size="45px"
+            :thickness="0.25"
+            color="primary"
+            track-color="grey-4"
+            center-color="deep-purple-5"
+            class="text-white"
+            readonly
           >
+            {{ percentPlayedGames }}%
+          </q-knob>
         </div>
         <div
           v-if="player.position !== Position.POR"
@@ -323,5 +343,10 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     font-size: 11px;
     color: $darkGrey;
   }
+}
+
+.my-knob {
+  border: 1px solid $primary;
+  border-radius: 50%;
 }
 </style>
