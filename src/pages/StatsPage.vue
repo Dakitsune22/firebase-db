@@ -41,6 +41,7 @@ interface TeamExt {
 const { y } = useWindowScroll();
 const loading = ref<boolean>(true);
 const reloading = ref<boolean>(false);
+const showFilters = ref<boolean>(true);
 const expanded = ref<boolean[]>([]);
 const allTeams = ref<TeamExt[]>([]); // const allTeams: TeamExt[] = [];
 const selectedFilters = ref([
@@ -265,7 +266,7 @@ onMounted(async () => {
       </div> -->
       <Transition name="scrollbtn">
         <q-btn
-          v-show="y > 150"
+          v-show="y > 240"
           color="primary"
           round
           size="md"
@@ -280,222 +281,244 @@ onMounted(async () => {
           "
         />
       </Transition>
-      <div class="my-filters">
-        <q-checkbox
-          v-for="(option, i) in leaguesMap.length"
-          :key="option"
-          v-model="selectedFilters"
-          :val="leaguesMap[i].value"
-          :label="leaguesMap[i].label"
-          color="primary"
-          dense
-          class="q-mb-sm q-mr-lg"
-        />
-        <!-- <q-checkbox
-          v-model="selectedFilters"
-          :val="leaguesMap[1].value"
-          :label="leaguesMap[1].label"
-          color="primary"
-        />
-        <q-checkbox
-          v-model="selectedFilters"
-          :val="leaguesMap[2].value"
-          :label="leaguesMap[2].label"
-          color="primary"
-        /> -->
-        <div class="q-mt-xs">
-          <q-btn
+      <q-btn
+        color="primary"
+        flat
+        dense
+        size="md"
+        :style="
+          showFilters
+            ? 'position: absolute; translate: 310px 2px; transition: translate .5s ease;'
+            : 'position: absolute; translate: 0px 2px; transition: translate .5s ease; z-index: 1;'
+        "
+        :icon="showFilters ? 'filter_alt' : 'filter_alt_off'"
+        @click="showFilters = !showFilters"
+      />
+      <Transition name="scrollbtn">
+        <div v-show="showFilters" class="my-filters">
+          <q-checkbox
+            v-for="(option, i) in leaguesMap.length"
+            :key="option"
+            v-model="selectedFilters"
+            :val="leaguesMap[i].value"
+            :label="leaguesMap[i].label"
             color="primary"
-            label="Seleccionar todas"
-            class="q-mr-sm"
-            unelevated
-            @click="onSelectAllLeagues()"
-            :loading="reloading"
+            dense
+            class="q-mb-sm q-mr-lg"
           />
-          <q-btn
+          <!-- <q-checkbox
+            v-model="selectedFilters"
+            :val="leaguesMap[1].value"
+            :label="leaguesMap[1].label"
             color="primary"
-            label="Ninguna"
-            unelevated
-            @click="selectedFilters = []"
           />
+          <q-checkbox
+            v-model="selectedFilters"
+            :val="leaguesMap[2].value"
+            :label="leaguesMap[2].label"
+            color="primary"
+          /> -->
+          <div class="q-mt-xs">
+            <q-btn
+              color="primary"
+              label="Seleccionar todas"
+              class="q-mr-sm"
+              unelevated
+              @click="onSelectAllLeagues()"
+              :loading="reloading"
+            />
+            <q-btn
+              color="primary"
+              label="Ninguna"
+              unelevated
+              @click="selectedFilters = []"
+            />
+          </div>
         </div>
-      </div>
+      </Transition>
       <!-- <div>y: {{ y }}</div> -->
       <!-- <div>{{ selectedFilters }}</div> -->
       <!-- <TransitionGroup name="teamcards"> -->
-      <q-card
-        v-for="(teamExt, rank) in filteredTeams"
-        :key="rank"
-        class="my-card q-mb-md"
-        flat
-        bordered
-      >
-        <q-badge
-          color="grey-5"
-          style="width: 100%; display: flex; justify-content: center"
+      <div :class="showFilters ? '' : 'q-mt-xl'">
+        <q-card
+          v-for="(teamExt, rank) in filteredTeams"
+          :key="rank"
+          class="my-card q-mb-md"
+          flat
+          bordered
         >
-          {{ rank + 1 }}
-        </q-badge>
-        <div class="my-card-leagueimg">
-          <q-img
-            :src="`/images/leagues/${teamExt.team.country.replace('-', '')}${
-              teamExt.team.division
-            }.png`"
-            spinner-color="primary"
-            width="100%"
-            fit="fill"
-          />
-        </div>
-        <!-- <div>
-          {{ teamExt.team.division }}
-        </div> -->
-        <q-card-section>
-          <!-- <div class="text-overline text-orange-9">{{ '#' + (rank + 1) }}</div> -->
-          <div class="my-card-content">
-            <div class="my-card-content-left">
-              <q-img
-                :src="`/images/teams-${teamExt.team.country}/${teamExt.team.shortName}.png`"
-                spinner-color="white"
-                width="40px"
-                height="40px"
-              />
-            </div>
-            <div class="my-card-content-right">
-              <div class="text-h5 q-ml-sm">{{ teamExt.team.name }}</div>
-              <div class="text-primary q-ml-xs">
-                <q-rating
-                  v-model="teamExt.ovr"
-                  size="17px"
-                  color="amber-12"
-                  readonly
-                  icon="star_border"
-                  icon-selected="star"
-                  icon-half="star_half"
-                  max="10"
-                  class="q-pb-xs q-ml-xs q-mr-xs"
+          <q-badge
+            color="grey-5"
+            style="width: 100%; display: flex; justify-content: center"
+          >
+            {{ rank + 1 }}
+          </q-badge>
+          <div class="my-card-leagueimg">
+            <q-img
+              :src="`/images/leagues/${teamExt.team.country.replace('-', '')}${
+                teamExt.team.division
+              }.png`"
+              spinner-color="primary"
+              width="100%"
+              fit="fill"
+            />
+          </div>
+          <!-- <div>
+              {{ teamExt.team.division }}
+            </div> -->
+          <q-card-section>
+            <!-- <div class="text-overline text-orange-9">{{ '#' + (rank + 1) }}</div> -->
+            <div class="my-card-content">
+              <div class="my-card-content-left">
+                <q-img
+                  :src="`/images/teams-${teamExt.team.country}/${teamExt.team.shortName}.png`"
+                  spinner-color="white"
+                  width="40px"
+                  height="40px"
                 />
-                <!-- {{
-                     (
-                       teamExt.team.players.reduce((a, b) => a + b.overall, 0) /
-                       teamExt.team.players.length
-                     ).toFixed(2)
-                   }} -->
-                {{ (teamExt.ovr * 10).toFixed(2).replace('.', ',') }}
+              </div>
+              <div class="my-card-content-right">
+                <div class="text-h5 q-ml-sm">{{ teamExt.team.name }}</div>
+                <div class="text-primary q-ml-xs">
+                  <q-rating
+                    v-model="teamExt.ovr"
+                    size="17px"
+                    color="amber-12"
+                    readonly
+                    icon="star_border"
+                    icon-selected="star"
+                    icon-half="star_half"
+                    max="10"
+                    class="q-pb-xs q-ml-xs q-mr-xs"
+                  />
+                  <!-- {{
+                         (
+                           teamExt.team.players.reduce((a, b) => a + b.overall, 0) /
+                           teamExt.team.players.length
+                         ).toFixed(2)
+                       }} -->
+                  {{ (teamExt.ovr * 10).toFixed(2).replace('.', ',') }}
+                </div>
               </div>
             </div>
-          </div>
-        </q-card-section>
+          </q-card-section>
 
-        <q-card-actions>
-          <span style="color: grey; padding-left: 8px"
-            >Jugadores en plantilla:
-          </span>
-          <span style="margin-left: 5px" class="text-primary">{{
-            teamExt.team.players.length
-          }}</span>
+          <q-card-actions>
+            <span style="color: grey; padding-left: 8px"
+              >Jugadores en plantilla:
+            </span>
+            <span style="margin-left: 5px" class="text-primary">{{
+              teamExt.team.players.length
+            }}</span>
 
-          <q-space />
-          <span style="color: grey; padding-left: 8px">Destacados</span>
-          <q-btn
-            color="grey"
-            round
-            flat
-            dense
-            :icon="expanded[rank] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-            @click="expanded[rank] = !expanded[rank]"
-          />
-        </q-card-actions>
+            <q-space />
+            <span style="color: grey; padding-left: 8px">Destacados</span>
+            <q-btn
+              color="grey"
+              round
+              flat
+              dense
+              :icon="
+                expanded[rank] ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
+              "
+              @click="expanded[rank] = !expanded[rank]"
+            />
+          </q-card-actions>
 
-        <q-slide-transition>
-          <div v-show="expanded[rank]">
-            <q-separator />
-            <q-card-section
-              v-if="teamExt.team.players.length > 0"
-              class="my-card-expand text-subtitle2"
-            >
-              <div
-                v-for="(player, i) in 3"
-                :key="player"
-                class="my-card-expand-row"
+          <q-slide-transition>
+            <div v-show="expanded[rank]">
+              <q-separator />
+              <q-card-section
+                v-if="teamExt.team.players.length > 0"
+                class="my-card-expand text-subtitle2"
               >
-                <div class="my-card-expand-col1">
-                  <q-img
-                    :src="`/images/flags/h20/${
-                      getPlayersSortedbyOverall(teamExt.team.players)[i]
-                        .nationality
-                    }.png`"
-                    spinner-color="white"
-                    width="29px"
-                    height="18px"
-                    fit="fill"
-                    style="border: 1px solid rgba(0, 0, 0, 65%)"
-                  />
-                </div>
-                <div class="my-card-expand-col2">
-                  <div
-                    v-if="
-                      !getPlayersSortedbyOverall(teamExt.team.players)[i]
-                        .nickname
-                    "
-                  >
-                    {{
-                      getPlayersSortedbyOverall(teamExt.team.players)[i].name +
-                      ' ' +
-                      getPlayersSortedbyOverall(teamExt.team.players)[i].surname
-                    }}
-                  </div>
-                  <div v-else>
-                    {{
-                      getPlayersSortedbyOverall(teamExt.team.players)[i]
-                        .nickname
-                    }}
-                  </div>
-                </div>
-                <div class="my-card-expand-col3">
-                  <q-badge outline color="primary" style="font-size: 11px">
-                    {{
-                      getPlayersSortedbyOverall(teamExt.team.players)[i]
-                        .position
-                    }}
-                  </q-badge>
-                </div>
-                <div class="my-card-expand-col4">
-                  <q-badge
-                    color="primary"
-                    style="
-                      font-size: 11px;
-                      margin-top: 3px;
-                      /* padding-right: 8px; */
-                      min-width: 46px;
-                    "
-                  >
-                    <q-icon
-                      name="star_rate"
-                      color="amber-6"
-                      size="12px"
-                      style="
-                        padding-bottom: 2px;
-                        margin-right: 3px;
-                        /* background-color: blueviolet;
-                 border-radius: 50%; */
-                      "
+                <div
+                  v-for="(player, i) in 3"
+                  :key="player"
+                  class="my-card-expand-row"
+                >
+                  <div class="my-card-expand-col1">
+                    <q-img
+                      :src="`/images/flags/h20/${
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .nationality
+                      }.png`"
+                      spinner-color="white"
+                      width="29px"
+                      height="18px"
+                      fit="fill"
+                      style="border: 1px solid rgba(0, 0, 0, 65%)"
                     />
-                    {{
-                      getPlayersSortedbyOverall(teamExt.team.players)[i].overall
-                    }}
-                  </q-badge>
+                  </div>
+                  <div class="my-card-expand-col2">
+                    <div
+                      v-if="
+                        !getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .nickname
+                      "
+                    >
+                      {{
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .name +
+                        ' ' +
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .surname
+                      }}
+                    </div>
+                    <div v-else>
+                      {{
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .nickname
+                      }}
+                    </div>
+                  </div>
+                  <div class="my-card-expand-col3">
+                    <q-badge outline color="primary" style="font-size: 11px">
+                      {{
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .position
+                      }}
+                    </q-badge>
+                  </div>
+                  <div class="my-card-expand-col4">
+                    <q-badge
+                      color="primary"
+                      style="
+                        font-size: 11px;
+                        margin-top: 3px;
+                        /* padding-right: 8px; */
+                        min-width: 46px;
+                      "
+                    >
+                      <q-icon
+                        name="star_rate"
+                        color="amber-6"
+                        size="12px"
+                        style="
+                          padding-bottom: 2px;
+                          margin-right: 3px;
+                          /* background-color: blueviolet;
+                     border-radius: 50%; */
+                        "
+                      />
+                      {{
+                        getPlayersSortedbyOverall(teamExt.team.players)[i]
+                          .overall
+                      }}
+                    </q-badge>
+                  </div>
                 </div>
-              </div>
-              <!-- <div class="my-card-expand-player2">
-                   {{ getPlayersSortedbyOverall(teamExt.team.players)[1].surname }}
-                 </div>
-                 <div class="my-card-expand-player3">
-                   {{ getPlayersSortedbyOverall(teamExt.team.players)[2].surname }}
-                 </div> -->
-            </q-card-section>
-          </div>
-        </q-slide-transition>
-      </q-card>
+                <!-- <div class="my-card-expand-player2">
+                       {{ getPlayersSortedbyOverall(teamExt.team.players)[1].surname }}
+                     </div>
+                     <div class="my-card-expand-player3">
+                       {{ getPlayersSortedbyOverall(teamExt.team.players)[2].surname }}
+                     </div> -->
+              </q-card-section>
+            </div>
+          </q-slide-transition>
+        </q-card>
+      </div>
       <!-- </TransitionGroup> -->
       <!-- {{ allTeams }} -->
     </div>
@@ -519,6 +542,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   margin-bottom: 20px;
   border-left: 6px solid $primary;
   color: $darkGrey;
+  // background-color: pink;
 }
 .my-card {
   width: 370px;

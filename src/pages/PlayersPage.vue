@@ -37,6 +37,7 @@ const topElement = ref(document.getElementById('topElement'));
 const { y } = useWindowScroll();
 const loading = ref<boolean>(true);
 const reloading = ref<boolean>(false);
+const showFilters = ref<boolean>(true);
 
 interface PlayerExt {
   player: Player;
@@ -296,7 +297,7 @@ onMounted(async () => {
     <div v-if="!loading">
       <Transition name="scrollbtn">
         <q-btn
-          v-show="y > 150"
+          v-show="(y > 650 && showFilters) || (y > 150 && !showFilters)"
           color="primary"
           round
           size="md"
@@ -311,229 +312,247 @@ onMounted(async () => {
           "
         />
       </Transition>
-      <div class="my-filters">
-        <span class="text-primary">Ligas:</span><br />
-        <q-checkbox
-          v-for="(option, i) in leaguesMap.length"
-          :key="option"
-          v-model="selectedFiltersLeague"
-          :val="leaguesMap[i].value"
-          :label="leaguesMap[i].label"
-          color="primary"
-          dense
-          class="q-mb-sm q-mr-lg"
-        />
-        <div class="q-mt-xs q-mb-md">
-          <q-btn
-            color="primary"
-            label="Seleccionar todas"
-            class="q-mr-sm"
-            unelevated
-            @click="onSelectAllLeagues()"
-            :loading="reloading"
-          />
-          <q-btn
-            color="primary"
-            label="Ninguna"
-            unelevated
-            @click="selectedFiltersLeague = []"
-          />
-        </div>
-        <span class="text-primary">Posiciones:</span><br />
-        <q-checkbox
-          v-for="option in Position"
-          :key="option"
-          v-model="selectedFiltersPosition"
-          :val="option"
-          :label="option"
-          color="primary"
-          dense
-          class="q-mb-sm q-mr-lg"
-        />
-        <div class="q-mt-xs q-mb-md">
-          <q-btn
-            color="primary"
-            label="Seleccionar todas"
-            class="q-mr-sm"
-            unelevated
-            @click="onSelectAllPositions()"
-            :loading="reloading"
-          />
-          <q-btn
-            color="primary"
-            label="Ninguna"
-            unelevated
-            @click="selectedFiltersPosition = []"
-          />
-        </div>
-        <span class="text-primary">Nacionalidad:</span>
-        <div class="q-mb-md">
-          <q-select
-            v-model="selectedNationality"
-            :options="nationalityOptions"
-            :display-value="
-              selectedNationality ? flagMap.get(selectedNationality) : ''
-            "
-            options-dense
-            dense
-            clearable
-          >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-img
-                  :src="`/images/flags/h24/${scope.opt}.png`"
-                  spinner-color="white"
-                  height="24px"
-                  width="40px"
-                  fit="fill"
-                  class="q-mr-sm"
-                  style="border: 1px solid rgba(0, 0, 0, 65%)"
-                />
-                {{ flagMap.get(scope.opt) }}
-              </q-item>
-            </template>
-          </q-select>
-        </div>
-        <span class="text-primary">Edad:</span>
-        <div>
-          <q-range
-            v-model="ageRange"
-            :min="15"
-            :max="49"
-            :step="1"
-            style="width: 340px; padding-top: 30px; padding-left: 10px"
-            label-always
-            @change="
-              (val) => {
-                // console.log(val);
-                ageFilter = val;
-              }
-            "
-            color="primary"
-          />
-        </div>
-        <span class="text-primary">Altura (cm):</span>
-        <div>
-          <q-range
-            v-model="heightRange"
-            :min="160"
-            :max="210"
-            :step="1"
-            style="width: 340px; padding-top: 30px; padding-left: 10px"
-            label-always
-            @change="
-              (val) => {
-                // console.log(val);
-                heightFilter = val;
-              }
-            "
-            color="primary"
-          />
-        </div>
-        <!-- {{ heightRange }}
-        {{ heightFilter }} -->
-      </div>
-      <q-card
-        v-for="(item, rank) in filteredPlayers"
-        :key="rank"
-        class="my-card q-mb-md"
+      <q-btn
+        color="primary"
         flat
-        bordered
-      >
-        <q-badge
-          color="grey-5"
-          style="width: 100%; display: flex; justify-content: center"
-        >
-          {{ rank + 1 }}
-        </q-badge>
-
-        <q-card-section class="q-pa-sm">
-          <div class="my-card-section">
-            <div class="my-card-section-left">
-              <q-img
-                :src="`/images/leagues/${item.leagueCountry.replace('-', '')}${
-                  item.leagueDivision
-                }.png`"
-                spinner-color="primary"
-                width="40px"
-                fit="fill"
-              />
-              <q-img
-                :src="`/images/teams-${item.leagueCountry}/${item.teamShortName}.png`"
-                spinner-color="white"
-                width="40px"
-                height="40px"
-              />
-            </div>
-            <div class="my-card-section-right">
-              <div class="my-card-row">
-                <div>
+        dense
+        size="md"
+        :style="
+          showFilters
+            ? 'position: absolute; translate: 310px 2px; transition: translate .5s ease;'
+            : 'position: absolute; translate: 0px -2px; transition: translate .5s ease; z-index: 1;'
+        "
+        :icon="showFilters ? 'filter_alt' : 'filter_alt_off'"
+        @click="showFilters = !showFilters"
+      />
+      <Transition name="scrollbtn">
+        <div v-show="showFilters" class="my-filters">
+          <span class="text-primary">Ligas:</span><br />
+          <q-checkbox
+            v-for="(option, i) in leaguesMap.length"
+            :key="option"
+            v-model="selectedFiltersLeague"
+            :val="leaguesMap[i].value"
+            :label="leaguesMap[i].label"
+            color="primary"
+            dense
+            class="q-mb-sm q-mr-lg"
+          />
+          <div class="q-mt-xs q-mb-md">
+            <q-btn
+              color="primary"
+              label="Seleccionar todas"
+              class="q-mr-sm"
+              unelevated
+              @click="onSelectAllLeagues()"
+              :loading="reloading"
+            />
+            <q-btn
+              color="primary"
+              label="Ninguna"
+              unelevated
+              @click="selectedFiltersLeague = []"
+            />
+          </div>
+          <span class="text-primary">Posiciones:</span><br />
+          <q-checkbox
+            v-for="option in Position"
+            :key="option"
+            v-model="selectedFiltersPosition"
+            :val="option"
+            :label="option"
+            color="primary"
+            dense
+            class="q-mb-sm q-mr-lg"
+          />
+          <div class="q-mt-xs q-mb-md">
+            <q-btn
+              color="primary"
+              label="Seleccionar todas"
+              class="q-mr-sm"
+              unelevated
+              @click="onSelectAllPositions()"
+              :loading="reloading"
+            />
+            <q-btn
+              color="primary"
+              label="Ninguna"
+              unelevated
+              @click="selectedFiltersPosition = []"
+            />
+          </div>
+          <span class="text-primary">Nacionalidad:</span>
+          <div class="q-mb-md" style="width: 312px">
+            <q-select
+              v-model="selectedNationality"
+              :options="nationalityOptions"
+              :display-value="
+                selectedNationality ? flagMap.get(selectedNationality) : ''
+              "
+              options-dense
+              dense
+              clearable
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
                   <q-img
-                    :src="`/images/flags/h20/${item.player.nationality}.png`"
+                    :src="`/images/flags/h24/${scope.opt}.png`"
                     spinner-color="white"
-                    width="29px"
-                    height="18px"
+                    height="24px"
+                    width="40px"
                     fit="fill"
+                    class="q-mr-sm"
                     style="border: 1px solid rgba(0, 0, 0, 65%)"
                   />
-                </div>
-                <div class="my-card-section-right-col2w">
-                  <div v-if="item.player.nickname">
-                    {{ item.player.nickname }}
-                  </div>
-                  <div v-else>
-                    {{ item.player.name + ' ' + item.player.surname }}
-                  </div>
-                </div>
+                  {{ flagMap.get(scope.opt) }}
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <span class="text-primary">Edad:</span>
+          <div>
+            <q-range
+              v-model="ageRange"
+              :min="15"
+              :max="49"
+              :step="1"
+              style="width: 302px; padding-top: 30px; padding-left: 10px"
+              label-always
+              @change="
+                (val) => {
+                  // console.log(val);
+                  ageFilter = val;
+                }
+              "
+              color="primary"
+            />
+          </div>
+          <span class="text-primary">Altura (cm):</span>
+          <div>
+            <q-range
+              v-model="heightRange"
+              :min="160"
+              :max="210"
+              :step="1"
+              style="width: 302px; padding-top: 30px; padding-left: 10px"
+              label-always
+              @change="
+                (val) => {
+                  // console.log(val);
+                  heightFilter = val;
+                }
+              "
+              color="primary"
+            />
+          </div>
+          <!-- {{ heightRange }}
+          {{ heightFilter }} -->
+        </div>
+      </Transition>
+      <div :class="showFilters ? '' : 'q-mt-xl'">
+        <q-card
+          v-for="(item, rank) in filteredPlayers"
+          :key="rank"
+          class="my-card q-mb-md"
+          flat
+          bordered
+        >
+          <q-badge
+            color="grey-5"
+            style="width: 100%; display: flex; justify-content: center"
+          >
+            {{ rank + 1 }}
+          </q-badge>
+
+          <q-card-section class="q-pa-sm">
+            <div class="my-card-section">
+              <div class="my-card-section-left">
+                <q-img
+                  :src="`/images/leagues/${item.leagueCountry.replace(
+                    '-',
+                    ''
+                  )}${item.leagueDivision}.png`"
+                  spinner-color="primary"
+                  width="40px"
+                  fit="fill"
+                />
+                <q-img
+                  :src="`/images/teams-${item.leagueCountry}/${item.teamShortName}.png`"
+                  spinner-color="white"
+                  width="40px"
+                  height="40px"
+                />
               </div>
-              <div class="my-card-row q-mt-xs">
-                <div class="my-card-section-right-col1"></div>
-                <div class="my-card-section-right-col2">
-                  <!-- <div> -->
-                  <span v-if="item.player.birthDate"
-                    >{{ getAge(item.player.birthDate) }} años</span
-                  >
-                  <span v-if="item.player.height" class="q-ml-sm"
-                    >{{
-                      (item.player.height / 100).toFixed(2).replace('.', ',')
-                    }}m</span
-                  >
-                  <!-- </div> -->
-                </div>
-                <div class="my-card-section-right-col3">
-                  <q-badge outline color="primary" style="font-size: 11px">
-                    {{ item.player.position }}
-                  </q-badge>
-                </div>
-                <div class="my-card-section-right-col4">
-                  <q-badge
-                    color="primary"
-                    style="
-                      font-size: 11px;
-                      /* margin-top: 3px; */
-                      /* padding-right: 8px; */
-                      min-width: 46px;
-                    "
-                  >
-                    <q-icon
-                      name="star_rate"
-                      color="amber-6"
-                      size="12px"
-                      style="
-                        padding-bottom: 2px;
-                        margin-right: 3px;
-                        /* background-color: blueviolet;
-                 border-radius: 50%; */
-                      "
+              <div class="my-card-section-right">
+                <div class="my-card-row">
+                  <div>
+                    <q-img
+                      :src="`/images/flags/h20/${item.player.nationality}.png`"
+                      spinner-color="white"
+                      width="29px"
+                      height="18px"
+                      fit="fill"
+                      style="border: 1px solid rgba(0, 0, 0, 65%)"
                     />
-                    {{ item.player.overall }}
-                  </q-badge>
+                  </div>
+                  <div class="my-card-section-right-col2w">
+                    <div v-if="item.player.nickname">
+                      {{ item.player.nickname }}
+                    </div>
+                    <div v-else>
+                      {{ item.player.name + ' ' + item.player.surname }}
+                    </div>
+                  </div>
+                </div>
+                <div class="my-card-row q-mt-xs">
+                  <div class="my-card-section-right-col1"></div>
+                  <div class="my-card-section-right-col2">
+                    <!-- <div> -->
+                    <span v-if="item.player.birthDate"
+                      >{{ getAge(item.player.birthDate) }} años</span
+                    >
+                    <span v-if="item.player.height" class="q-ml-sm"
+                      >{{
+                        (item.player.height / 100).toFixed(2).replace('.', ',')
+                      }}m</span
+                    >
+                    <!-- </div> -->
+                  </div>
+                  <div class="my-card-section-right-col3">
+                    <q-badge outline color="primary" style="font-size: 11px">
+                      {{ item.player.position }}
+                    </q-badge>
+                  </div>
+                  <div class="my-card-section-right-col4">
+                    <q-badge
+                      color="primary"
+                      style="
+                        font-size: 11px;
+                        /* margin-top: 3px; */
+                        /* padding-right: 8px; */
+                        min-width: 46px;
+                      "
+                    >
+                      <q-icon
+                        name="star_rate"
+                        color="amber-6"
+                        size="12px"
+                        style="
+                          padding-bottom: 2px;
+                          margin-right: 3px;
+                          /* background-color: blueviolet;
+                   border-radius: 50%; */
+                        "
+                      />
+                      {{ item.player.overall }}
+                    </q-badge>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </q-card-section>
-      </q-card>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
     <div class="loading-container" v-else>
       <q-spinner color="primary" size="48px" />
