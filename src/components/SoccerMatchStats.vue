@@ -92,21 +92,52 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
           <div class="matchstats-container-player-overall">
             {{ p.overall }}
           </div>
-          <div
-            v-if="
-              matchRef.scorers1.filter((s) => s === p.shirtNumber).length < 4
-            "
-            class="matchstats-container-player-goals"
-          >
-            <q-icon
+          <div class="matchstats-container-player-goals">
+            <!-- <q-icon
               v-for="g in matchRef.scorers1.filter((s) => s === p.shirtNumber)
                 .length"
               :key="g"
               name="sports_soccer"
               color="grey-9"
-            ></q-icon>
+            >
+              <q-badge color="orange">{{
+                matchRef.scorers1.filter((s) => s === p.shirtNumber).length
+              }}</q-badge>
+            </q-icon> -->
+            <q-btn
+              v-if="
+                matchRef.scorers1.filter((s) => s === p.shirtNumber).length > 0
+              "
+              icon="sports_soccer"
+              color="grey-9"
+              size="7px"
+              dense
+              flat
+              style="cursor: default"
+            >
+              <q-badge
+                v-if="
+                  matchRef.scorers1.filter((s) => s === p.shirtNumber).length >
+                  1
+                "
+                style="
+                  zoom: 65%;
+                  font-size: 14px;
+                  padding-top: 3px;
+                  padding-bottom: 2px;
+                  padding-left: 4px;
+                  padding-right: 4px;
+                  translate: 3px 0px;
+                "
+                floating
+                color="negative"
+                >{{
+                  matchRef.scorers1.filter((s) => s === p.shirtNumber).length
+                }}</q-badge
+              >
+            </q-btn>
           </div>
-          <div v-else class="matchstats-container-player-goals">
+          <!-- <div v-else class="matchstats-container-player-goals">
             <q-icon name="sports_soccer" color="grey-9" />
             <span class="text-grey-9 matchstats-container-player-goals-number"
               ><span style="font-size: 10px">x</span
@@ -114,7 +145,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
                 matchRef.scorers1.filter((s) => s === p.shirtNumber).length
               }}</span
             >
-          </div>
+          </div> -->
         </div>
       </div>
       <q-dialog
@@ -211,21 +242,48 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               color="grey-9"
             ></q-icon>
           </div> -->
-          <div
-            v-if="
-              matchRef.scorers2.filter((s) => s === p.shirtNumber).length < 4
-            "
-            class="matchstats-container-player-goals"
-          >
-            <q-icon
+          <div class="matchstats-container-player-goals">
+            <!-- <q-icon
               v-for="g in matchRef.scorers2.filter((s) => s === p.shirtNumber)
                 .length"
               :key="g"
               name="sports_soccer"
               color="grey-9"
-            ></q-icon>
+            ></q-icon> -->
+            <q-btn
+              v-if="
+                matchRef.scorers2.filter((s) => s === p.shirtNumber).length > 0
+              "
+              icon="sports_soccer"
+              color="grey-9"
+              size="7px"
+              dense
+              flat
+              style="cursor: default"
+            >
+              <q-badge
+                v-if="
+                  matchRef.scorers2.filter((s) => s === p.shirtNumber).length >
+                  1
+                "
+                style="
+                  zoom: 65%;
+                  font-size: 14px;
+                  padding-top: 3px;
+                  padding-bottom: 2px;
+                  padding-left: 4px;
+                  padding-right: 4px;
+                  translate: 3px 0px;
+                "
+                floating
+                color="negative"
+                >{{
+                  matchRef.scorers2.filter((s) => s === p.shirtNumber).length
+                }}</q-badge
+              >
+            </q-btn>
           </div>
-          <div v-else class="matchstats-container-player-goals">
+          <!-- <div v-else class="matchstats-container-player-goals">
             <q-icon name="sports_soccer" color="grey-9" />
             <span class="text-grey-9 matchstats-container-player-goals-number"
               ><span style="font-size: 10px">x</span
@@ -233,7 +291,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
                 matchRef.scorers2.filter((s) => s === p.shirtNumber).length
               }}</span
             >
-          </div>
+          </div> -->
         </div>
       </div>
       <q-dialog
