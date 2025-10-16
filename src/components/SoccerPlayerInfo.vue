@@ -3,6 +3,7 @@ import { getAge } from 'src/helpers/functions';
 import { Leagues, Player } from 'src/models';
 import { Position } from 'src/models/player';
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 // import { ref } from 'vue';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   roundGoals?: number;
   roundGoalsConceded?: number;
   urlTeamCrest?: string;
+  matchId?: number;
 }
 
 const props = defineProps<Props>();
@@ -19,13 +21,34 @@ const props = defineProps<Props>();
 // console.log(props.roundNumber);
 // console.log(props.roundGoals);
 
+const route = useRoute();
+
+const isCup = route.name?.toString().includes(Leagues.MyCup);
+const isCupSecondLeg = isCup && props.matchId && props.matchId % 2 === 0;
+
 // const player = ref<Player>({ ...props });
 // const player = ref<Player>({...props});
 const percentPlayedGames = ref<number>(
   ((props.player.seasonStats.playedGames + 1) /
-    (props.roundNumber ? props.roundNumber : 0)) *
+    (props.roundNumber && !isCup
+      ? props.roundNumber
+      : props.roundNumber && isCup && !isCupSecondLeg
+      ? props.roundNumber * 2 - 1
+      : props.roundNumber && isCup && isCupSecondLeg
+      ? props.roundNumber * 2
+      : 0)) *
     100
 );
+// R1 -> 1 y 2
+// R2 -> 3 y 4
+// R3 -> 5 y 6
+// R4 -> 7 y 8
+// R5 -> 9 y 10
+// R6 -> 11 y 12
+// console.log('Played games:', props.player.seasonStats.playedGames);
+// console.log('Round:', props.roundNumber);
+// console.log('Match Id:', props.matchId);
+// console.log(props.matchId && props.matchId % 2 === 0 ? 'Vuelta' : 'Ida');
 </script>
 
 <template>
@@ -97,9 +120,7 @@ const percentPlayedGames = ref<number>(
     <q-card-section>
       <div v-if="roundNumber">
         <div class="main-container-section3 q-pb-xs">
-          <span
-            v-if="$route.name?.toString().includes(Leagues.MyCup)"
-            class="main-container-section3-span"
+          <span v-if="isCup" class="main-container-section3-span"
             >Estadísticas en copa tras este partido:</span
           >
           <span v-else class="main-container-section3-span"
@@ -137,7 +158,7 @@ const percentPlayedGames = ref<number>(
             class="text-white"
             readonly
           >
-            {{ percentPlayedGames }}%
+            {{ Math.round(percentPlayedGames) }}%
           </q-knob>
         </div>
         <div
@@ -198,9 +219,7 @@ const percentPlayedGames = ref<number>(
       </div>
       <div v-else>
         <div class="main-container-section3 q-pb-xs">
-          <span
-            v-if="$route.name?.toString().includes(Leagues.MyCup)"
-            class="main-container-section3-span"
+          <span v-if="isCup" class="main-container-section3-span"
             >Estadísticas totales en copa:</span
           >
           <span v-else class="main-container-section3-span"

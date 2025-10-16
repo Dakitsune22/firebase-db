@@ -148,6 +148,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               .length
           "
           :round-goals-conceded="matchRef.score2"
+          :match-id="matchRef.id"
         />
       </q-dialog>
     </div>
@@ -266,6 +267,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               .length
           "
           :round-goals-conceded="matchRef.score1"
+          :match-id="matchRef.id"
         />
       </q-dialog>
     </div>
