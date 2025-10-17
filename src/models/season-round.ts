@@ -16,4 +16,6 @@ export interface Match {
   startingLineup2: Player[];
   scorers1: number[];
   scorers2: number[];
+  assistants1: number[];
+  assistants2: number[];
 }

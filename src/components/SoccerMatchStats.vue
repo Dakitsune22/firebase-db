@@ -21,6 +21,8 @@ const matchRef = ref<Match>({
   startingLineup2: props.startingLineup2,
   scorers1: props.scorers1,
   scorers2: props.scorers2,
+  assistants1: props.assistants1,
+  assistants2: props.assistants2,
 });
 
 const ratingTeam1 = ref<number>(
@@ -39,6 +41,8 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
   playerInfo.value = selectedPlayer;
   isPlayerLocale.value = isLocale;
 };
+// console.log('SoccerMatchStats s1:', matchRef.value.scorers1);
+// console.log('SoccerMatchStats a1:', matchRef.value.assistants1);
 </script>
 
 <template>
@@ -113,7 +117,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               size="7px"
               dense
               flat
-              style="cursor: default"
+              style="cursor: default; translate: -2px 0px; z-index: 1"
             >
               <q-badge
                 v-if="
@@ -128,11 +132,46 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
                   padding-left: 4px;
                   padding-right: 4px;
                   translate: 3px 0px;
+                  z-index: 2;
                 "
                 floating
                 color="negative"
                 >{{
                   matchRef.scorers1.filter((s) => s === p.shirtNumber).length
+                }}</q-badge
+              >
+            </q-btn>
+            <q-btn
+              v-if="
+                matchRef.assistants1.filter((a) => a === p.shirtNumber).length >
+                0
+              "
+              icon="hdr_auto"
+              color="grey-9"
+              size="7px"
+              dense
+              flat
+              style="cursor: default; translate: -2px 0px; z-index: 1"
+            >
+              <q-badge
+                v-if="
+                  matchRef.assistants1.filter((a) => a === p.shirtNumber)
+                    .length > 1
+                "
+                style="
+                  zoom: 65%;
+                  font-size: 14px;
+                  padding-top: 3px;
+                  padding-bottom: 2px;
+                  padding-left: 4px;
+                  padding-right: 4px;
+                  translate: 3px 0px;
+                  z-index: 2;
+                "
+                floating
+                color="negative"
+                >{{
+                  matchRef.assistants1.filter((a) => a === p.shirtNumber).length
                 }}</q-badge
               >
             </q-btn>
@@ -179,6 +218,10 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               .length
           "
           :round-goals-conceded="matchRef.score2"
+          :round-assists="
+            matchRef.assistants1.filter((a) => a === playerInfo?.shirtNumber)
+              .length
+          "
           :match-id="matchRef.id"
         />
       </q-dialog>
@@ -259,7 +302,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               size="7px"
               dense
               flat
-              style="cursor: default"
+              style="cursor: default; translate: -2px 0px; z-index: 1"
             >
               <q-badge
                 v-if="
@@ -274,11 +317,51 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
                   padding-left: 4px;
                   padding-right: 4px;
                   translate: 3px 0px;
+                  z-index: 2;
                 "
                 floating
                 color="negative"
                 >{{
                   matchRef.scorers2.filter((s) => s === p.shirtNumber).length
+                }}</q-badge
+              >
+            </q-btn>
+            <q-btn
+              v-if="
+                matchRef.assistants2.filter((a) => a === p.shirtNumber).length >
+                0
+              "
+              icon="hdr_auto"
+              color="grey-9"
+              size="7px"
+              dense
+              flat
+              style="cursor: default; translate: -2px 0px; z-index: 1"
+              :style="
+                matchRef.scorers2.filter((s) => s === p.shirtNumber).length > 0
+                  ? 'translate: -3px 0px;'
+                  : ''
+              "
+            >
+              <q-badge
+                v-if="
+                  matchRef.assistants2.filter((a) => a === p.shirtNumber)
+                    .length > 1
+                "
+                style="
+                  zoom: 65%;
+                  font-size: 14px;
+                  padding-top: 3px;
+                  padding-bottom: 2px;
+                  padding-left: 4px;
+                  padding-right: 4px;
+                  translate: 3px 0px;
+                  z-index: 2;
+                "
+                floating
+                color="negative"
+                >{{
+                  matchRef.assistants2.filter((a) => a === p.shirtNumber).length
                 }}</q-badge
               >
             </q-btn>
@@ -325,6 +408,10 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
               .length
           "
           :round-goals-conceded="matchRef.score1"
+          :round-assists="
+            matchRef.assistants2.filter((a) => a === playerInfo?.shirtNumber)
+              .length
+          "
           :match-id="matchRef.id"
         />
       </q-dialog>
@@ -399,7 +486,7 @@ $midGrey: rgb(150, 150, 150);
       // background-color: antiquewhite;
     }
     &-name {
-      width: 53%;
+      width: 55%;
       font-size: 11px;
       text-align: left;
       cursor: pointer;
@@ -418,7 +505,8 @@ $midGrey: rgb(150, 150, 150);
     &-goals {
       @include flexPosition(start, center);
       font-size: 10px;
-      width: 17%;
+      // width: 17%;
+      width: 40px;
       // background-color: pink;
 
       &-number {

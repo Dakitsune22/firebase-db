@@ -162,3 +162,76 @@ const getScorerByRate = (players: Player[]): Player => {
 
   return players[maxDiceIndex];
 };
+
+export const getAssistants = (
+  players: Player[],
+  scorers: number[]
+): number[] => {
+  const assistants: number[] = [];
+  // console.log('Players:');
+  // console.log(players);
+  // for (let i = 0; i < scorers.length; i++) {
+  //   // const iPlayer = Math.floor(Math.random() * players.length);
+  //   // console.log('Index player:', iPlayer);
+  //   // scorers.push(players[iPlayer].shirtNumber);
+  //   assistants.push(getAssistantByRate(players, scorers[i]).shirtNumber);
+  // }
+  scorers.forEach((scorer) => {
+    assistants.push(getAssistantByRate(players, scorer).shirtNumber);
+  });
+  return assistants;
+};
+
+const getAssistantByRate = (
+  players: Player[],
+  goalScorerShirtNumber: number
+): Player => {
+  const diceResults: number[] = [];
+  let dice: number;
+
+  // Tiramos dado para cada jugador, con diferente probabilidad por demarcación:
+  players.forEach((player) => {
+    if (player.shirtNumber === goalScorerShirtNumber) {
+      // Si el jugador coincide con el goleador, le asignamos puntuación cero,
+      // para que no salga elegido como asistente.
+      dice = 0;
+    } else {
+      switch (player.position) {
+        case Position.POR:
+          dice = Math.floor(Math.random() * 15) + 1;
+          break;
+        case Position.DF:
+          dice = Math.floor(Math.random() * 70) + 1;
+          break;
+        case Position.LD:
+        case Position.LI:
+        case Position.MCD:
+          dice = Math.floor(Math.random() * 60) + 11;
+          break;
+        case Position.MC:
+          dice = Math.floor(Math.random() * 60) + 31;
+          break;
+        case Position.MCO:
+        case Position.ED:
+        case Position.EI:
+          dice = Math.floor(Math.random() * 60) + 41;
+          break;
+        case Position.DC:
+          dice = Math.floor(Math.random() * 60) + 21;
+          break;
+        // default:
+        //   break;
+      }
+    }
+    diceResults.push(dice);
+    // console.log(player.position, player.surname, '-->', dice);
+  });
+  // Comprobamos el jugador que ha saco el dado más alto y lo retornamos como asistente:
+  const maxDice = Math.max(...diceResults);
+  // console.log({ maxDice });
+  const maxDiceIndex = diceResults.findIndex((d) => d === maxDice);
+  // console.log({ maxDiceIndex });
+  // console.log(players[maxDiceIndex]);
+
+  return players[maxDiceIndex];
+};

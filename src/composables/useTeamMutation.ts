@@ -22,6 +22,7 @@ interface teamUpdateStatsData {
   newGoalsConceded: number;
   startingLineup: Player[];
   scorers: number[];
+  assistants: number[];
   team: Team;
 }
 
@@ -216,6 +217,15 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
       goals: ut.players[pIdx].seasonStats.goals + 1,
     };
   });
+  // Actualizamos asistencias de jugador en BD:
+  t.assistants.forEach((assistant) => {
+    const pIdx = ut.players.findIndex((p) => p.shirtNumber === assistant);
+    if (pIdx === -1) return;
+    ut.players[pIdx].seasonStats = {
+      ...ut.players[pIdx].seasonStats,
+      assists: ut.players[pIdx].seasonStats.assists + 1,
+    };
+  });
   // Incrementamos en uno los partidos jugados del jugador en BD e
   // Incrementamos al portero titular los goles encajados:
   t.startingLineup.forEach((slPlayer) => {
@@ -348,6 +358,7 @@ const useTeamMutation = () => {
       newGoalsConceded,
       startingLineup,
       scorers,
+      assistants,
       team,
     }: teamUpdateStatsData) =>
       updateTeamStats({
@@ -357,6 +368,7 @@ const useTeamMutation = () => {
         newGoalsConceded,
         startingLineup,
         scorers,
+        assistants,
         team,
       }),
     onSuccess: () => {

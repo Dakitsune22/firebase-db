@@ -54,6 +54,7 @@ onBeforeUnmount(async () => {
 onMounted(async () => {
   await sleep(500);
   console.log('*** TOTAL ROUNDS (computed):', totalRounds.value);
+  console.log(queryRound.data.value?.matches);
 });
 
 const totalRounds = computed(() => {
@@ -84,6 +85,8 @@ const restartLeague = async () => {
           score2: 0,
           scorers1: [],
           scorers2: [],
+          assistants1: [],
+          assistants2: [],
           startingLineup1: [],
           startingLineup2: [],
         });
@@ -323,6 +326,8 @@ const onLastRound = async () => {
             :score2="match.score2"
             :scorers1="match.scorers1"
             :scorers2="match.scorers2"
+            :assistants1="match.assistants1"
+            :assistants2="match.assistants2"
             :startingLineup1="match.startingLineup1"
             :startingLineup2="match.startingLineup2"
           />

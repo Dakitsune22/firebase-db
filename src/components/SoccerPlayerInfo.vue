@@ -11,6 +11,7 @@ interface Props {
   roundNumber?: number;
   roundGoals?: number;
   roundGoalsConceded?: number;
+  roundAssists?: number;
   urlTeamCrest?: string;
   matchId?: number;
 }
@@ -216,6 +217,31 @@ const percentPlayedGames = ref<number>(
             p.p.<span class="text-primary">)</span></span
           >
         </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Asistencias:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.assists + (roundAssists || 0) }}
+          </div>
+          <span
+            v-if="player.seasonStats.assists + (roundAssists || 0) > 0"
+            class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              (
+                (player.seasonStats.assists + (roundAssists || 0)) /
+                (player.seasonStats.playedGames + 1)
+              )
+                .toFixed(2)
+                .replace('.', ',')
+            }}
+            p.p.<span class="text-primary">)</span></span
+          >
+        </div>
       </div>
       <div v-else>
         <div class="main-container-section3 q-pb-xs">
@@ -259,6 +285,28 @@ const percentPlayedGames = ref<number>(
             p.p.<span class="text-primary">)</span></span
           >
         </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Asistencias:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.assists }}
+          </div>
+          <span
+            v-if="player.seasonStats.assists > 0"
+            class="main-container-section3-percent"
+            ><span class="text-primary">(</span
+            >{{
+              (player.seasonStats.assists / player.seasonStats.playedGames)
+                .toFixed(2)
+                .replace('.', ',')
+            }}
+            p.p.<span class="text-primary">)</span></span
+          >
+        </div>
         <!-- <div v-else class="main-container-section3">
           <q-icon
             name="subdirectory_arrow_right"
@@ -284,7 +332,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
 .main-container {
   max-width: 380px;
-  max-height: 300px;
+  max-height: 500px;
   background-color: lightgrey;
   cursor: pointer;
 

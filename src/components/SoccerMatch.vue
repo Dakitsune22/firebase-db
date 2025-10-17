@@ -9,6 +9,7 @@ import { Leagues, Team } from 'src/models';
 import {
   getStartingLineup,
   getScorers,
+  getAssistants,
   getMatchResult,
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
@@ -34,7 +35,12 @@ const matchRef = ref<Match>({
   startingLineup2: props.startingLineup2,
   scorers1: props.scorers1,
   scorers2: props.scorers2,
+  assistants1: props.assistants1,
+  assistants2: props.assistants2,
 });
+
+// console.log('SoccerMatch s1:', matchRef.value.scorers1);
+// console.log('SoccerMatch a1:', matchRef.value.assistants1);
 
 const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
@@ -97,6 +103,15 @@ const onPlayMatch = async () => {
     matchRef.value.score2,
     matchRef.value.startingLineup2
   );
+  // Obtener asistentes:
+  matchRef.value.assistants1 = getAssistants(
+    matchRef.value.startingLineup1,
+    matchRef.value.scorers1
+  );
+  matchRef.value.assistants2 = getAssistants(
+    matchRef.value.startingLineup2,
+    matchRef.value.scorers2
+  );
 
   // Actualizar datos de los equipos en store y BBDD.
   roundMatches.value[matchRef.value.id - 1].played = matchRef.value.played;
@@ -108,6 +123,10 @@ const onPlayMatch = async () => {
     matchRef.value.startingLineup2;
   roundMatches.value[matchRef.value.id - 1].scorers1 = matchRef.value.scorers1;
   roundMatches.value[matchRef.value.id - 1].scorers2 = matchRef.value.scorers2;
+  roundMatches.value[matchRef.value.id - 1].assistants1 =
+    matchRef.value.assistants1;
+  roundMatches.value[matchRef.value.id - 1].assistants2 =
+    matchRef.value.assistants2;
 
   mutateRoundPlay.mutate({
     round: getCurrentRound(),
@@ -121,6 +140,7 @@ const onPlayMatch = async () => {
     newGoalsConceded: matchRef.value.score2,
     startingLineup: matchRef.value.startingLineup1,
     scorers: matchRef.value.scorers1,
+    assistants: matchRef.value.assistants1,
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
 
@@ -132,6 +152,7 @@ const onPlayMatch = async () => {
       newGoalsConceded: matchRef.value.score1,
       startingLineup: matchRef.value.startingLineup2,
       scorers: matchRef.value.scorers2,
+      assistants: matchRef.value.assistants2,
       team: qt2.data.value ? qt2.data.value : ({} as Team),
     },
     {
@@ -235,6 +256,8 @@ const onPlayMatch = async () => {
       :startingLineup2="matchRef.startingLineup2"
       :scorers1="matchRef.scorers1"
       :scorers2="matchRef.scorers2"
+      :assistants1="matchRef.assistants1"
+      :assistants2="matchRef.assistants2"
       :team1="matchRef.team1"
       :team2="matchRef.team2"
     />

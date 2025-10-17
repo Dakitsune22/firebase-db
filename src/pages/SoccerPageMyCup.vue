@@ -216,6 +216,8 @@ const onAdvanceCupRound = async (): Promise<void> => {
         score2: 0,
         scorers1: [],
         scorers2: [],
+        assistants1: [],
+        assistants2: [],
         startingLineup1: [],
         startingLineup2: [],
       });
@@ -230,6 +232,8 @@ const onAdvanceCupRound = async (): Promise<void> => {
           score2: 0,
           scorers1: [],
           scorers2: [],
+          assistants1: [],
+          assistants2: [],
           startingLineup1: [],
           startingLineup2: [],
         });
@@ -295,6 +299,8 @@ const restartCup = () => {
         score2: 0,
         scorers1: [],
         scorers2: [],
+        assistants1: [],
+        assistants2: [],
         startingLineup1: [],
         startingLineup2: [],
       });
@@ -309,6 +315,8 @@ const restartCup = () => {
           score2: 0,
           scorers1: [],
           scorers2: [],
+          assistants1: [],
+          assistants2: [],
           startingLineup1: [],
           startingLineup2: [],
         });
@@ -702,6 +710,8 @@ const getCupRoundName = (): string => {
             :score2="match.score2"
             :scorers1="match.scorers1"
             :scorers2="match.scorers2"
+            :assistants1="match.assistants1"
+            :assistants2="match.assistants2"
             :startingLineup1="match.startingLineup1"
             :startingLineup2="match.startingLineup2"
           />
