@@ -22,7 +22,7 @@ const getPlayersByGoalsScored = async (): Promise<Player[]> => {
 
   teams.forEach((team) => {
     team.players.forEach((player) => {
-      if (player.seasonStats.goals > 0) {
+      if (player.seasonStats.goals > 0 || player.seasonStats.assists > 0) {
         players.push(player);
       }
     });

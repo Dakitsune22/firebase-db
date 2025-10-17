@@ -52,7 +52,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
         <q-rating
           v-model="ratingTeam1"
           size="15px"
-          color="amber-11"
+          color="amber-12"
           readonly
           icon="star_border"
           icon-selected="star"
@@ -231,7 +231,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
         <q-rating
           v-model="ratingTeam2"
           size="15px"
-          color="amber-11"
+          color="amber-12"
           readonly
           icon="star_border"
           icon-selected="star"
@@ -426,12 +426,12 @@ $midGrey: rgb(150, 150, 150);
 
 .matchstats-container {
   @include flexPosition(start, start);
-  background-color: lightgrey;
+  background-color: lighten($color: lightgrey, $amount: 6%);
   padding: 6px;
   // padding-top: 4px;
   border: 1px solid $midGrey;
   border-radius: 0.2em;
-  margin-top: 1px;
+  margin-top: -1px;
   font-size: 12px;
   // height: 100px;
 
@@ -462,7 +462,7 @@ $midGrey: rgb(150, 150, 150);
       padding-left: 5px;
       padding-right: 5px;
       border-radius: 10%;
-      color: $amber-11;
+      color: $amber-12;
       background-color: $darkGrey;
     }
   }

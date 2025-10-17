@@ -177,7 +177,17 @@ export const getAssistants = (
   //   assistants.push(getAssistantByRate(players, scorers[i]).shirtNumber);
   // }
   scorers.forEach((scorer) => {
-    assistants.push(getAssistantByRate(players, scorer).shirtNumber);
+    const dice = Math.floor(Math.random() * 100) + 1;
+    console.log(dice);
+    // Tiramos dado para ver si el gol tiene asistente
+    // (Según estudio, el 65% de los goles provienen de una asistencia)
+    if (dice <= 65) {
+      // console.log('Gol con asistente');
+      assistants.push(getAssistantByRate(players, scorer).shirtNumber);
+    }
+    // } else {
+    //   console.log('Gol sin asistente');
+    // }
   });
   return assistants;
 };
