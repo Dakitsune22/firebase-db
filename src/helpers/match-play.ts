@@ -208,7 +208,7 @@ const getAssistantByRate = (
     } else {
       switch (player.position) {
         case Position.POR:
-          dice = Math.floor(Math.random() * 15) + 1;
+          dice = Math.floor(Math.random() * 20) + 1;
           break;
         case Position.DF:
           dice = Math.floor(Math.random() * 70) + 1;
@@ -216,7 +216,7 @@ const getAssistantByRate = (
         case Position.LD:
         case Position.LI:
         case Position.MCD:
-          dice = Math.floor(Math.random() * 60) + 11;
+          dice = Math.floor(Math.random() * 60) + 16;
           break;
         case Position.MC:
           dice = Math.floor(Math.random() * 60) + 31;
@@ -224,7 +224,7 @@ const getAssistantByRate = (
         case Position.MCO:
         case Position.ED:
         case Position.EI:
-          dice = Math.floor(Math.random() * 60) + 41;
+          dice = Math.floor(Math.random() * 60) + 36;
           break;
         case Position.DC:
           dice = Math.floor(Math.random() * 60) + 21;

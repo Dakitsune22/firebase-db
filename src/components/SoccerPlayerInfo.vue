@@ -46,6 +46,16 @@ const percentPlayedGames = ref<number>(
 // R4 -> 7 y 8
 // R5 -> 9 y 10
 // R6 -> 11 y 12
+
+const percentCleanSheets = ref<number>(
+  ((props.roundGoalsConceded !== undefined && props.roundGoalsConceded <= 0
+    ? props.player.seasonStats.cleanSheets + 1
+    : props.player.seasonStats.cleanSheets) /
+    (props.player.seasonStats.playedGames + 1)) *
+    100
+);
+// console.log(percentCleanSheets.value, '%');
+
 // console.log('Played games:', props.player.seasonStats.playedGames);
 // console.log('Round:', props.roundNumber);
 // console.log('Match Id:', props.matchId);
@@ -216,6 +226,38 @@ const percentPlayedGames = ref<number>(
             }}
             p.p.<span class="text-primary">)</span></span
           >
+        </div>
+        <div
+          v-if="player.position === Position.POR"
+          class="main-container-section3"
+        >
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Porterías a cero:</span>
+          <div class="main-container-section3-goals">
+            {{
+              roundGoalsConceded !== undefined && roundGoalsConceded <= 0
+                ? player.seasonStats.cleanSheets + 1
+                : player.seasonStats.cleanSheets
+            }}
+          </div>
+          <q-knob
+            show-value
+            font-size="10px"
+            v-model="percentCleanSheets"
+            size="45px"
+            :thickness="0.25"
+            color="primary"
+            track-color="grey-4"
+            center-color="deep-purple-5"
+            class="text-white"
+            readonly
+          >
+            {{ Math.round(percentCleanSheets) }}%
+          </q-knob>
         </div>
         <div class="main-container-section3">
           <q-icon

@@ -152,6 +152,7 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
       ...p,
       seasonStats: {
         playedGames: 0,
+        cleanSheets: 0,
         goalsConceded: 0,
         assists: 0,
         goals: 0,
@@ -228,6 +229,7 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
   });
   // Incrementamos en uno los partidos jugados del jugador en BD e
   // Incrementamos al portero titular los goles encajados:
+  // Incrementamos al portero titular los partidos a cero en caso de no haber encajado goles:
   t.startingLineup.forEach((slPlayer) => {
     const pIdx = ut.players.findIndex(
       (p) => p.shirtNumber === slPlayer.shirtNumber
@@ -240,6 +242,10 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
         ut.players[pIdx].position === Position.POR
           ? ut.players[pIdx].seasonStats.goalsConceded + t.newGoalsConceded
           : ut.players[pIdx].seasonStats.goalsConceded,
+      cleanSheets:
+        ut.players[pIdx].position === Position.POR && t.newGoalsConceded === 0
+          ? ut.players[pIdx].seasonStats.cleanSheets + 1
+          : ut.players[pIdx].seasonStats.cleanSheets,
     };
   });
 

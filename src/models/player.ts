@@ -12,8 +12,9 @@ export interface Player {
   teamId: number;
 }
 
-interface SeasonStats {
+export interface SeasonStats {
   playedGames: number;
+  cleanSheets: number;
   goalsConceded: number;
   goals: number;
   assists: number;

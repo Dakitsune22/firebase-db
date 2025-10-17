@@ -520,6 +520,7 @@ const onAddPlayer = (): void => {
     nationality: getNewPlayerFlag(),
     seasonStats: {
       playedGames: 0,
+      cleanSheets: 0,
       goalsConceded: 0,
       assists: 0,
       goals: 0,
