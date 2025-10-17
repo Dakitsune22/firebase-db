@@ -71,6 +71,12 @@ const showPlayerInfo = ref<boolean>(false);
         <q-item-section class="section-goals">{{
           props.player.seasonStats.goals
         }}</q-item-section>
+        <q-item-section class="section-assists">
+          <q-icon name="hdr_auto" size="18px" />
+          <span style="padding-top: 2px; translate: -2px 0px">{{
+            props.player.seasonStats.assists
+          }}</span></q-item-section
+        >
       </q-item>
       <q-dialog v-model="showPlayerInfo" auto-close persistent>
         <soccer-player-info
@@ -100,6 +106,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 .item {
   background-color: lightgrey;
   height: 30px;
+  padding-right: 10px;
   // border: 1px solid darkgrey;
   //   width: 400px;
 
@@ -121,7 +128,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     width: 20px;
   }
   &-position {
-    align-items: start;
+    align-items: center;
     width: 25px;
     padding-left: 5px;
     font-size: 9px;
@@ -147,11 +154,23 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   &-goals {
     align-items: center;
     margin-top: 2px;
-    width: 50px;
+    margin-left: 5px;
+    margin-right: 2px;
+    width: 45px;
     height: 24px;
     background-color: $darkGrey;
     color: whitesmoke;
     font-size: 18px;
+    font-weight: 500;
+  }
+  &-assists {
+    // align-items: center;
+    margin-top: 2px;
+    width: 60px;
+    height: 24px;
+    // background-color: aqua;
+    color: $darkGrey;
+    font-size: 16px;
     font-weight: 500;
   }
 }
