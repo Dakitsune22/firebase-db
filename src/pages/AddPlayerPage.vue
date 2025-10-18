@@ -23,6 +23,8 @@ const player = ref<Player>({
   overall: 75,
   seasonStats: {
     playedGames: 0,
+    playedGamesStart: 0,
+    playedGamesSub: 0,
     cleanSheets: 0,
     mvps: 0,
     goalsConceded: 0,
@@ -66,6 +68,8 @@ const onReset = () => {
     overall: 75,
     seasonStats: {
       playedGames: 0,
+      playedGamesStart: 0,
+      playedGamesSub: 0,
       cleanSheets: 0,
       mvps: 0,
       goalsConceded: 0,

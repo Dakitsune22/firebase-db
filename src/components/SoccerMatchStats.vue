@@ -291,6 +291,11 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
             matchRef.assistants1.filter((a) => a === playerInfo?.shirtNumber)
               .length
           "
+          :round-substitute="
+            matchRef.substitutes1.findIndex(
+              (sp) => sp.shirtNumber === playerInfo?.shirtNumber
+            ) >= 0
+          "
           :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
           :match-id="matchRef.id"
         />
@@ -526,6 +531,11 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
           :round-assists="
             matchRef.assistants2.filter((a) => a === playerInfo?.shirtNumber)
               .length
+          "
+          :round-substitute="
+            matchRef.substitutes2.findIndex(
+              (sp) => sp.shirtNumber === playerInfo?.shirtNumber
+            ) >= 0
           "
           :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
           :match-id="matchRef.id"

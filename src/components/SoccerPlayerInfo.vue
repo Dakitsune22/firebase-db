@@ -13,6 +13,7 @@ interface Props {
   roundGoalsConceded?: number;
   roundAssists?: number;
   roundMvp?: boolean;
+  roundSubstitute?: boolean;
   urlTeamCrest?: string;
   matchId?: number;
 }
@@ -173,6 +174,40 @@ const percentCleanSheets = ref<number>(
             {{ Math.round(percentPlayedGames) }}%
           </q-knob>
         </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span"
+            >Partidos como titular:</span
+          >
+          <div class="main-container-section3-goals">
+            {{
+              roundSubstitute
+                ? player.seasonStats.playedGamesStart
+                : player.seasonStats.playedGamesStart + 1
+            }}
+          </div>
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span"
+            >Partidos como suplente:</span
+          >
+          <div class="main-container-section3-goals">
+            {{
+              roundSubstitute
+                ? player.seasonStats.playedGamesSub + 1
+                : player.seasonStats.playedGamesSub
+            }}
+          </div>
+        </div>
         <div
           v-if="player.position !== Position.POR"
           class="main-container-section3"
@@ -317,6 +352,32 @@ const percentCleanSheets = ref<number>(
           <span class="main-container-section3-span">Partidos disputados:</span>
           <div class="main-container-section3-goals">
             {{ player.seasonStats.playedGames }}
+          </div>
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span"
+            >Partidos como titular:</span
+          >
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.playedGamesStart }}
+          </div>
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span"
+            >Partidos como suplente:</span
+          >
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.playedGamesSub }}
           </div>
         </div>
         <div class="main-container-section3">

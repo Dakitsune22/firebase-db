@@ -154,6 +154,8 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
       ...p,
       seasonStats: {
         playedGames: 0,
+        playedGamesStart: 0,
+        playedGamesSub: 0,
         cleanSheets: 0,
         mvps: 0,
         goalsConceded: 0,
@@ -251,6 +253,7 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
     ut.players[pIdx].seasonStats = {
       ...ut.players[pIdx].seasonStats,
       playedGames: ut.players[pIdx].seasonStats.playedGames + 1,
+      playedGamesStart: ut.players[pIdx].seasonStats.playedGamesStart + 1,
       goalsConceded:
         ut.players[pIdx].position === Position.POR
           ? ut.players[pIdx].seasonStats.goalsConceded + t.newGoalsConceded
@@ -271,6 +274,7 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
     ut.players[pIdx].seasonStats = {
       ...ut.players[pIdx].seasonStats,
       playedGames: ut.players[pIdx].seasonStats.playedGames + 1,
+      playedGamesSub: ut.players[pIdx].seasonStats.playedGamesSub + 1,
     };
   });
 

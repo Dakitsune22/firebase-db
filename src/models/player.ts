@@ -14,6 +14,8 @@ export interface Player {
 
 export interface SeasonStats {
   playedGames: number;
+  playedGamesStart: number;
+  playedGamesSub: number;
   cleanSheets: number;
   mvps: number;
   goalsConceded: number;
