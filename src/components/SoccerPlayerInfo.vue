@@ -12,6 +12,7 @@ interface Props {
   roundGoals?: number;
   roundGoalsConceded?: number;
   roundAssists?: number;
+  roundMvp?: boolean;
   urlTeamCrest?: string;
   matchId?: number;
 }
@@ -284,6 +285,19 @@ const percentCleanSheets = ref<number>(
             p.p.<span class="text-primary">)</span></span
           >
         </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Veces MVP:</span>
+          <div class="main-container-section3-goals">
+            {{
+              roundMvp ? player.seasonStats.mvps + 1 : player.seasonStats.mvps
+            }}
+          </div>
+        </div>
       </div>
       <div v-else>
         <div class="main-container-section3 q-pb-xs">
@@ -348,6 +362,17 @@ const percentCleanSheets = ref<number>(
             }}
             p.p.<span class="text-primary">)</span></span
           >
+        </div>
+        <div class="main-container-section3">
+          <q-icon
+            name="subdirectory_arrow_right"
+            color="primary"
+            style="translate: 0px -1px"
+          />
+          <span class="main-container-section3-span">Veces MVP:</span>
+          <div class="main-container-section3-goals">
+            {{ player.seasonStats.mvps }}
+          </div>
         </div>
         <!-- <div v-else class="main-container-section3">
           <q-icon

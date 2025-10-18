@@ -23,6 +23,7 @@ const matchRef = ref<Match>({
   scorers2: props.scorers2,
   assistants1: props.assistants1,
   assistants2: props.assistants2,
+  mvp: props.mvp,
 });
 
 const ratingTeam1 = ref<number>(
@@ -35,6 +36,7 @@ const ratingTeam2 = ref<number>(
 const showPlayerInfo = ref<boolean>(false);
 const playerInfo = ref<Player>();
 const isPlayerLocale = ref<boolean>(false);
+const showMvpIcon = ref<boolean>(false);
 
 const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
   showPlayerInfo.value = true;
@@ -43,6 +45,8 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
 };
 // console.log('SoccerMatchStats s1:', matchRef.value.scorers1);
 // console.log('SoccerMatchStats a1:', matchRef.value.assistants1);
+
+setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
 </script>
 
 <template>
@@ -81,7 +85,43 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
-            {{ p.position }}
+            <!-- <q-icon
+              v-if="
+                matchRef.mvp.playerId === p.shirtNumber &&
+                matchRef.mvp.playerTeamId === matchRef.team1 &&
+                showMvpIcon
+              "
+              name="star_rate"
+              color="amber-12"
+              size="12px"
+            >
+            </q-icon> -->
+            <!-- <Transition name="mvp">
+              <div
+                v-if="
+                  matchRef.mvp.playerId === p.shirtNumber &&
+                  matchRef.mvp.playerTeamId === matchRef.team1 &&
+                  showMvpIcon
+                "
+              >
+                <span style="font-size: 11px">⭐</span>
+              </div>
+              <div v-else>
+                {{ p.position }}
+              </div>
+            </Transition> -->
+            <div
+              v-if="
+                matchRef.mvp.playerId === p.shirtNumber &&
+                matchRef.mvp.playerTeamId === matchRef.team1 &&
+                showMvpIcon
+              "
+            >
+              <span style="font-size: 11px">⭐</span>
+            </div>
+            <div v-else>
+              {{ p.position }}
+            </div>
           </div>
           <div
             class="matchstats-container-player-name"
@@ -222,6 +262,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             matchRef.assistants1.filter((a) => a === playerInfo?.shirtNumber)
               .length
           "
+          :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
           :match-id="matchRef.id"
         />
       </q-dialog>
@@ -260,7 +301,18 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
-            {{ p.position }}
+            <div
+              v-if="
+                matchRef.mvp.playerId === p.shirtNumber &&
+                matchRef.mvp.playerTeamId === matchRef.team2 &&
+                showMvpIcon
+              "
+            >
+              <span style="font-size: 11px">⭐</span>
+            </div>
+            <div v-else>
+              {{ p.position }}
+            </div>
           </div>
           <div
             class="matchstats-container-player-name"
@@ -412,6 +464,7 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
             matchRef.assistants2.filter((a) => a === playerInfo?.shirtNumber)
               .length
           "
+          :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
           :match-id="matchRef.id"
         />
       </q-dialog>
@@ -480,6 +533,7 @@ $midGrey: rgb(150, 150, 150);
     }
     &-position {
       width: 11%;
+      max-height: 16px;
       font-size: 8px;
       text-align: center;
       color: $darkGrey;
@@ -518,4 +572,22 @@ $midGrey: rgb(150, 150, 150);
     }
   }
 }
+/* Transition */
+.mvp-enter-active,
+.mvp-leave-active {
+  // transform: translateX(-50px) translateY(-10px);
+  transition: all 0.25s ease-in;
+}
+.mvp-enter-from {
+  opacity: 0;
+  // transform: translateY(15px);
+  transform: translateY(8px);
+}
+.mvp-leave-to {
+  opacity: 0;
+  transform: translateY(-18px);
+}
+// .mvp-move {
+//   transition: all 1s ease;
+// }
 </style>

@@ -1,4 +1,4 @@
-import { Player } from './player';
+import { Mvp, Player } from './player';
 
 export interface SeasonRound {
   round: number;
@@ -18,4 +18,5 @@ export interface Match {
   scorers2: number[];
   assistants1: number[];
   assistants2: number[];
+  mvp: Mvp;
 }

@@ -11,6 +11,7 @@ import {
   getScorers,
   getAssistants,
   getMatchResult,
+  getMVP,
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
 import usePlayers from 'src/composables/usePlayers';
@@ -37,6 +38,7 @@ const matchRef = ref<Match>({
   scorers2: props.scorers2,
   assistants1: props.assistants1,
   assistants2: props.assistants2,
+  mvp: props.mvp,
 });
 
 // console.log('SoccerMatch s1:', matchRef.value.scorers1);
@@ -112,7 +114,46 @@ const onPlayMatch = async () => {
     matchRef.value.startingLineup2,
     matchRef.value.scorers2
   );
+  // Obtener MVP:
+  matchRef.value.mvp = getMVP(
+    matchRef.value.startingLineup1.concat(matchRef.value.startingLineup2),
+    matchRef.value.team1,
+    matchRef.value.team2,
+    matchRef.value.score1,
+    matchRef.value.score2,
+    matchRef.value.scorers1,
+    matchRef.value.scorers2,
+    matchRef.value.assistants1,
+    matchRef.value.assistants2
+  );
 
+  // if (matchRef.value.score1 > matchRef.value.score2) {
+  //   matchRef.value.mvp = getMVP(
+  //     matchRef.value.startingLineup1,
+  //     matchRef.value.score1,
+  //     matchRef.value.score2,
+  //     matchRef.value.scorers1,
+  //     matchRef.value.assistants1
+  //   );
+  // } else if (matchRef.value.score2 > matchRef.value.score1) {
+  //   matchRef.value.mvp = getMVP(
+  //     matchRef.value.startingLineup2,
+  //     matchRef.value.score2,
+  //     matchRef.value.score1,
+  //     matchRef.value.scorers2,
+  //     matchRef.value.assistants2
+  //   );
+  // } else {
+  //   matchRef.value.mvp = getMVP(
+  //     matchRef.value.startingLineup1.concat(matchRef.value.startingLineup2),
+  //     matchRef.value.score1,
+  //     matchRef.value.score2,
+  //     matchRef.value.scorers1,
+  //     matchRef.value.assistants1,
+  //     matchRef.value.scorers2,
+  //     matchRef.value.assistants2
+  //   );
+  // }
   // Actualizar datos de los equipos en store y BBDD.
   roundMatches.value[matchRef.value.id - 1].played = matchRef.value.played;
   roundMatches.value[matchRef.value.id - 1].score1 = matchRef.value.score1;
@@ -127,6 +168,7 @@ const onPlayMatch = async () => {
     matchRef.value.assistants1;
   roundMatches.value[matchRef.value.id - 1].assistants2 =
     matchRef.value.assistants2;
+  roundMatches.value[matchRef.value.id - 1].mvp = matchRef.value.mvp;
 
   mutateRoundPlay.mutate({
     round: getCurrentRound(),
@@ -141,6 +183,7 @@ const onPlayMatch = async () => {
     startingLineup: matchRef.value.startingLineup1,
     scorers: matchRef.value.scorers1,
     assistants: matchRef.value.assistants1,
+    mvp: matchRef.value.mvp,
     team: qt1.data.value ? qt1.data.value : ({} as Team),
   });
 
@@ -153,6 +196,7 @@ const onPlayMatch = async () => {
       startingLineup: matchRef.value.startingLineup2,
       scorers: matchRef.value.scorers2,
       assistants: matchRef.value.assistants2,
+      mvp: matchRef.value.mvp,
       team: qt2.data.value ? qt2.data.value : ({} as Team),
     },
     {
@@ -260,6 +304,7 @@ const onPlayMatch = async () => {
       :assistants2="matchRef.assistants2"
       :team1="matchRef.team1"
       :team2="matchRef.team2"
+      :mvp="matchRef.mvp"
     />
   </div>
 </template>

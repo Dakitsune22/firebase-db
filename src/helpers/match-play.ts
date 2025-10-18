@@ -1,7 +1,7 @@
 import { positionReplacements } from 'src/data/tactics';
 import { Team, Player } from 'src/models';
 import { getResult, type MatchResult } from './match-calc';
-import { Position } from 'src/models/player';
+import { Mvp, Position } from 'src/models/player';
 import { TacticList } from 'src/models/tactic';
 
 export const getStartingLineup = (team: Team): Player[] => {
@@ -244,4 +244,121 @@ const getAssistantByRate = (
   // console.log(players[maxDiceIndex]);
 
   return players[maxDiceIndex];
+};
+
+export const getMVP = (
+  candidates: Player[],
+  idTeam1: number,
+  idTeam2: number,
+  goalsTeam1: number,
+  goalsTeam2: number,
+  scorersTeam1: number[],
+  scorersTeam2: number[],
+  assistantsTeam1: number[],
+  assistantsTeam2: number[]
+): Mvp => {
+  console.log(candidates);
+  const diceResults: number[] = [];
+
+  candidates.forEach((candidate) => {
+    const candidatesTeamGoalsConceded =
+      candidate.teamId === idTeam1 ? goalsTeam2 : goalsTeam1;
+    const candidatesTeamGoalsScored =
+      candidate.teamId === idTeam1 ? goalsTeam1 : goalsTeam2;
+    const candidateGoalsScored =
+      candidate.teamId === idTeam1
+        ? scorersTeam1.filter((scorer) => scorer === candidate.shirtNumber)
+            .length
+        : scorersTeam2.filter((scorer) => scorer === candidate.shirtNumber)
+            .length;
+    const candidateAssists =
+      candidate.teamId === idTeam1
+        ? assistantsTeam1.filter(
+            (assistant) => assistant === candidate.shirtNumber
+          ).length
+        : assistantsTeam2.filter(
+            (assistant) => assistant === candidate.shirtNumber
+          ).length;
+
+    // Puntos iniciales por jugador: Aleatorio de 1 a 10.
+    let mvpScore = Math.floor(Math.random() * 10) + 1;
+    // Suma de puntos adicionales para jugadores del equipo ganador:
+    if (candidatesTeamGoalsScored > candidatesTeamGoalsConceded) {
+      if (candidate.position === Position.MC) {
+        mvpScore += 2 + (Math.floor(Math.random() * 5) + 1);
+      } else {
+        mvpScore += 2;
+      }
+    }
+    // Suma o resta de puntos para portero y posiciones defensivas por goles encajados:
+    if (candidatesTeamGoalsConceded === 0) {
+      if (candidate.position === Position.POR) {
+        mvpScore += 10 + (Math.floor(Math.random() * 5) + 1);
+      } else if (
+        candidate.position === Position.DF ||
+        candidate.position === Position.LD ||
+        candidate.position === Position.LI ||
+        candidate.position === Position.MCD
+      ) {
+        mvpScore += 10 + (Math.floor(Math.random() * 3) + 1);
+      }
+    } else if (candidatesTeamGoalsConceded === 1) {
+      if (candidate.position === Position.POR) {
+        mvpScore += 5 + (Math.floor(Math.random() * 2) + 1);
+      } else if (
+        candidate.position === Position.DF ||
+        candidate.position === Position.LD ||
+        candidate.position === Position.LI ||
+        candidate.position === Position.MCD
+      ) {
+        mvpScore += 5 + (Math.floor(Math.random() * 4) + 1);
+      }
+    } else if (candidatesTeamGoalsConceded > 3) {
+      if (candidate.position === Position.POR) {
+        mvpScore -= 5 + (Math.floor(Math.random() * 3) + 1);
+      } else if (
+        candidate.position === Position.DF ||
+        candidate.position === Position.LD ||
+        candidate.position === Position.LI ||
+        candidate.position === Position.MCD
+      ) {
+        mvpScore -= 5 + (Math.floor(Math.random() * 5) + 1);
+      }
+    }
+    // Suma o resta de puntos por goles marcados:
+    if (candidateGoalsScored > 0) {
+      if (
+        candidatesTeamGoalsScored === 1 &&
+        candidatesTeamGoalsConceded === 0
+      ) {
+        mvpScore += 10 + (Math.floor(Math.random() * 5) + 1);
+      } else {
+        mvpScore += 10 * candidateGoalsScored;
+      }
+    }
+    // Suma o resta de puntos por asistencias dadas:
+    if (candidateAssists > 0) {
+      if (
+        candidatesTeamGoalsScored === 1 &&
+        candidatesTeamGoalsConceded === 0
+      ) {
+        mvpScore += 8 + (Math.floor(Math.random() * 5) + 1);
+      } else {
+        mvpScore += 8 * candidateAssists;
+      }
+    }
+    // Añadimos al array de resultados los puntos del jugador:
+    diceResults.push(mvpScore);
+  });
+  console.log(diceResults);
+
+  // Comprobamos el jugador que sumó más puntos y nos quedamos con su índice:
+  const maxDice = Math.max(...diceResults);
+  const maxDiceIndex = diceResults.findIndex((d) => d === maxDice);
+
+  const mvp: Mvp = {
+    playerId: candidates[maxDiceIndex].shirtNumber,
+    playerTeamId: candidates[maxDiceIndex].teamId,
+  };
+  return mvp;
 };

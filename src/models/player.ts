@@ -15,10 +15,16 @@ export interface Player {
 export interface SeasonStats {
   playedGames: number;
   cleanSheets: number;
+  mvps: number;
   goalsConceded: number;
   goals: number;
   assists: number;
   injured: number;
+}
+
+export interface Mvp {
+  playerId: number;
+  playerTeamId: number;
 }
 
 export enum Position {

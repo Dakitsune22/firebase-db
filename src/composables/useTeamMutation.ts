@@ -5,7 +5,7 @@ import { useQuasar } from 'quasar';
 import { Leagues, Team, Player } from 'src/models';
 import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
-import { Position } from 'src/models/player';
+import { Mvp, Position } from 'src/models/player';
 
 // let numTeam = 0;
 
@@ -23,6 +23,7 @@ interface teamUpdateStatsData {
   startingLineup: Player[];
   scorers: number[];
   assistants: number[];
+  mvp: Mvp;
   team: Team;
 }
 
@@ -153,6 +154,7 @@ const addTeam = async (league: Leagues, team: Team): Promise<void> => {
       seasonStats: {
         playedGames: 0,
         cleanSheets: 0,
+        mvps: 0,
         goalsConceded: 0,
         assists: 0,
         goals: 0,
@@ -227,6 +229,16 @@ const updateTeamStats = async (t: teamUpdateStatsData): Promise<void> => {
       assists: ut.players[pIdx].seasonStats.assists + 1,
     };
   });
+  // Actualizamos MVPs de jugador en BD:
+  const pIdxMvp = ut.players.findIndex(
+    (p) => p.teamId === t.mvp.playerTeamId && p.shirtNumber === t.mvp.playerId
+  );
+  if (pIdxMvp >= 0) {
+    ut.players[pIdxMvp].seasonStats = {
+      ...ut.players[pIdxMvp].seasonStats,
+      mvps: ut.players[pIdxMvp].seasonStats.mvps + 1,
+    };
+  }
   // Incrementamos en uno los partidos jugados del jugador en BD e
   // Incrementamos al portero titular los goles encajados:
   // Incrementamos al portero titular los partidos a cero en caso de no haber encajado goles:
@@ -365,6 +377,7 @@ const useTeamMutation = () => {
       startingLineup,
       scorers,
       assistants,
+      mvp,
       team,
     }: teamUpdateStatsData) =>
       updateTeamStats({
@@ -375,6 +388,7 @@ const useTeamMutation = () => {
         startingLineup,
         scorers,
         assistants,
+        mvp,
         team,
       }),
     onSuccess: () => {

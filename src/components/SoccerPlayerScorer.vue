@@ -73,7 +73,7 @@ const showPlayerInfo = ref<boolean>(false);
         }}</q-item-section>
         <q-item-section class="section-assists">
           <q-icon name="hdr_auto" size="18px" />
-          <span style="padding-top: 2px; translate: -2px 0px">{{
+          <span style="translate: -2px 0px">{{
             props.player.seasonStats.assists
           }}</span></q-item-section
         >

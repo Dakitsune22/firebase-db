@@ -521,6 +521,7 @@ const onAddPlayer = (): void => {
     seasonStats: {
       playedGames: 0,
       cleanSheets: 0,
+      mvps: 0,
       goalsConceded: 0,
       assists: 0,
       goals: 0,
