@@ -94,6 +94,7 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               name="star"
               color="primary"
               size="14px"
+              style="translate: -2px"
             >
             </q-icon>
             <!-- <Transition name="mvp">
@@ -310,6 +311,7 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               name="star"
               color="primary"
               size="14px"
+              style="translate: -2px"
             >
             </q-icon>
             <!-- <div
