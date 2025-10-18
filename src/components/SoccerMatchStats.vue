@@ -85,17 +85,17 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
-            <!-- <q-icon
+            <q-icon
               v-if="
                 matchRef.mvp.playerId === p.shirtNumber &&
                 matchRef.mvp.playerTeamId === matchRef.team1 &&
                 showMvpIcon
               "
-              name="star_rate"
-              color="amber-12"
-              size="12px"
+              name="star"
+              color="primary"
+              size="14px"
             >
-            </q-icon> -->
+            </q-icon>
             <!-- <Transition name="mvp">
               <div
                 v-if="
@@ -110,7 +110,7 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
                 {{ p.position }}
               </div>
             </Transition> -->
-            <div
+            <!-- <div
               v-if="
                 matchRef.mvp.playerId === p.shirtNumber &&
                 matchRef.mvp.playerTeamId === matchRef.team1 &&
@@ -118,7 +118,7 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               "
             >
               <span style="font-size: 11px">⭐</span>
-            </div>
+            </div> -->
             <div v-else>
               {{ p.position }}
             </div>
@@ -301,7 +301,18 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
-            <div
+            <q-icon
+              v-if="
+                matchRef.mvp.playerId === p.shirtNumber &&
+                matchRef.mvp.playerTeamId === matchRef.team2 &&
+                showMvpIcon
+              "
+              name="star"
+              color="primary"
+              size="14px"
+            >
+            </q-icon>
+            <!-- <div
               v-if="
                 matchRef.mvp.playerId === p.shirtNumber &&
                 matchRef.mvp.playerTeamId === matchRef.team2 &&
@@ -309,7 +320,7 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               "
             >
               <span style="font-size: 11px">⭐</span>
-            </div>
+            </div> -->
             <div v-else>
               {{ p.position }}
             </div>
