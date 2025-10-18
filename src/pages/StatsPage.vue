@@ -340,7 +340,10 @@ onMounted(async () => {
       <!-- <div>y: {{ y }}</div> -->
       <!-- <div>{{ selectedFilters }}</div> -->
       <!-- <TransitionGroup name="teamcards"> -->
-      <div :class="showFilters ? '' : 'q-mt-xl'">
+      <div
+        v-if="filteredTeams.length > 0"
+        :class="showFilters ? '' : 'q-mt-xl'"
+      >
         <q-card
           v-for="(teamExt, rank) in filteredTeams"
           :key="rank"
@@ -520,6 +523,10 @@ onMounted(async () => {
           </q-slide-transition>
         </q-card>
       </div>
+      <div class="stats-empty" v-else>
+        <q-icon name="info" size="72px" color="primary" />
+        <span style="margin-top: 10px">Selecciona al menos un filtro</span>
+      </div>
       <!-- </TransitionGroup> -->
       <!-- {{ allTeams }} -->
     </div>
@@ -545,6 +552,20 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
     @include response('mobile') {
       display: block;
+    }
+  }
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    // padding-top: 20px;
+
+    @include response('mobile') {
+      padding-top: 70px;
     }
   }
 }

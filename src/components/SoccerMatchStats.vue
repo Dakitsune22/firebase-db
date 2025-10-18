@@ -81,7 +81,16 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
             fit="fill"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
-          <div class="matchstats-container-player-shirt">
+          <div
+            class="matchstats-container-player-shirt"
+            :class="
+              matchRef.mvp.playerId === p.shirtNumber &&
+              matchRef.mvp.playerTeamId === matchRef.team1 &&
+              showMvpIcon
+                ? 'text-primary'
+                : ''
+            "
+          >
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
@@ -126,6 +135,13 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
           </div>
           <div
             class="matchstats-container-player-name"
+            :class="
+              matchRef.mvp.playerId === p.shirtNumber &&
+              matchRef.mvp.playerTeamId === matchRef.team1 &&
+              showMvpIcon
+                ? 'text-primary'
+                : ''
+            "
             @click="onShowPlayerInfo(p, true)"
           >
             {{
@@ -298,7 +314,16 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
             fit="fill"
             style="border: 1px solid rgba(0, 0, 0, 65%)"
           />
-          <div class="matchstats-container-player-shirt">
+          <div
+            class="matchstats-container-player-shirt"
+            :class="
+              matchRef.mvp.playerId === p.shirtNumber &&
+              matchRef.mvp.playerTeamId === matchRef.team2 &&
+              showMvpIcon
+                ? 'text-primary'
+                : ''
+            "
+          >
             {{ p.shirtNumber }}
           </div>
           <div class="matchstats-container-player-position">
@@ -329,6 +354,13 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
           </div>
           <div
             class="matchstats-container-player-name"
+            :class="
+              matchRef.mvp.playerId === p.shirtNumber &&
+              matchRef.mvp.playerTeamId === matchRef.team2 &&
+              showMvpIcon
+                ? 'text-primary'
+                : ''
+            "
             @click="onShowPlayerInfo(p, false)"
           >
             <!-- {{ p.nickname ? p.nickname : p.name.charAt(0) + '. ' + p.surname }} -->

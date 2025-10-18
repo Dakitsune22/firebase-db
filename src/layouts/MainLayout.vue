@@ -47,6 +47,9 @@ const setCurrentTitle = (newPath: string): void => {
     case '/stats':
       currentTitle.value = 'Ranking: Equipos';
       break;
+    case '/players':
+      currentTitle.value = 'Ranking: Jugadores';
+      break;
     case '/mycup':
       currentTitle.value = 'Gestión: My~Cup';
       break;

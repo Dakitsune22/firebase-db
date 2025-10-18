@@ -450,7 +450,10 @@ onMounted(async () => {
           {{ heightFilter }} -->
         </div>
       </Transition>
-      <div :class="showFilters ? '' : 'q-mt-xl'">
+      <div
+        v-if="filteredPlayers.length > 0"
+        :class="showFilters ? '' : 'q-mt-xl'"
+      >
         <q-card
           v-for="(item, rank) in filteredPlayers"
           :key="rank"
@@ -554,6 +557,12 @@ onMounted(async () => {
           </q-card-section>
         </q-card>
       </div>
+      <div class="stats-empty" v-else>
+        <q-icon name="info" size="72px" color="primary" />
+        <span style="margin-top: 10px"
+          >No se han encontrado jugadores para los filtros seleccionados</span
+        >
+      </div>
     </div>
     <div class="loading-container" v-else>
       <q-spinner color="primary" size="48px" />
@@ -577,6 +586,24 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 
     @include response('mobile') {
       display: block;
+    }
+  }
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    max-width: 370px;
+    // background-color: aqua;
+
+    @include response('mobile') {
+      padding-top: 30px;
+      padding-bottom: 50px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
   }
 }
