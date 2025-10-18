@@ -27,7 +27,7 @@ export const getStartingLineup = (team: Team): Player[] => {
     // y necesita "descanso", añadimos alternativas a la lista:
     if (
       filteredPlayers.length === 0 ||
-      (filteredPlayers.length === 1 && Math.random() * 10 >= 7) // 0 a 6 no descansa, 7 a 9 descansa
+      (filteredPlayers.length === 1 && Math.random() * 10 >= 6) // 0 a 5 no descansa, 6 a 9 descansa
     ) {
       const posRep = positionReplacements.find(
         (pr) => pr.position === position
@@ -67,30 +67,57 @@ export const getStartingLineup = (team: Team): Player[] => {
       const diceResults: number[] = [];
       let bonus = 0;
 
-      for (let i = 0; i < filteredPlayers.length; i++) {
-        // console.log({ bonus });
-        diceResults.push(
-          Math.floor(Math.random() * (100 - filteredPlayers[i].overall) - bonus)
-        );
-        if (filteredPlayers[i].position === Position.POR) {
-          bonus += 5;
-        } else {
-          bonus += 1;
+      // for (let i = 0; i < filteredPlayers.length; i++) {
+      //   // console.log({ bonus });
+      //   diceResults.push(
+      //     Math.floor(Math.random() * (100 - filteredPlayers[i].overall) - bonus)
+      //   );
+      //   if (filteredPlayers[i].position === Position.POR) {
+      //     bonus += 5;
+      //   } else {
+      //     bonus += 1;
+      //   }
+      //   // console.log(
+      //   //   filteredPlayers[i].name,
+      //   //   filteredPlayers[i].surname,
+      //   //   '-',
+      //   //   diceResults[i]
+      //   // );
+      // }
+      //       // Comprobamos el jugador que sacó el resultado más bajo y lo añadimos como titular:
+      // const minDice = Math.min(...diceResults);
+      // // console.log({ minDice });
+      // const minDiceIndex = diceResults.findIndex((d) => d === minDice);
+      // // console.log({ minDiceIndex });
+      // // console.log(filteredPlayers[minDiceIndex]);
+      // startingLineup.push(filteredPlayers[minDiceIndex]);
+
+      filteredPlayers.forEach((player, idx) => {
+        // Definición de bonuses (siempre que en la lista haya más de un jugador):
+        if (filteredPlayers.length > 1) {
+          // - Jugador con más valor de la lista:
+          if (idx === 0) {
+            if (player.overall > filteredPlayers[idx + 1].overall) {
+              if (player.position === Position.POR) {
+                bonus += 5;
+              } else {
+                bonus += 2;
+              }
+            }
+          }
         }
-        // console.log(
-        //   filteredPlayers[i].name,
-        //   filteredPlayers[i].surname,
-        //   '-',
-        //   diceResults[i]
-        // );
-      }
-      // Comprobamos el jugador que saco el dado más alto y lo añadimos como titular:
-      const minDice = Math.min(...diceResults);
-      // console.log({ minDice });
-      const minDiceIndex = diceResults.findIndex((d) => d === minDice);
-      // console.log({ minDiceIndex });
-      // console.log(filteredPlayers[minDiceIndex]);
-      startingLineup.push(filteredPlayers[minDiceIndex]);
+        diceResults.push(
+          player.overall + bonus + Math.floor(Math.random() * 20)
+        );
+      });
+
+      // Comprobamos el jugador que sacó el resultado más alto y lo añadimos como titular:
+      const maxDice = Math.max(...diceResults);
+      // console.log({ maxDice });
+      const maxDiceIndex = diceResults.findIndex((d) => d === maxDice);
+      // console.log({ maxDiceIndex });
+      // console.log(filteredPlayers[maxDiceIndex]);
+      startingLineup.push(filteredPlayers[maxDiceIndex]);
     }
   });
 
@@ -288,6 +315,12 @@ export const getMVP = (
         mvpScore += 2 + (Math.floor(Math.random() * 5) + 1);
       } else {
         mvpScore += 2;
+      }
+    }
+    // Suma de puntos adicionales para jugadores en caso de empate:
+    if (candidatesTeamGoalsScored > candidatesTeamGoalsConceded) {
+      if (candidate.position === Position.MC) {
+        mvpScore += 1 + (Math.floor(Math.random() * 3) + 1);
       }
     }
     // Suma o resta de puntos para portero y posiciones defensivas por goles encajados:
