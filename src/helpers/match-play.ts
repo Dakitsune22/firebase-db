@@ -127,6 +127,29 @@ export const getStartingLineup = (team: Team): Player[] => {
   return startingLineup;
 };
 
+export const getSubstitutes = (
+  team: Team,
+  startingLineup: Player[]
+): Player[] => {
+  // Escogemos como candidatos aquellos jugadores que no han sido titulares y que no son porteros:
+  const candidates = team.players.filter(
+    (player) =>
+      player.position !== Position.POR &&
+      startingLineup.findIndex(
+        (startingPlayer) => player.shirtNumber === startingPlayer.shirtNumber
+      ) < 0
+  );
+  // Barajamos la lista de candidatos:
+  candidates.sort(() => Math.random() - 0.5); // shuffle
+  // candidates.forEach((c) =>
+  //   console.log(c.name + ' ' + c.surname + ' ' + c.nickname)
+  // );
+  // Establecemos el número de sustituciones, entre 2 y 5:
+  const numSubs = Math.floor(Math.random() * 4) + 2;
+  // Retornamos los primeros X jugadores de entre los candidatos:
+  return candidates.slice(0, numSubs);
+};
+
 export const getMatchResult = (
   homeTeamOverall: number,
   awayTeamOverall: number

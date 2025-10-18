@@ -12,6 +12,7 @@ import {
   getAssistants,
   getMatchResult,
   getMVP,
+  getSubstitutes,
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
 import usePlayers from 'src/composables/usePlayers';
@@ -34,6 +35,8 @@ const matchRef = ref<Match>({
   score2: props.score2,
   startingLineup1: props.startingLineup1,
   startingLineup2: props.startingLineup2,
+  substitutes1: props.substitutes1,
+  substitutes2: props.substitutes2,
   scorers1: props.scorers1,
   scorers2: props.scorers2,
   assistants1: props.assistants1,
@@ -86,6 +89,20 @@ const onPlayMatch = async () => {
   // Obtener onces iniciales:
   matchRef.value.startingLineup1 = getStartingLineup(qt1.data.value as Team);
   matchRef.value.startingLineup2 = getStartingLineup(qt2.data.value as Team);
+
+  // Obtener sustituciones:
+  matchRef.value.substitutes1 = getSubstitutes(
+    qt1.data.value as Team,
+    matchRef.value.startingLineup1
+  );
+  matchRef.value.substitutes2 = getSubstitutes(
+    qt2.data.value as Team,
+    matchRef.value.startingLineup2
+  );
+  // console.log('Substitutes:');
+  // substitutes.forEach((c) =>
+  //   console.log(c.name + ' ' + c.surname + ' ' + c.nickname)
+  // );
 
   // Calcular resultado:
   matchRef.value.played = true;
@@ -162,6 +179,10 @@ const onPlayMatch = async () => {
     matchRef.value.startingLineup1;
   roundMatches.value[matchRef.value.id - 1].startingLineup2 =
     matchRef.value.startingLineup2;
+  roundMatches.value[matchRef.value.id - 1].substitutes1 =
+    matchRef.value.substitutes1;
+  roundMatches.value[matchRef.value.id - 1].substitutes2 =
+    matchRef.value.substitutes2;
   roundMatches.value[matchRef.value.id - 1].scorers1 = matchRef.value.scorers1;
   roundMatches.value[matchRef.value.id - 1].scorers2 = matchRef.value.scorers2;
   roundMatches.value[matchRef.value.id - 1].assistants1 =
@@ -181,6 +202,7 @@ const onPlayMatch = async () => {
     newGoalsScored: matchRef.value.score1,
     newGoalsConceded: matchRef.value.score2,
     startingLineup: matchRef.value.startingLineup1,
+    substitutes: matchRef.value.substitutes1,
     scorers: matchRef.value.scorers1,
     assistants: matchRef.value.assistants1,
     mvp: matchRef.value.mvp,
@@ -194,6 +216,7 @@ const onPlayMatch = async () => {
       newGoalsScored: matchRef.value.score2,
       newGoalsConceded: matchRef.value.score1,
       startingLineup: matchRef.value.startingLineup2,
+      substitutes: matchRef.value.substitutes2,
       scorers: matchRef.value.scorers2,
       assistants: matchRef.value.assistants2,
       mvp: matchRef.value.mvp,
@@ -298,6 +321,8 @@ const onPlayMatch = async () => {
       :score2="matchRef.score2"
       :startingLineup1="matchRef.startingLineup1"
       :startingLineup2="matchRef.startingLineup2"
+      :substitutes1="matchRef.substitutes1"
+      :substitutes2="matchRef.substitutes2"
       :scorers1="matchRef.scorers1"
       :scorers2="matchRef.scorers2"
       :assistants1="matchRef.assistants1"

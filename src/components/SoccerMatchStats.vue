@@ -19,6 +19,8 @@ const matchRef = ref<Match>({
   score2: props.score2,
   startingLineup1: props.startingLineup1,
   startingLineup2: props.startingLineup2,
+  substitutes1: props.substitutes1,
+  substitutes2: props.substitutes2,
   scorers1: props.scorers1,
   scorers2: props.scorers2,
   assistants1: props.assistants1,
@@ -43,6 +45,9 @@ const onShowPlayerInfo = (selectedPlayer: Player, isLocale: boolean): void => {
   playerInfo.value = selectedPlayer;
   isPlayerLocale.value = isLocale;
 };
+
+const fullLineup1 = props.startingLineup1.concat(props.substitutes1);
+const fullLineup2 = props.startingLineup2.concat(props.substitutes2);
 // console.log('SoccerMatchStats s1:', matchRef.value.scorers1);
 // console.log('SoccerMatchStats a1:', matchRef.value.assistants1);
 
@@ -71,7 +76,14 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
           }}
         </div>
       </div>
-      <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber">
+      <!-- <div v-for="p in matchRef.startingLineup1" :key="p.shirtNumber"> -->
+      <div v-for="(p, idx) in fullLineup1" :key="p.shirtNumber">
+        <div
+          v-if="idx === matchRef.startingLineup1.length"
+          class="text-primary q-pt-xs"
+        >
+          Sustituciones:
+        </div>
         <div class="matchstats-container-player">
           <q-img
             :src="`/images/flags/h20/${p.nationality}.png`"
@@ -304,7 +316,13 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
           }}
         </div>
       </div>
-      <div v-for="p in matchRef.startingLineup2" :key="p.shirtNumber">
+      <div v-for="(p, idx) in fullLineup2" :key="p.shirtNumber">
+        <div
+          v-if="idx === matchRef.startingLineup2.length"
+          class="text-primary q-pt-xs"
+        >
+          Sustituciones:
+        </div>
         <div class="matchstats-container-player">
           <q-img
             :src="`/images/flags/h20/${p.nationality}.png`"

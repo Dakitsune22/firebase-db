@@ -220,6 +220,8 @@ const onAdvanceCupRound = async (): Promise<void> => {
         assistants2: [],
         startingLineup1: [],
         startingLineup2: [],
+        substitutes1: [],
+        substitutes2: [],
         mvp: {
           playerId: 0,
           playerTeamId: 0,
@@ -240,6 +242,8 @@ const onAdvanceCupRound = async (): Promise<void> => {
           assistants2: [],
           startingLineup1: [],
           startingLineup2: [],
+          substitutes1: [],
+          substitutes2: [],
           mvp: {
             playerId: 0,
             playerTeamId: 0,
@@ -311,6 +315,8 @@ const restartCup = () => {
         assistants2: [],
         startingLineup1: [],
         startingLineup2: [],
+        substitutes1: [],
+        substitutes2: [],
         mvp: {
           playerId: 0,
           playerTeamId: 0,
@@ -331,6 +337,8 @@ const restartCup = () => {
           assistants2: [],
           startingLineup1: [],
           startingLineup2: [],
+          substitutes1: [],
+          substitutes2: [],
           mvp: {
             playerId: 0,
             playerTeamId: 0,
@@ -730,6 +738,8 @@ const getCupRoundName = (): string => {
             :assistants2="match.assistants2"
             :startingLineup1="match.startingLineup1"
             :startingLineup2="match.startingLineup2"
+            :substitutes1="match.substitutes1"
+            :substitutes2="match.substitutes2"
             :mvp="match.mvp"
           />
         </div>

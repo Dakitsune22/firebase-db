@@ -163,6 +163,8 @@ const restartLeague = async () => {
         assistants2: [],
         startingLineup1: [],
         startingLineup2: [],
+        substitutes1: [],
+        substitutes2: [],
         mvp: {
           playerId: 0,
           playerTeamId: 0,
@@ -586,6 +588,8 @@ const onLastRound = async () => {
             :assistants2="match.assistants2"
             :startingLineup1="match.startingLineup1"
             :startingLineup2="match.startingLineup2"
+            :substitutes1="match.substitutes1"
+            :substitutes2="match.substitutes2"
             :mvp="match.mvp"
           />
         </div>
