@@ -54,7 +54,7 @@ onBeforeUnmount(async () => {
 onMounted(async () => {
   await sleep(500);
   console.log('*** TOTAL ROUNDS (computed):', totalRounds.value);
-  console.log(queryRound.data.value?.matches);
+  // console.log(queryRound.data.value?.matches);
 });
 
 const totalRounds = computed(() => {
