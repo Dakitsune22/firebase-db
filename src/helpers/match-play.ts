@@ -157,25 +157,35 @@ export const getMatchResult = (
   return getResult(homeTeamOverall, awayTeamOverall);
 };
 
-export const getScorers = (goals: number, players: Player[]): number[] => {
+export const getScorers = (
+  goals: number,
+  startingPlayers: Player[],
+  subPlayers?: Player[]
+): number[] => {
   const scorers: number[] = [];
-  // console.log('Players:');
-  // console.log(players);
+  const candidates = subPlayers
+    ? startingPlayers.concat(subPlayers)
+    : startingPlayers;
+  const idxFirstSub = startingPlayers.length;
+  // console.log('startingPlayers:');
+  // console.log(startingPlayers);
   for (let i = 0; i < goals; i++) {
-    // const iPlayer = Math.floor(Math.random() * players.length);
+    // const iPlayer = Math.floor(Math.random() * startingPlayers.length);
     // console.log('Index player:', iPlayer);
-    // scorers.push(players[iPlayer].shirtNumber);
-    scorers.push(getScorerByRate(players).shirtNumber);
+    // scorers.push(startingPlayers[iPlayer].shirtNumber);
+    scorers.push(getScorerByRate(candidates, idxFirstSub).shirtNumber);
   }
   return scorers;
 };
 
-const getScorerByRate = (players: Player[]): Player => {
+const getScorerByRate = (players: Player[], idxFirstSub: number): Player => {
   const diceResults: number[] = [];
   let dice: number;
 
   // Tiramos dado para cada jugador, con diferente probabilidad por demarcación:
-  players.forEach((player) => {
+  players.forEach((player, idx) => {
+    const isSubstitute = idx >= idxFirstSub;
+    // console.log('scorer', { idx }, { isSubstitute });
     switch (player.position) {
       case Position.POR:
         dice = Math.floor(Math.random() * 10) + 1;
@@ -187,15 +197,21 @@ const getScorerByRate = (players: Player[]): Player => {
         dice = Math.floor(Math.random() * 70) + 1;
         break;
       case Position.MC:
-        dice = Math.floor(Math.random() * 60) + 21;
+        dice = isSubstitute
+          ? Math.floor(Math.random() * 60) + 16
+          : Math.floor(Math.random() * 60) + 21;
         break;
       case Position.MCO:
       case Position.ED:
       case Position.EI:
-        dice = Math.floor(Math.random() * 60) + 31;
+        dice = isSubstitute
+          ? Math.floor(Math.random() * 60) + 21
+          : Math.floor(Math.random() * 60) + 31;
         break;
       case Position.DC:
-        dice = Math.floor(Math.random() * 60) + 41;
+        dice = isSubstitute
+          ? Math.floor(Math.random() * 60) + 31
+          : Math.floor(Math.random() * 60) + 41;
         break;
       // default:
       //   break;
@@ -214,26 +230,33 @@ const getScorerByRate = (players: Player[]): Player => {
 };
 
 export const getAssistants = (
-  players: Player[],
-  scorers: number[]
+  scorers: number[],
+  startingPlayers: Player[],
+  subPlayers?: Player[]
 ): number[] => {
   const assistants: number[] = [];
-  // console.log('Players:');
-  // console.log(players);
+  const candidates = subPlayers
+    ? startingPlayers.concat(subPlayers)
+    : startingPlayers;
+  const idxFirstSub = startingPlayers.length;
+  // console.log('startingPlayers:');
+  // console.log(startingPlayers);
   // for (let i = 0; i < scorers.length; i++) {
-  //   // const iPlayer = Math.floor(Math.random() * players.length);
+  //   // const iPlayer = Math.floor(Math.random() * startingPlayers.length);
   //   // console.log('Index player:', iPlayer);
-  //   // scorers.push(players[iPlayer].shirtNumber);
-  //   assistants.push(getAssistantByRate(players, scorers[i]).shirtNumber);
+  //   // scorers.push(startingPlayers[iPlayer].shirtNumber);
+  //   assistants.push(getAssistantByRate(startingPlayers, scorers[i]).shirtNumber);
   // }
   scorers.forEach((scorer) => {
     const dice = Math.floor(Math.random() * 100) + 1;
-    console.log(dice);
+    // console.log({dice});
     // Tiramos dado para ver si el gol tiene asistente
     // (Según estudio, el 65% de los goles provienen de una asistencia)
     if (dice <= 65) {
       // console.log('Gol con asistente');
-      assistants.push(getAssistantByRate(players, scorer).shirtNumber);
+      assistants.push(
+        getAssistantByRate(candidates, idxFirstSub, scorer).shirtNumber
+      );
     }
     // } else {
     //   console.log('Gol sin asistente');
@@ -244,13 +267,16 @@ export const getAssistants = (
 
 const getAssistantByRate = (
   players: Player[],
+  idxFirstSub: number,
   goalScorerShirtNumber: number
 ): Player => {
   const diceResults: number[] = [];
   let dice: number;
 
   // Tiramos dado para cada jugador, con diferente probabilidad por demarcación:
-  players.forEach((player) => {
+  players.forEach((player, idx) => {
+    const isSubstitute = idx >= idxFirstSub;
+    // console.log('Assistant', { idx }, { isSubstitute });
     if (player.shirtNumber === goalScorerShirtNumber) {
       // Si el jugador coincide con el goleador, le asignamos puntuación cero,
       // para que no salga elegido como asistente.
@@ -266,18 +292,26 @@ const getAssistantByRate = (
         case Position.LD:
         case Position.LI:
         case Position.MCD:
-          dice = Math.floor(Math.random() * 60) + 16;
+          dice = isSubstitute
+            ? Math.floor(Math.random() * 60) + 11
+            : Math.floor(Math.random() * 60) + 16;
           break;
         case Position.MC:
-          dice = Math.floor(Math.random() * 60) + 31;
+          dice = isSubstitute
+            ? Math.floor(Math.random() * 60) + 21
+            : Math.floor(Math.random() * 60) + 31;
           break;
         case Position.MCO:
         case Position.ED:
         case Position.EI:
-          dice = Math.floor(Math.random() * 60) + 36;
+          dice = isSubstitute
+            ? Math.floor(Math.random() * 60) + 26
+            : Math.floor(Math.random() * 60) + 36;
           break;
         case Position.DC:
-          dice = Math.floor(Math.random() * 60) + 21;
+          dice = isSubstitute
+            ? Math.floor(Math.random() * 60) + 11
+            : Math.floor(Math.random() * 60) + 21;
           break;
         // default:
         //   break;
@@ -307,7 +341,7 @@ export const getMVP = (
   assistantsTeam1: number[],
   assistantsTeam2: number[]
 ): Mvp => {
-  console.log(candidates);
+  // console.log(candidates);
   const diceResults: number[] = [];
 
   candidates.forEach((candidate) => {
@@ -349,25 +383,25 @@ export const getMVP = (
     // Suma o resta de puntos para portero y posiciones defensivas por goles encajados:
     if (candidatesTeamGoalsConceded === 0) {
       if (candidate.position === Position.POR) {
-        mvpScore += 10 + (Math.floor(Math.random() * 5) + 1);
+        mvpScore += 8 + (Math.floor(Math.random() * 5) + 1);
       } else if (
         candidate.position === Position.DF ||
         candidate.position === Position.LD ||
         candidate.position === Position.LI ||
         candidate.position === Position.MCD
       ) {
-        mvpScore += 10 + (Math.floor(Math.random() * 3) + 1);
+        mvpScore += 8 + (Math.floor(Math.random() * 3) + 1);
       }
     } else if (candidatesTeamGoalsConceded === 1) {
       if (candidate.position === Position.POR) {
-        mvpScore += 5 + (Math.floor(Math.random() * 2) + 1);
+        mvpScore += 4 + (Math.floor(Math.random() * 2) + 1);
       } else if (
         candidate.position === Position.DF ||
         candidate.position === Position.LD ||
         candidate.position === Position.LI ||
         candidate.position === Position.MCD
       ) {
-        mvpScore += 5 + (Math.floor(Math.random() * 4) + 1);
+        mvpScore += 4 + (Math.floor(Math.random() * 4) + 1);
       }
     } else if (candidatesTeamGoalsConceded > 3) {
       if (candidate.position === Position.POR) {
@@ -406,7 +440,7 @@ export const getMVP = (
     // Añadimos al array de resultados los puntos del jugador:
     diceResults.push(mvpScore);
   });
-  console.log(diceResults);
+  console.log('MVP dice throws:', diceResults);
 
   // Comprobamos el jugador que sumó más puntos y nos quedamos con su índice:
   const maxDice = Math.max(...diceResults);

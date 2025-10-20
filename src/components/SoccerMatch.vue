@@ -116,20 +116,24 @@ const onPlayMatch = async () => {
   // Obtener goleadores:
   matchRef.value.scorers1 = getScorers(
     matchRef.value.score1,
-    matchRef.value.startingLineup1.concat(matchRef.value.substitutes1)
+    matchRef.value.startingLineup1,
+    matchRef.value.substitutes1
   );
   matchRef.value.scorers2 = getScorers(
     matchRef.value.score2,
-    matchRef.value.startingLineup2.concat(matchRef.value.substitutes2)
+    matchRef.value.startingLineup2,
+    matchRef.value.substitutes2
   );
   // Obtener asistentes:
   matchRef.value.assistants1 = getAssistants(
-    matchRef.value.startingLineup1.concat(matchRef.value.substitutes1),
-    matchRef.value.scorers1
+    matchRef.value.scorers1,
+    matchRef.value.startingLineup1,
+    matchRef.value.substitutes1
   );
   matchRef.value.assistants2 = getAssistants(
-    matchRef.value.startingLineup2.concat(matchRef.value.substitutes2),
-    matchRef.value.scorers2
+    matchRef.value.scorers2,
+    matchRef.value.startingLineup2,
+    matchRef.value.substitutes2
   );
   // Obtener MVP:
   matchRef.value.mvp = getMVP(
