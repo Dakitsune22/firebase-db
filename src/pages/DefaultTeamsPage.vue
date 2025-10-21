@@ -991,7 +991,7 @@ const onSetMasterDBTeams = () => {
         html: true,
         title: '<span class="text-negative">Cambios irreversibles</span>',
         message:
-          'Se va a proceder a sobreescribir en BD todo el contenido de la tabla maestra con ID:',
+          'Se va a proceder a sobreescribir en BD todo el contenido de la tabla maestra <span class="text-primary">teams</span> con ID:',
         cancel: { label: 'Cancelar', flat: true },
         ok: {
           icon: 'warning',
@@ -1000,11 +1000,11 @@ const onSetMasterDBTeams = () => {
           flat: true,
         },
         prompt: {
-          model: `${data}`,
+          model: `${data}-${selectedLeague.value}`,
           type: 'text',
           disable: true,
           outlined: true,
-          style: 'width: 176px',
+          // style: 'width: 300px',
         },
         persistent: true,
       })
