@@ -349,20 +349,30 @@ const useTeamMutation = () => {
   const queryClient = useQueryClient();
 
   const refreshData = (): void => {
+    // queryClient.invalidateQueries({
+    //   queryKey: [`teams-${getCurrentLeague()}`],
+    //   exact: true,
+    // });
+    // queryClient.refetchQueries({
+    //   queryKey: [`teams-${getCurrentLeague()}`],
+    //   exact: true,
+    // });
     queryClient.invalidateQueries({
-      queryKey: [`teams-${getCurrentLeague()}`],
+      queryKey: ['teams-by'],
+      exact: false,
+    });
+    queryClient.refetchQueries({
+      queryKey: ['teams-by'],
+      exact: false,
+    });
+    queryClient.invalidateQueries({
+      // queryKey: [`${getCurrentLeague()}-top-scorers`],
+      queryKey: [`top-scorers-${getCurrentLeague()}`],
       exact: true,
     });
     queryClient.refetchQueries({
-      queryKey: [`teams-${getCurrentLeague()}`],
-      exact: true,
-    });
-    queryClient.invalidateQueries({
-      queryKey: [`${getCurrentLeague()}-top-scorers`],
-      exact: true,
-    });
-    queryClient.refetchQueries({
-      queryKey: [`${getCurrentLeague()}-top-scorers`],
+      // queryKey: [`${getCurrentLeague()}-top-scorers`],
+      queryKey: [`top-scorers-${getCurrentLeague()}`],
       exact: true,
     });
   };

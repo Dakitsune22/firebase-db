@@ -1,4 +1,4 @@
-import { Leagues, SeasonRound } from 'src/models';
+import { SeasonRound } from 'src/models';
 import {
   collection,
   doc,
@@ -13,8 +13,7 @@ import useSoccer from './storeWrappers/useSoccer';
 import useUI from './storeWrappers/useUI';
 
 const { userId } = useUI();
-const { roundMatches, getCurrentRound, getCurrentLeague, setCurrentRound } =
-  useSoccer();
+const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 
 //const getRound = async (roundNumber: number): Promise<SeasonRound> => {
 const getRound = async (): Promise<SeasonRound> => {
@@ -33,19 +32,21 @@ const getRound = async (): Promise<SeasonRound> => {
       round: docSnap.data().round,
       matches: docSnap.data().matches,
     };
-  } else if (
-    (getCurrentLeague() === Leagues.MyLeague ||
-      getCurrentLeague() === Leagues.MyCup) &&
-    getCurrentRound() > 1
-  ) {
-    console.error(
-      `${getCurrentLeague().toUpperCase()} round ${getCurrentRound()} does not exist.`
-    );
-    console.log("Let's check if first round does.");
-    setCurrentRound(1);
-    const cupFirstRound = await getRound();
-    return cupFirstRound;
+    // } else if (
+    //   (getCurrentLeague() === Leagues.MyLeague ||
+    //     getCurrentLeague() === Leagues.MyCup) &&
+    //   getCurrentRound() > 1
+    // ) {
+    //   console.error(
+    //     `${getCurrentLeague().toUpperCase()} round ${getCurrentRound()} does not exist.`
+    //   );
+    //   console.log("Let's check if first round does.");
+    //   setCurrentRound(1);
+    //   const cupFirstRound = await getRound();
+    //   return cupFirstRound;
+    // }
   } else {
+    console.error('GetRound failed to get data');
     return { round: 0, matches: [] };
   }
 };

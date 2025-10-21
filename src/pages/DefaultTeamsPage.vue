@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { md5 } from 'js-md5';
+// import { md5 } from 'js-md5';
 import { QTableProps, useQuasar } from 'quasar';
 import { computed, ref } from 'vue';
 import useUI from 'src/composables/storeWrappers/useUI';
@@ -28,7 +28,7 @@ import {
   sleep,
 } from 'src/helpers/functions';
 import { Leagues, Team, Player, CountryLeague } from 'src/models';
-import { leaguesMap } from 'src/models/leagues';
+import { leaguesMap, SeasonId } from 'src/models/leagues';
 import { Flag, flagMap, Position } from 'src/models/player';
 import { Tactic, TacticList } from 'src/models/tactic';
 import {
@@ -40,6 +40,8 @@ import {
   teamCrestOptionsOthersEurope,
   teamCrestOptionsOthersWorld,
 } from 'src/models/team';
+import useUserInfo from 'src/composables/useUserInfo';
+import { UseQueryReturnType } from '@tanstack/vue-query';
 
 defineOptions({
   name: 'DefaultTeamsPage',
@@ -47,6 +49,7 @@ defineOptions({
 
 const $q = useQuasar();
 const { userId } = useUI();
+const { queryUsers } = useUserInfo();
 
 const initialTeamData: Team = {
   country: CountryLeague.Spain,
@@ -95,29 +98,39 @@ const { queryTeamsByName: queryTeamsOthersWorld } = useTeams(
 );
 const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
 
-const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
-  Leagues.LaLigaPrimeraDivision
-);
-const { queryTeams: queryMDBTeamsSpain2 } = useDefaultTeams(
-  Leagues.LaLigaSegundaDivision
-);
-const { queryTeams: queryMDBTeamsEngland1 } = useDefaultTeams(
-  Leagues.PremierLeague
-);
-const { queryTeams: queryMDBTeamsEngland2 } = useDefaultTeams(
-  Leagues.Championship
-);
-const { queryTeams: queryMDBTeamsGermany1 } = useDefaultTeams(
-  Leagues.Bundesliga
-);
-const { queryTeams: queryMDBTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
-const { queryTeams: queryMDBTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
-const { queryTeams: queryMDBTeamsOthersEurope } = useDefaultTeams(
-  Leagues.OthersEurope
-);
-const { queryTeams: queryMDBTeamsOthersWorld } = useDefaultTeams(
-  Leagues.OthersWorld
-);
+// const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
+//   Leagues.LaLigaPrimeraDivision
+// );
+// const { queryTeams: queryMDBTeamsSpain2 } = useDefaultTeams(
+//   Leagues.LaLigaSegundaDivision
+// );
+// const { queryTeams: queryMDBTeamsEngland1 } = useDefaultTeams(
+//   Leagues.PremierLeague
+// );
+// const { queryTeams: queryMDBTeamsEngland2 } = useDefaultTeams(
+//   Leagues.Championship
+// );
+// const { queryTeams: queryMDBTeamsGermany1 } = useDefaultTeams(
+//   Leagues.Bundesliga
+// );
+// const { queryTeams: queryMDBTeamsItaly1 } = useDefaultTeams(Leagues.SerieA);
+// const { queryTeams: queryMDBTeamsFrance1 } = useDefaultTeams(Leagues.Ligue1);
+// const { queryTeams: queryMDBTeamsOthersEurope } = useDefaultTeams(
+//   Leagues.OthersEurope
+// );
+// const { queryTeams: queryMDBTeamsOthersWorld } = useDefaultTeams(
+//   Leagues.OthersWorld
+// );
+const queriesMDBTeamsSpain1 = useDefaultTeams(Leagues.LaLigaPrimeraDivision);
+const queriesMDBTeamsSpain2 = useDefaultTeams(Leagues.LaLigaSegundaDivision);
+const queriesMDBTeamsEngland1 = useDefaultTeams(Leagues.PremierLeague);
+const queriesMDBTeamsEngland2 = useDefaultTeams(Leagues.Championship);
+const queriesMDBTeamsGermany1 = useDefaultTeams(Leagues.Bundesliga);
+const queriesMDBTeamsItaly1 = useDefaultTeams(Leagues.SerieA);
+const queriesMDBTeamsFrance1 = useDefaultTeams(Leagues.Ligue1);
+const queriesMDBTeamsOthersEurope = useDefaultTeams(Leagues.OthersEurope);
+const queriesMDBTeamsOthersWorld = useDefaultTeams(Leagues.OthersWorld);
+
 const { mutateTeamAdd: mutateMDBTeamAdd } = useDefaultTeamsMutation();
 
 const { mutateRoundsDelete } = useRoundsMutation();
@@ -532,6 +545,232 @@ const onAddPlayer = (): void => {
   });
 };
 
+const updateUserTeamsByMDBseason = (idSeason: SeasonId): void => {
+  let query: UseQueryReturnType<Team[], Error>;
+
+  if (selectedLeague.value === Leagues.LaLigaPrimeraDivision) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsSpain1.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsSpain1.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsSpain1.queryTeams2627summer
+        : queriesMDBTeamsSpain1.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.LaLigaSegundaDivision) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsSpain2.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsSpain2.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsSpain2.queryTeams2627summer
+        : queriesMDBTeamsSpain2.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.PremierLeague) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsEngland1.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsEngland1.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsEngland1.queryTeams2627summer
+        : queriesMDBTeamsEngland1.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.Championship) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsEngland2.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsEngland2.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsEngland2.queryTeams2627summer
+        : queriesMDBTeamsEngland2.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.Bundesliga) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsGermany1.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsGermany1.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsGermany1.queryTeams2627summer
+        : queriesMDBTeamsGermany1.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.SerieA) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsItaly1.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsItaly1.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsItaly1.queryTeams2627summer
+        : queriesMDBTeamsItaly1.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.Ligue1) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsFrance1.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsFrance1.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsFrance1.queryTeams2627summer
+        : queriesMDBTeamsFrance1.queryTeams2627Winter;
+  } else if (selectedLeague.value === Leagues.OthersWorld) {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsOthersWorld.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsOthersWorld.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsOthersWorld.queryTeams2627summer
+        : queriesMDBTeamsOthersWorld.queryTeams2627Winter;
+  } else {
+    query =
+      idSeason === SeasonId.Season_2025_2026_Summer
+        ? queriesMDBTeamsOthersEurope.queryTeams2526summer
+        : idSeason === SeasonId.Season_2025_2026_Winter
+        ? queriesMDBTeamsOthersEurope.queryTeams2526Winter
+        : idSeason === SeasonId.Season_2026_2027_Summer
+        ? queriesMDBTeamsOthersEurope.queryTeams2627summer
+        : queriesMDBTeamsOthersEurope.queryTeams2627Winter;
+  }
+
+  if (query.data.value) {
+    query.data.value.forEach((team) => {
+      mutateTeamAdd.mutate(
+        {
+          league: selectedLeague.value as Leagues,
+          team,
+        }
+        // {
+        //   onSuccess: () => {
+        //     selectedTeamId.value = undefined;
+        //     selectedTeamData.value = initialTeamData;
+        //     if (selectedLeague.value) {
+        //       mutateRoundsDelete.mutate(selectedLeague.value);
+        //       refetchQueryLeague(selectedLeague.value);
+        //     }
+        //   },
+        // }
+      );
+    });
+  }
+
+  // switch (selectedLeague.value) {
+  //   case Leagues.LaLigaPrimeraDivision:
+  //     query =
+  //       idSeason === SeasonId.Season_2025_2026_Summer
+  //         ? queriesMDBTeamsSpain1.queryTeams2526summer
+  //         : idSeason === SeasonId.Season_2025_2026_Winter
+  //         ? queriesMDBTeamsSpain1.queryTeams2526Winter
+  //         : idSeason === SeasonId.Season_2026_2027_Summer
+  //         ? queriesMDBTeamsSpain1.queryTeams2627summer
+  //         : queriesMDBTeamsSpain1.queryTeams2627Winter;
+  //     if (query.data.value) {
+  //       query.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.LaLigaPrimeraDivision,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.LaLigaSegundaDivision:
+  //     const query =
+  //       idSeason === SeasonId.Season_2025_2026_Summer
+  //         ? queriesMDBTeamsSpain2.queryTeams2526summer
+  //         : idSeason === SeasonId.Season_2025_2026_Winter
+  //         ? queriesMDBTeamsSpain2.queryTeams2526Winter
+  //         : idSeason === SeasonId.Season_2026_2027_Summer
+  //         ? queriesMDBTeamsSpain2.queryTeams2627summer
+  //         : queriesMDBTeamsSpain2.queryTeams2627Winter;
+  //     if (query.data.value) {
+  //       query.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.LaLigaSegundaDivision,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.PremierLeague:
+  //     if (queryMDBTeamsEngland1.data.value) {
+  //       queryMDBTeamsEngland1.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.PremierLeague,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.Championship:
+  //     if (queryMDBTeamsEngland2.data.value) {
+  //       queryMDBTeamsEngland2.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.Championship,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.Bundesliga:
+  //     if (queryMDBTeamsGermany1.data.value) {
+  //       queryMDBTeamsGermany1.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.Bundesliga,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.SerieA:
+  //     if (queryMDBTeamsItaly1.data.value) {
+  //       queryMDBTeamsItaly1.data.value.forEach((team) => {
+  //         // console.log(team.name);
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.SerieA,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.Ligue1:
+  //     if (queryMDBTeamsFrance1.data.value) {
+  //       queryMDBTeamsFrance1.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.Ligue1,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.OthersEurope:
+  //     if (queryMDBTeamsOthersEurope.data.value) {
+  //       queryMDBTeamsOthersEurope.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.OthersEurope,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+
+  //   case Leagues.OthersWorld:
+  //     if (queryMDBTeamsOthersWorld.data.value) {
+  //       queryMDBTeamsOthersWorld.data.value.forEach((team) => {
+  //         mutateTeamAdd.mutate({
+  //           league: Leagues.OthersWorld,
+  //           team,
+  //         });
+  //       });
+  //     }
+  //     break;
+  // }
+};
+
 const onRestoreTeams = () => {
   const labelLeague = Object.values(leagueOptions.value).find(
     (league) => league.value === selectedLeague.value
@@ -659,113 +898,35 @@ const onGetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    //message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong>`,
+    message: `Se van a actualizar los equipos de <strong>${labelLeague}</strong>, recuperando de la tabla maestra la última versión de estos.<BR><BR>Se perderá cualquier cambio que se haya realizado hasta la fecha (nombres, escudos, tácticas, jugadores...).<br><br>También se reiniciarán todos los datos de la liga en curso (clasificación, resultados, goleadores).<br><br><span class="text-negative">Este cambio es permanente.</span><br><br><strong>¿Estás seguro de continuar?</strong><br><br>Selecciona la tabla de la que quieres recuperar los equipos.`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
+    options: {
+      type: 'radio',
+      model: SeasonId.Season_2025_2026_Summer,
+      items: [
+        {
+          label: 'Temporada 2025-2026',
+          value: SeasonId.Season_2025_2026_Summer,
+        },
+        {
+          label: 'Temporada 2025-2026 (Invierno)',
+          value: SeasonId.Season_2025_2026_Winter,
+          disable: true,
+        },
+        {
+          label: 'Temporada 2026-2027',
+          value: SeasonId.Season_2026_2027_Summer,
+          disable: true,
+        },
+      ],
+    },
     persistent: true,
   })
-    .onOk(() => {
-      switch (selectedLeague.value) {
-        case Leagues.LaLigaPrimeraDivision:
-          if (queryMDBTeamsSpain1.data.value) {
-            queryMDBTeamsSpain1.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.LaLigaPrimeraDivision,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.LaLigaSegundaDivision:
-          if (queryMDBTeamsSpain2.data.value) {
-            queryMDBTeamsSpain2.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.LaLigaPrimeraDivision,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.PremierLeague:
-          if (queryMDBTeamsEngland1.data.value) {
-            queryMDBTeamsEngland1.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.PremierLeague,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.Championship:
-          if (queryMDBTeamsEngland2.data.value) {
-            queryMDBTeamsEngland2.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.Championship,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.Bundesliga:
-          if (queryMDBTeamsGermany1.data.value) {
-            queryMDBTeamsGermany1.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.Bundesliga,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.SerieA:
-          if (queryMDBTeamsItaly1.data.value) {
-            queryMDBTeamsItaly1.data.value.forEach((team) => {
-              // console.log(team.name);
-              mutateTeamAdd.mutate({
-                league: Leagues.SerieA,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.Ligue1:
-          if (queryMDBTeamsFrance1.data.value) {
-            queryMDBTeamsFrance1.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.Ligue1,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.OthersEurope:
-          if (queryMDBTeamsOthersEurope.data.value) {
-            queryMDBTeamsOthersEurope.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.OthersEurope,
-                team,
-              });
-            });
-          }
-          break;
-
-        case Leagues.OthersWorld:
-          if (queryMDBTeamsOthersWorld.data.value) {
-            queryMDBTeamsOthersWorld.data.value.forEach((team) => {
-              mutateTeamAdd.mutate({
-                league: Leagues.OthersWorld,
-                team,
-              });
-            });
-          }
-          break;
-      }
+    .onOk((data: SeasonId) => {
+      console.log({ data });
+      updateUserTeamsByMDBseason(data);
     })
     .onOk(() => {
       selectedTeamId.value = undefined;
@@ -794,37 +955,98 @@ const onSetMasterDBTeams = () => {
       '-',
       ''
     )}.png" /></div>`,
-    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Los datos actuales de la tabla serán reemplazados por los datos de <span class="text-primary">${userId.value}</span> (nombres, escudos, tácticas, jugadores...).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
+    // message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Los datos actuales de la tabla serán reemplazados por los datos de <span class="text-primary">${userId.value}</span> (nombres, escudos, tácticas, jugadores...).<br><br>Este cambio es permanente.<br><br><strong>¿Estás seguro de continuar?</strong><br><br>Se requiere contraseña de administrador.`,
+    message: `Se van a subir todos los equipos de <strong>${labelLeague}</strong> a la tabla maestra.<BR><BR>Los datos actuales de la tabla serán reemplazados por los datos de <span class="text-primary">${userId.value}</span> (nombres, escudos, tácticas, jugadores...).<br><br><span class="text-negative">Este cambio es permanente.</span><br><br><strong>¿Estás seguro de continuar?</strong><br><br>Selecciona la tabla que deseas sobreescribir.`,
     cancel: { label: 'Volver', flat: true },
     ok: { icon: 'warning', label: 'Continuar', color: 'negative', flat: true },
-    prompt: {
-      model: '',
-      isValid: (val) => val.length > 0, // << here is the magic
-      type: 'password', // optional
+    // prompt: {
+    //   model: '',
+    //   isValid: (val) => val.length > 0, // << here is the magic
+    //   type: 'password', // optional
+    // },
+    options: {
+      type: 'radio',
+      model: SeasonId.Season_2025_2026_Winter,
+
+      items: [
+        {
+          label: 'Temporada 2025-2026',
+          value: SeasonId.Season_2025_2026_Summer,
+        },
+        {
+          label: 'Temporada 2025-2026 (Invierno)',
+          value: SeasonId.Season_2025_2026_Winter,
+        },
+        {
+          label: 'Temporada 2026-2027',
+          value: SeasonId.Season_2026_2027_Summer,
+        },
+      ],
     },
     persistent: true,
   })
-    .onOk((data) => {
-      if (md5(data) !== '32e90b4f00b8f0be4394f9f03d6e50d7') {
-        $q.notify({
-          type: 'negative',
-          message:
-            'Se require cuenta de administrador para poder modificar la tabla maestra.',
-        });
-      } else {
-        currentTeams.value.data.value?.forEach((team) => {
-          if (selectedLeague.value !== undefined) {
-            // console.log(team.name);
-            mutateMDBTeamAdd.mutate({
-              league: selectedLeague.value,
-              team,
-            });
+    .onOk((data: SeasonId) => {
+      console.log({ data });
+      $q.dialog({
+        html: true,
+        title: '<span class="text-negative">Cambios irreversibles</span>',
+        message:
+          'Se va a proceder a sobreescribir en BD todo el contenido de la tabla maestra con ID:',
+        cancel: { label: 'Cancelar', flat: true },
+        ok: {
+          icon: 'warning',
+          label: 'Confirmar',
+          color: 'negative',
+          flat: true,
+        },
+        prompt: {
+          model: `${data}`,
+          type: 'text',
+          disable: true,
+          outlined: true,
+          style: 'width: 176px',
+        },
+        persistent: true,
+      })
+        .onOk((data) => {
+          console.log({ data });
+          currentTeams.value.data.value?.forEach((team) => {
+            if (selectedLeague.value !== undefined) {
+              // console.log(team.name);
+              mutateMDBTeamAdd.mutate({
+                league: selectedLeague.value,
+                team,
+                seasonId: data,
+              });
+            }
+          });
+          if (selectedLeague.value) {
+            refetchQueryLeague(selectedLeague.value);
           }
+        })
+        .onCancel(() => {
+          return;
         });
-        if (selectedLeague.value) {
-          refetchQueryLeague(selectedLeague.value);
-        }
-      }
+      // if (md5(data) !== '32e90b4f00b8f0be4394f9f03d6e50d7') {
+      //   $q.notify({
+      //     type: 'negative',
+      //     message:
+      //       'Se require cuenta de administrador para poder modificar la tabla maestra.',
+      //   });
+      // } else {
+      //   currentTeams.value.data.value?.forEach((team) => {
+      //     if (selectedLeague.value !== undefined) {
+      //       // console.log(team.name);
+      //       mutateMDBTeamAdd.mutate({
+      //         league: selectedLeague.value,
+      //         team,
+      //       });
+      //     }
+      //   });
+      //   if (selectedLeague.value) {
+      //     refetchQueryLeague(selectedLeague.value);
+      //   }
+      // }
     })
     .onOk(() => {
       // selectedTeamId.value = undefined;
@@ -967,31 +1189,31 @@ const refetchQueryLeague = (league: Leagues): void => {
   switch (league) {
     case Leagues.LaLigaPrimeraDivision:
       queryTeamsSpain1.refetch();
-      queryMDBTeamsSpain1.refetch();
+    // queryMDBTeamsSpain1.refetch();
     case Leagues.LaLigaSegundaDivision:
       queryTeamsSpain2.refetch();
-      queryMDBTeamsSpain2.refetch();
+    // queryMDBTeamsSpain2.refetch();
     case Leagues.PremierLeague:
       queryTeamsEngland1.refetch();
-      queryMDBTeamsEngland1.refetch();
+    // queryMDBTeamsEngland1.refetch();
     case Leagues.Championship:
       queryTeamsEngland2.refetch();
-      queryMDBTeamsEngland2.refetch();
+    // queryMDBTeamsEngland2.refetch();
     case Leagues.Bundesliga:
       queryTeamsGermany1.refetch();
-      queryMDBTeamsGermany1.refetch();
+    // queryMDBTeamsGermany1.refetch();
     case Leagues.SerieA:
       queryTeamsItaly1.refetch();
-      queryMDBTeamsItaly1.refetch();
+    // queryMDBTeamsItaly1.refetch();
     case Leagues.Ligue1:
       queryTeamsFrance1.refetch();
-      queryMDBTeamsFrance1.refetch();
+    // queryMDBTeamsFrance1.refetch();
     case Leagues.OthersEurope:
       queryTeamsOthersEurope.refetch();
-      queryMDBTeamsOthersEurope.refetch();
+    // queryMDBTeamsOthersEurope.refetch();
     case Leagues.OthersWorld:
       queryTeamsOthersWorld.refetch();
-      queryMDBTeamsOthersWorld.refetch();
+    // queryMDBTeamsOthersWorld.refetch();
   }
 };
 
@@ -1471,6 +1693,10 @@ const onReset = () => {
           flat
           @click="onSetMasterDBTeams"
           :disable="
+            !(
+              queryUsers.data.value &&
+              queryUsers.data.value.find((user) => user.id === userId)?.admin
+            ) ||
             !selectedLeague ||
             (currentTeams.data.value && currentTeams.data.value?.length <= 0)
           "

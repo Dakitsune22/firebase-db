@@ -110,22 +110,22 @@ const getTeamById = async (league: Leagues, teamId: number): Promise<Team> => {
 
 const useTeams = (league: Leagues, id?: number) => {
   const queryTeamsByPoints = useQuery({
-    queryKey: [`teams-p-${league}`],
+    queryKey: [`teams-by-points-${league}`],
     queryFn: () => getTeamsByPoints(league),
   });
 
   const queryTeamsByName = useQuery({
-    queryKey: [`teams-n-${league}`],
+    queryKey: [`teams-by-name-${league}`],
     queryFn: () => getTeamsByName(league),
   });
 
   const queryTeamsById = useQuery({
-    queryKey: [`teams-id-${league}`],
+    queryKey: [`teams-by-id-${league}`],
     queryFn: () => getTeamsById(league),
   });
 
   const queryTeamById = useQuery({
-    queryKey: [`teams-${league}`, id],
+    queryKey: [`team-${league}`, id],
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     queryFn: () => getTeamById(league, id!),
   });

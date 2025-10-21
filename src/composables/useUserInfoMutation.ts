@@ -11,6 +11,7 @@ const addSignInUserInfo = async (password: string): Promise<void> => {
     id: userId.value ? userId.value : '0000000000',
     lastLogged: new Date().getTime().toString(),
     password,
+    admin: false,
   };
   await setDoc(doc(db, 'users', `${userId.value}-user-info`), {
     ...userInfo,

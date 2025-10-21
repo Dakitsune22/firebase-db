@@ -22,6 +22,13 @@ export enum CountryLeague {
   OthersWorld = 'others-world',
 }
 
+export enum SeasonId {
+  Season_2025_2026_Summer = '2025-2026-summer',
+  Season_2025_2026_Winter = '2025-2026-winter',
+  Season_2026_2027_Summer = '2026-2027-summer',
+  Season_2026_2027_Winter = '2026-2027-winter',
+}
+
 export const leaguesMap = [
   {
     label: 'LaLiga EA Sports',

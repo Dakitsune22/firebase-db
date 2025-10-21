@@ -525,7 +525,7 @@ onMounted(async () => {
       </div>
       <div class="stats-empty" v-else>
         <q-icon name="info" size="72px" color="primary" />
-        <span style="margin-top: 10px">Selecciona al menos un filtro</span>
+        <span style="margin-top: 10px">No se han encontrado equipos</span>
       </div>
       <!-- </TransitionGroup> -->
       <!-- {{ allTeams }} -->
