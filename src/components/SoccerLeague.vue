@@ -451,7 +451,7 @@ const onLastRound = async () => {
     <Router-link :to="{ name: 'teamsDB' }">Gestión de equipos</Router-link>
   </q-page>
   <q-page v-else class="page-body">
-    <div>
+    <div class="wrapper">
       <div class="teams-header">
         <div class="teams-header-coleq">Equipo</div>
         <div class="teams-header-colpts">Puntos</div>
@@ -514,7 +514,7 @@ const onLastRound = async () => {
     </div>
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-      class="round"
+      class="wrapper"
     >
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
@@ -595,36 +595,41 @@ const onLastRound = async () => {
         </div>
       </div>
     </div>
-    <div v-if="queryRound.data.value && queryRound.data.value?.round > 0">
+    <div
+      v-if="queryRound.data.value && queryRound.data.value?.round > 0"
+      class="wrapper"
+    >
       <div class="my-spinner" v-if="queryTopScorers.isLoading.value">
         <q-spinner color="primary" size="48px" />
       </div>
       <div v-else>
-        <div class="scorers-header q-ml-md">Máximos goleadores:</div>
-        <TransitionGroup name="scorer">
-          <div
-            v-for="(player, idx) in queryTopScorers.data.value"
-            :key="
-              player.name +
-              player.surname +
-              player.position +
-              player.shirtNumber
-            "
-          >
-            <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
-            <soccer-player-scorer
-              :player="player"
-              :i-key="idx + 1"
-              :top-scorer-goals="
-                idx > 0
-                  ? queryTopScorers.data.value &&
-                    queryTopScorers.data.value[0].seasonStats.goals
-                  : undefined
+        <div v-if="queryTopScorers.data.value!.length > 0">
+          <div class="scorers-header q-ml-md">Máximos goleadores:</div>
+          <TransitionGroup name="scorer">
+            <div
+              v-for="(player, idx) in queryTopScorers.data.value"
+              :key="
+                player.name +
+                player.surname +
+                player.position +
+                player.shirtNumber
               "
-            />
-          </div>
-        </TransitionGroup>
-        <div
+            >
+              <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
+              <soccer-player-scorer
+                :player="player"
+                :i-key="idx + 1"
+                :top-scorer-goals="
+                  idx > 0
+                    ? queryTopScorers.data.value &&
+                      queryTopScorers.data.value[0].seasonStats.goals
+                    : undefined
+                "
+              />
+            </div>
+          </TransitionGroup>
+        </div>
+        <!-- <div
           v-if="queryTopScorers.data.value!.length < 1"
           style="display: flex; justify-content: center"
         >
@@ -634,7 +639,7 @@ const onLastRound = async () => {
             class="q-ml-sm"
             color="primary"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </q-page>
@@ -644,7 +649,7 @@ const onLastRound = async () => {
 .page-body {
   @include flexPosition(center, start);
   flex-wrap: wrap;
-  gap: 34px;
+  // gap: 34px;
   padding-top: 20px;
   padding-bottom: 10px;
   // padding: 16px;
@@ -661,15 +666,21 @@ const onLastRound = async () => {
     // background-color: red;
   }
 }
-.round-header {
-  @include flexPosition(space-between, center);
-  // @include flexPosition(center, center);
-  height: 34px;
+.wrapper {
   // background-color: aqua;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+
+  @include response('mobile') {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+  }
 }
 .teams-header {
   @include flexPosition(start, center);
-  padding-top: 13px;
+  padding-top: 14px;
   // width: 100%;
   color: $primary;
   font-weight: 500;
@@ -699,9 +710,15 @@ const onLastRound = async () => {
     text-align: center;
   }
 }
+.round-header {
+  @include flexPosition(space-between, center);
+  // @include flexPosition(center, center);
+  height: 34px;
+  // background-color: aqua;
+}
 .scorers-header {
   @include flexPosition(start, center);
-  padding-top: 15px;
+  padding-top: 14px;
   color: $primary;
   font-weight: 500;
   font-size: small;

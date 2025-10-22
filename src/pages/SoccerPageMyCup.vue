@@ -558,7 +558,7 @@ const getCupRoundName = (): string => {
     <Router-link :to="{ name: 'myCup' }">Gestión de My~Cup</Router-link>
   </q-page>
   <q-page v-else class="page-body">
-    <div>
+    <div class="wrapper">
       <div class="page-body-title">
         <div class="page-body-title-text">Equipos clasificados</div>
         <q-icon
@@ -647,7 +647,7 @@ const getCupRoundName = (): string => {
     </div> -->
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-      class="round"
+      class="wrapper"
     >
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
@@ -837,36 +837,41 @@ const getCupRoundName = (): string => {
         </Transition>
       </div>
     </div>
-    <div v-if="queryRound.data.value && queryRound.data.value?.round > 0">
+    <div
+      v-if="queryRound.data.value && queryRound.data.value?.round > 0"
+      class="wrapper wrapper-scorer"
+    >
       <div class="my-spinner" v-if="queryTopScorers.isLoading.value">
         <q-spinner color="primary" size="48px" />
       </div>
       <div v-else>
-        <div class="scorers-header q-ml-md">Máximos goleadores:</div>
-        <TransitionGroup name="scorer">
-          <div
-            v-for="(player, idx) in queryTopScorers.data.value"
-            :key="
-              player.name +
-              player.surname +
-              player.position +
-              player.shirtNumber
-            "
-          >
-            <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
-            <soccer-player-scorer
-              :player="player"
-              :i-key="idx + 1"
-              :top-scorer-goals="
-                idx > 0
-                  ? queryTopScorers.data.value &&
-                    queryTopScorers.data.value[0].seasonStats.goals
-                  : undefined
+        <div v-if="queryTopScorers.data.value!.length > 0">
+          <div class="scorers-header q-ml-md">Máximos goleadores:</div>
+          <TransitionGroup name="scorer">
+            <div
+              v-for="(player, idx) in queryTopScorers.data.value"
+              :key="
+                player.name +
+                player.surname +
+                player.position +
+                player.shirtNumber
               "
-            />
-          </div>
-        </TransitionGroup>
-        <div
+            >
+              <!-- {{ player.name }} {{ player.surname }}: {{ player.seasonStats.goals }} -->
+              <soccer-player-scorer
+                :player="player"
+                :i-key="idx + 1"
+                :top-scorer-goals="
+                  idx > 0
+                    ? queryTopScorers.data.value &&
+                      queryTopScorers.data.value[0].seasonStats.goals
+                    : undefined
+                "
+              />
+            </div>
+          </TransitionGroup>
+        </div>
+        <!-- <div
           v-if="queryTopScorers.data.value!.length < 1"
           style="display: flex; justify-content: center"
         >
@@ -876,7 +881,7 @@ const getCupRoundName = (): string => {
             class="q-ml-sm"
             color="primary"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </q-page>
@@ -886,7 +891,7 @@ const getCupRoundName = (): string => {
 .page-body {
   @include flexPosition(center, start);
   flex-wrap: wrap;
-  gap: 34px;
+  // gap: 0px 34px;
   padding-top: 30px;
   padding-bottom: 10px;
   // padding: 16px;
@@ -902,7 +907,7 @@ const getCupRoundName = (): string => {
     padding-right: 13px;
     // border-left: 6px solid $primary;
     padding-left: 13px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     // background-color: aqua;
 
     &-text {
@@ -921,14 +926,35 @@ const getCupRoundName = (): string => {
     // background-color: red;
   }
 }
+.wrapper {
+  // background-color: aqua;
+  margin-left: 14px;
+  margin-right: 14px;
+  margin-bottom: 20px;
+
+  @include response('mobile') {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 40px;
+  }
+
+  &-scorer {
+    margin-left: 26px;
+    margin-right: 26px;
+
+    @include response('mobile') {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+  }
+}
 .round-header {
   @include flexPosition(space-between, center);
   // @include flexPosition(center, center);
   height: 34px;
-  margin-top: 30px;
+  margin-top: 4px;
   // background-color: aqua;
 }
-
 .teams-list {
   width: 500px;
   display: flex;
@@ -937,41 +963,41 @@ const getCupRoundName = (): string => {
   gap: 4px;
   // background-color: antiquewhite;
 }
-.teams-header {
-  @include flexPosition(start, center);
-  padding-top: 13px;
-  // width: 100%;
-  color: $primary;
-  font-weight: 500;
-  font-size: small;
+// .teams-header {
+//   @include flexPosition(start, center);
+//   padding-top: 13px;
+//   // width: 100%;
+//   color: $primary;
+//   font-weight: 500;
+//   font-size: small;
 
-  &-coleq {
-    width: 196px;
-    padding-left: 48px;
-    // background-color: aquamarine;
-  }
-  &-colpts {
-    width: 40px;
-    padding-left: 24px;
-    // background-color: bisque;
-    text-align: center;
-  }
-  &-colval {
-    width: 30px;
-    margin-left: 42px;
-    // background-color: aquamarine;
-    text-align: center;
-  }
-  &-colvalaux {
-    width: 32px;
-    margin-left: 1px;
-    // background-color: bisque;
-    text-align: center;
-  }
-}
+//   &-coleq {
+//     width: 196px;
+//     padding-left: 48px;
+//     // background-color: aquamarine;
+//   }
+//   &-colpts {
+//     width: 40px;
+//     padding-left: 24px;
+//     // background-color: bisque;
+//     text-align: center;
+//   }
+//   &-colval {
+//     width: 30px;
+//     margin-left: 42px;
+//     // background-color: aquamarine;
+//     text-align: center;
+//   }
+//   &-colvalaux {
+//     width: 32px;
+//     margin-left: 1px;
+//     // background-color: bisque;
+//     text-align: center;
+//   }
+// }
 .scorers-header {
   @include flexPosition(start, center);
-  padding-top: 25px;
+  padding-top: 18px;
   color: $primary;
   font-weight: 500;
   font-size: small;
