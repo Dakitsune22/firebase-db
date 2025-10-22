@@ -5,8 +5,8 @@
 //   teamsItaly1,
 //   teamsSpain1,
 // } from 'src/data/teams';
-import { CountryLeague } from './leagues';
-import { Player } from './player';
+import { CountryLeague, Leagues } from './leagues';
+import { Player, Mvp } from './player';
 import { Tactic } from './tactic';
 
 export interface Team {
@@ -25,6 +25,25 @@ export interface Team {
   wins: number;
   tactic: Tactic;
   players: Player[];
+}
+
+export interface teamUpdateData {
+  league: Leagues;
+  id: number;
+  team: Team;
+}
+
+export interface teamUpdateStatsData {
+  league: Leagues;
+  id: number;
+  newGoalsScored: number;
+  newGoalsConceded: number;
+  startingLineup: Player[];
+  substitutes: Player[];
+  scorers: number[];
+  assistants: number[];
+  mvp: Mvp;
+  team: Team;
 }
 
 // export const crestMapSpain = new Map();

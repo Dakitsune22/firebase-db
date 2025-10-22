@@ -990,8 +990,7 @@ const onSetMasterDBTeams = () => {
       $q.dialog({
         html: true,
         title: '<span class="text-negative">Cambios irreversibles</span>',
-        message:
-          'Se va a proceder a sobreescribir en BD todo el contenido de la tabla maestra <span class="text-primary">teams</span> con ID:',
+        message: `Se va a proceder a sobreescribir en BD todo el contenido de la tabla maestra <span class="text-primary">teams-${selectedLeague.value}</span> con ID:`,
         cancel: { label: 'Cancelar', flat: true },
         ok: {
           icon: 'warning',
@@ -1000,7 +999,7 @@ const onSetMasterDBTeams = () => {
           flat: true,
         },
         prompt: {
-          model: `${data}-${selectedLeague.value}`,
+          model: `${data}`,
           type: 'text',
           disable: true,
           outlined: true,
