@@ -10,17 +10,17 @@ const { getCurrentLeague } = useSoccer();
 
 const useRounds = () => {
   const queryRound = useQuery({
-    queryKey: [`current-round-${getCurrentLeague()}`],
+    queryKey: [`rounds-current-${getCurrentLeague()}`],
     queryFn: getRound,
   });
 
   const queryTotalRounds = useQuery({
-    queryKey: [`total-rounds-${getCurrentLeague()}`],
+    queryKey: [`rounds-total-${getCurrentLeague()}`],
     queryFn: getTotalRounds,
   });
 
   const queryCountRounds = useQuery({
-    queryKey: [`count-rounds-${getCurrentLeague()}`],
+    queryKey: [`rounds-count-${getCurrentLeague()}`],
     queryFn: countTotalRounds,
     enabled: false, // para que no se ejecute automáticamente al lanzar este composable
   });

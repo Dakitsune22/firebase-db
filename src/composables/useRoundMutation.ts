@@ -15,12 +15,29 @@ const useRoundsMutation = () => {
   const queryClient = useQueryClient();
 
   const refreshData = (): void => {
+    // queryClient.invalidateQueries({
+    //   // queryKey: [`season-rounds-${getCurrentLeague()}`],
+    //   queryKey: ['rounds'],
+    //   exact: false,
+    // });
+    // queryClient.refetchQueries({
+    //   queryKey: [`season-rounds-${getCurrentLeague()}`],
+    //   exact: true,
+    // });
+
+    // ! Por algún motivo no funciona el invalidate con 'rounds' y exact false
+    // ! para que invalide todas las queries que empiecen por 'rounds'...
+
     queryClient.invalidateQueries({
-      queryKey: [`season-rounds-${getCurrentLeague()}`],
+      queryKey: [`rounds-current-${getCurrentLeague()}`],
       exact: true,
     });
-    queryClient.refetchQueries({
-      queryKey: [`season-rounds-${getCurrentLeague()}`],
+    queryClient.invalidateQueries({
+      queryKey: [`rounds-total-${getCurrentLeague()}`],
+      exact: true,
+    });
+    queryClient.invalidateQueries({
+      queryKey: [`rounds-count-${getCurrentLeague()}`],
       exact: true,
     });
   };

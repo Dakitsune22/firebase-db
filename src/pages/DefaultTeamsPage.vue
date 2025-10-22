@@ -876,7 +876,7 @@ const onRestoreTeams = () => {
       selectedTeamData.value = initialTeamData;
       if (selectedLeague.value) {
         mutateRoundsDelete.mutate(selectedLeague.value);
-        refetchQueryLeague(selectedLeague.value);
+        // refetchQueryLeague(selectedLeague.value);
       }
     })
     .onCancel(() => {
@@ -933,7 +933,7 @@ const onGetMasterDBTeams = () => {
       selectedTeamData.value = initialTeamData;
       if (selectedLeague.value) {
         mutateRoundsDelete.mutate(selectedLeague.value);
-        refetchQueryLeague(selectedLeague.value);
+        // refetchQueryLeague(selectedLeague.value);
       }
     })
     .onCancel(() => {
@@ -1019,9 +1019,9 @@ const onSetMasterDBTeams = () => {
               });
             }
           });
-          if (selectedLeague.value) {
-            refetchQueryLeague(selectedLeague.value);
-          }
+          // if (selectedLeague.value) {
+          //   refetchQueryLeague(selectedLeague.value);
+          // }
         })
         .onCancel(() => {
           return;
@@ -1184,37 +1184,37 @@ const updateCurrentTeamCrests = (): void => {
 //   }
 // };
 
-const refetchQueryLeague = (league: Leagues): void => {
-  switch (league) {
-    case Leagues.LaLigaPrimeraDivision:
-      queryTeamsSpain1.refetch();
-    // queryMDBTeamsSpain1.refetch();
-    case Leagues.LaLigaSegundaDivision:
-      queryTeamsSpain2.refetch();
-    // queryMDBTeamsSpain2.refetch();
-    case Leagues.PremierLeague:
-      queryTeamsEngland1.refetch();
-    // queryMDBTeamsEngland1.refetch();
-    case Leagues.Championship:
-      queryTeamsEngland2.refetch();
-    // queryMDBTeamsEngland2.refetch();
-    case Leagues.Bundesliga:
-      queryTeamsGermany1.refetch();
-    // queryMDBTeamsGermany1.refetch();
-    case Leagues.SerieA:
-      queryTeamsItaly1.refetch();
-    // queryMDBTeamsItaly1.refetch();
-    case Leagues.Ligue1:
-      queryTeamsFrance1.refetch();
-    // queryMDBTeamsFrance1.refetch();
-    case Leagues.OthersEurope:
-      queryTeamsOthersEurope.refetch();
-    // queryMDBTeamsOthersEurope.refetch();
-    case Leagues.OthersWorld:
-      queryTeamsOthersWorld.refetch();
-    // queryMDBTeamsOthersWorld.refetch();
-  }
-};
+// const refetchQueryLeague = (league: Leagues): void => {
+//   switch (league) {
+//     case Leagues.LaLigaPrimeraDivision:
+//       queryTeamsSpain1.refetch();
+//     // queryMDBTeamsSpain1.refetch();
+//     case Leagues.LaLigaSegundaDivision:
+//       queryTeamsSpain2.refetch();
+//     // queryMDBTeamsSpain2.refetch();
+//     case Leagues.PremierLeague:
+//       queryTeamsEngland1.refetch();
+//     // queryMDBTeamsEngland1.refetch();
+//     case Leagues.Championship:
+//       queryTeamsEngland2.refetch();
+//     // queryMDBTeamsEngland2.refetch();
+//     case Leagues.Bundesliga:
+//       queryTeamsGermany1.refetch();
+//     // queryMDBTeamsGermany1.refetch();
+//     case Leagues.SerieA:
+//       queryTeamsItaly1.refetch();
+//     // queryMDBTeamsItaly1.refetch();
+//     case Leagues.Ligue1:
+//       queryTeamsFrance1.refetch();
+//     // queryMDBTeamsFrance1.refetch();
+//     case Leagues.OthersEurope:
+//       queryTeamsOthersEurope.refetch();
+//     // queryMDBTeamsOthersEurope.refetch();
+//     case Leagues.OthersWorld:
+//       queryTeamsOthersWorld.refetch();
+//     // queryMDBTeamsOthersWorld.refetch();
+//   }
+// };
 
 const isSelectedTeamDataChanged = (): boolean => {
   let infoTeamOriginal =
@@ -1421,17 +1421,17 @@ const onTransferPlayer = (squadIndex: number, scope: any): void => {
           {
             onSuccess: async () => {
               // console.log('Mutate team update successful');
-              if (
-                transferSelectedLeague.value &&
-                transferSelectedTeamId.value !== undefined
-              ) {
-                refetchQueryLeague(transferSelectedLeague.value);
-                console.log('Refetch target team league query');
-              }
-              if (selectedLeague.value && selectedTeamId.value !== undefined) {
-                refetchQueryLeague(selectedLeague.value);
-                console.log('Refetch source team league query');
-              }
+              // if (
+              //   transferSelectedLeague.value &&
+              //   transferSelectedTeamId.value !== undefined
+              // ) {
+              //   refetchQueryLeague(transferSelectedLeague.value);
+              //   console.log('Refetch target team league query');
+              // }
+              // if (selectedLeague.value && selectedTeamId.value !== undefined) {
+              //   refetchQueryLeague(selectedLeague.value);
+              //   console.log('Refetch source team league query');
+              // }
               // Init data:
               transferSelectedLeague.value = undefined;
               transferSelectedTeamId.value = undefined;
@@ -1522,9 +1522,9 @@ const onSubmit = () => {
             },
             {
               onSuccess: () => {
-                if (selectedLeague.value) {
-                  refetchQueryLeague(selectedLeague.value);
-                }
+                // if (selectedLeague.value) {
+                //   refetchQueryLeague(selectedLeague.value);
+                // }
 
                 const selectedTeamDefaultPlayers: Player[] = [];
                 selectedTeamData.value.players.forEach((player) => {

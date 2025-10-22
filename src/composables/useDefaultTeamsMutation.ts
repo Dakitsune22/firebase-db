@@ -12,13 +12,13 @@ const useDefaultTeamsMutation = () => {
     queryClient.invalidateQueries({
       queryKey: [`default-teams-${idSeason}-${league}`],
       // queryKey: ['default-teams'],
-      // exact: true,
+      exact: true,
     });
-    queryClient.refetchQueries({
-      queryKey: [`default-teams-${idSeason}-${league}`],
-      // queryKey: ['default-teams'],
-      // exact: true,
-    });
+    // queryClient.refetchQueries({
+    //   queryKey: [`default-teams-${idSeason}-${league}`],
+    //   // queryKey: ['default-teams'],
+    //   // exact: true,
+    // });
     console.log(
       `*** useDefaultTeamsMutation --> default-teams-${idSeason}-${league} --> Invalidated & Refetched ***`
     );

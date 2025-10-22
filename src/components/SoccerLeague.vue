@@ -328,7 +328,7 @@ const startPlayoff = () => {
         },
         {
           onSuccess: () => {
-            queryTeamsMyCup.refetch();
+            // queryTeamsMyCup.refetch();
           },
         }
       );

@@ -19,7 +19,7 @@ const useTeamMutation = () => {
   const $q = useQuasar();
   const queryClient = useQueryClient();
 
-  const refreshData = (): void => {
+  const refreshData = (league: Leagues, id?: number): void => {
     // queryClient.invalidateQueries({
     //   queryKey: [`teams-${getCurrentLeague()}`],
     //   exact: true,
@@ -28,31 +28,55 @@ const useTeamMutation = () => {
     //   queryKey: [`teams-${getCurrentLeague()}`],
     //   exact: true,
     // });
+    // queryClient.invalidateQueries({
+    //   // queryKey: ['teams-by'],
+    //   queryKey: ['team'],
+    //   exact: false,
+    // });
+    // queryClient.refetchQueries({
+    //   queryKey: ['teams-by'],
+    //   exact: false,
+    // });
+
+    // ! Por algún motivo no funciona el invalidate con 'team' y exact false
+    // ! para que invalide todas las queries que empiecen por 'team'...
+
     queryClient.invalidateQueries({
-      queryKey: ['teams-by'],
-      exact: false,
+      queryKey: [`teams-by-points-${league}`],
+      exact: true,
     });
-    queryClient.refetchQueries({
-      queryKey: ['teams-by'],
-      exact: false,
+    queryClient.invalidateQueries({
+      queryKey: [`teams-by-name-${league}`],
+      exact: true,
     });
+    queryClient.invalidateQueries({
+      queryKey: [`teams-by-id-${league}`],
+      exact: true,
+    });
+    if (id) {
+      queryClient.invalidateQueries({
+        queryKey: [`team-${league}`, id],
+        exact: true,
+      });
+    }
     queryClient.invalidateQueries({
       // queryKey: [`${getCurrentLeague()}-top-scorers`],
       queryKey: [`top-scorers-${getCurrentLeague()}`],
       exact: true,
     });
-    queryClient.refetchQueries({
-      // queryKey: [`${getCurrentLeague()}-top-scorers`],
-      queryKey: [`top-scorers-${getCurrentLeague()}`],
-      exact: true,
-    });
+
+    // queryClient.refetchQueries({
+    //   // queryKey: [`${getCurrentLeague()}-top-scorers`],
+    //   queryKey: [`top-scorers-${getCurrentLeague()}`],
+    //   exact: true,
+    // });
   };
 
   const mutateTeamAdd = useMutation({
     mutationFn: ({ league, team }: { league: Leagues; team: Team }) =>
       addTeam(league, team),
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(vars.league);
       $q.notify({
         type: 'positive',
         message: 'Equipo añadido con éxito',
@@ -91,8 +115,8 @@ const useTeamMutation = () => {
         mvp,
         team,
       }),
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(vars.league, vars.id);
     },
   });
 
@@ -103,8 +127,8 @@ const useTeamMutation = () => {
         id,
         team,
       }),
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(vars.league, vars.id);
       $q.notify({
         type: 'positive',
         message: 'Equipo actualizado con éxito',
@@ -122,8 +146,8 @@ const useTeamMutation = () => {
 
   const mutateTeamAddMyLeague = useMutation({
     mutationFn: ({ team }: { team: Team }) => addTeamToMyLeague(team),
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(Leagues.MyLeague, vars.team.id);
       $q.notify({
         type: 'positive',
         message: 'Equipo añadido con éxito a My~League',
@@ -139,8 +163,8 @@ const useTeamMutation = () => {
 
   const mutateTeamAddMyCup = useMutation({
     mutationFn: ({ team }: { team: Team }) => addTeamToMyCup(team),
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(Leagues.MyCup, vars.team.id);
       $q.notify({
         type: 'positive',
         message: 'Equipo añadido con éxito a My~Cup',
@@ -157,8 +181,8 @@ const useTeamMutation = () => {
   const mutateTeamDeleteMyLeague = useMutation({
     mutationFn: (teamId: number) => deleteTeamMyLeague(teamId),
     // onSuccess: (fruit) => {
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(Leagues.MyLeague, vars);
       $q.notify({
         type: 'info',
         message: 'Equipo eliminado de My~League',
@@ -178,8 +202,8 @@ const useTeamMutation = () => {
   const mutateTeamDeleteMyCup = useMutation({
     mutationFn: (teamId: number) => deleteTeamMyCup(teamId),
     // onSuccess: (fruit) => {
-    onSuccess: () => {
-      refreshData();
+    onSuccess: (data, vars) => {
+      refreshData(Leagues.MyCup, vars);
       $q.notify({
         type: 'info',
         message: 'Equipo eliminado de My~Cup',

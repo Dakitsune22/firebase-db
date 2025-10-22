@@ -304,7 +304,6 @@ const onSubmitMyLeague = () => {
             selectedMyXTeams.value.forEach((team) => {
               // console.log('addTeamToMyLeague');
               mutateTeamAddMyLeague.mutate({ team });
-              // currentTeams.value.refetch();
             });
           }
         },
@@ -314,10 +313,9 @@ const onSubmitMyLeague = () => {
     selectedMyXTeams.value.forEach((team) => {
       // console.log('addTeamToMyLeague');
       mutateTeamAddMyLeague.mutate({ team });
-      // currentTeams.value.refetch();
     });
   }
-  currentTeams.value.refetch();
+  // currentTeams.value.refetch();
   // Delete current league rounds:
   const initialMyLeagueTeamsRounds = initialMyXTeamsId.length * 2 - 2;
   console.log('Jornadas:', initialMyLeagueTeamsRounds);
@@ -343,7 +341,6 @@ const onSubmitMyCup = () => {
             selectedMyXTeams.value.forEach((team) => {
               // console.log('addTeamToMyLeague');
               mutateTeamAddMyCup.mutate({ team });
-              // currentTeams.value.refetch();
             });
           }
         },
@@ -353,10 +350,9 @@ const onSubmitMyCup = () => {
     selectedMyXTeams.value.forEach((team) => {
       // console.log('addTeamToMyLeague');
       mutateTeamAddMyCup.mutate({ team });
-      // currentTeams.value.refetch();
     });
   }
-  currentTeams.value.refetch();
+  // currentTeams.value.refetch();
 
   // Delete current cup rounds:
   // To Do: PENDIENTE, EL NUMERO DE RONDAS PARA COPA NO SIGUE ESTE CRITERIO:

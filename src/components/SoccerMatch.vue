@@ -15,7 +15,7 @@ import {
   getSubstitutes,
 } from 'src/helpers/match-play';
 import SoccerMatchStats from './SoccerMatchStats.vue';
-import usePlayers from 'src/composables/usePlayers';
+// import usePlayers from 'src/composables/usePlayers';
 import { useRoute } from 'vue-router';
 
 const props = defineProps<Match>();
@@ -50,8 +50,8 @@ const matchRef = ref<Match>({
 const { roundMatches, getCurrentRound, getCurrentLeague } = useSoccer();
 const { mutateRoundPlay } = useRoundsMutation();
 const { mutateTeamUpdateStats } = useTeamMutation();
-const { queryTopScorers } = usePlayers();
-const { queryTeamsByPoints } = useTeams(getCurrentLeague());
+// const { queryTopScorers } = usePlayers();
+// const { queryTeamsByPoints } = useTeams(getCurrentLeague());
 
 const { queryTeamById: qt1 } = useTeams(
   getCurrentLeague(),
@@ -234,8 +234,8 @@ const onPlayMatch = async () => {
         // console.log('Mutate team update successful');
 
         // Actualizamos query de goleadores, para que se refresquen en pantalla:
-        queryTopScorers.refetch();
-        queryTeamsByPoints.refetch();
+        // queryTopScorers.refetch();
+        // queryTeamsByPoints.refetch();
 
         // Lanzamos emit para que la página principalreciba evento de partido jugado:
         emit('gamePlayed', matchRef.value.id);

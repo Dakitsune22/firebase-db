@@ -38,6 +38,7 @@ const roundKey = ref<number>(0);
 // const leagueKey = ref<number>(0);
 const showTeams = ref<boolean>(true);
 const isLottery = ref<boolean>(true);
+const isLoadingNextCupRound = ref<boolean>(false);
 
 const forceRender = (): void => {
   // leagueKey.value++;
@@ -202,6 +203,7 @@ const getRoundWinnerIds = (): number[] => {
 };
 
 const onAdvanceCupRound = async (): Promise<void> => {
+  isLoadingNextCupRound.value = true;
   // Rounds:
   if (queryCupTeams.data.value) {
     const teamsIdSortedList = getRoundWinnerIds();
@@ -259,10 +261,11 @@ const onAdvanceCupRound = async (): Promise<void> => {
       onSuccess: async () => {
         // Incrementamos ronda y refrescamos query:
         // setCurrentRound(getCurrentRound() + 1);
-        // await queryRound.refetch();
-        await queryTotalRounds.refetch();
+        // await queryTotalRounds.refetch();
         // // Cambiamos valor a roundkey para forzar repintado de rondas:
         // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+        await sleep(1000);
+        isLoadingNextCupRound.value = false;
         onNextRound();
       },
     });
@@ -286,7 +289,6 @@ const onAdvanceCupRound = async (): Promise<void> => {
 // const deleteDBRounds = () => {
 //   mutateMyCupRoundsDelete.mutate(totalRounds.value, {
 //     onSuccess: async () => {
-//       await queryTotalRounds.refetch();
 //     },
 //   });
 // };
@@ -373,8 +375,8 @@ const restartCup = () => {
                 setCurrentRound(1);
                 await queryRound.refetch();
                 await queryTotalRounds.refetch();
-                await queryCupTeams.refetch();
-                await queryTopScorers.refetch();
+                // await queryCupTeams.refetch();
+                // await queryTopScorers.refetch();
                 // sleep(1000);
                 // Cambiamos valor a roundkey para forzar repintado de rondas:
                 roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
@@ -405,10 +407,6 @@ const restartCup = () => {
   // currentRound.value = 1;
   // sleep(2000);
   // setCurrentRound(1);
-  // await queryRound.refetch();
-  // await queryTotalRounds.refetch();
-  // await queryCupTeams.refetch();
-  // await queryTopScorers.refetch();
   // sleep(1000);
   // Cambiamos valor a roundkey para forzar repintado de rondas:
   // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
@@ -440,7 +438,7 @@ const onRestartCup = () => {
       // deleteDBRounds();
       mutateMyCupRoundsDelete.mutate(totalRounds.value, {
         onSuccess: async () => {
-          await queryTotalRounds.refetch();
+          // await queryTotalRounds.refetch();
           // onFirstRound();
           console.log(queryTotalRounds.data.value);
           console.log(isCupRoundFinished.value);
@@ -472,7 +470,7 @@ const onPreviousRound = async () => {
 };
 
 const onNextRound = async () => {
-  // console.log('Count round:', queryTotalRounds.data.value);
+  console.log('Count round:', queryTotalRounds.data.value);
   // if (getCurrentRound() < totalRounds.value) {
   if (
     queryTotalRounds.data.value &&
@@ -751,9 +749,10 @@ const getCupRoundName = (): string => {
       <div class="next-round">
         <q-btn
           v-show="
-            queryTotalRounds.data.value &&
-            getCurrentRound() >= queryTotalRounds.data.value &&
-            queryTotalRounds.data.value < totalRounds
+            (queryTotalRounds.data.value &&
+              getCurrentRound() >= queryTotalRounds.data.value &&
+              queryTotalRounds.data.value < totalRounds) ||
+            isLoadingNextCupRound
           "
           :label="
             getCurrentRound() >= totalRounds - 1
@@ -769,6 +768,7 @@ const getCupRoundName = (): string => {
             (isCupRoundFinished &&
               getCurrentRound() < queryTotalRounds.data.value)
           "
+          :loading="isLoadingNextCupRound"
           @click="onAdvanceCupRound"
         />
         <Transition name="winner">
