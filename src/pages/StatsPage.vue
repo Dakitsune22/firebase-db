@@ -539,16 +539,30 @@ onMounted(async () => {
 <style lang="scss" scoped>
 $darkGrey: rgba(42, 42, 42, 0.692);
 .stats {
-  @include flexPosition(center, center);
+  // @include flexPosition(center, center);
+  @include flexPosition(start, start);
   margin-top: 20px;
   margin-bottom: 10px;
+
+  @include response('mobile') {
+    @include flexPosition(center, start);
+  }
+  // background-color: aqua;
+  margin-left: 20px;
+  margin-right: 20px;
+
+  @include response('mobile') {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 
   &-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    // justify-content: center;
     // align-items: center;
     gap: 0px 50px;
+    // background-color: aqua;
 
     @include response('mobile') {
       display: block;
