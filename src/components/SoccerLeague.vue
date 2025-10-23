@@ -112,6 +112,18 @@ const totalRounds = computed(() => {
   // return 2;
 });
 
+const isLeagueFinished = computed(() => {
+  if (queryRound.data.value === undefined) return false;
+  if (queryRound.data.value.round === totalRounds.value) {
+    return (
+      queryTeamsByPoints.data.value?.filter(
+        (team) => team.matchesPlayed === totalRounds.value
+      ).length === queryTeamsByPoints.data.value?.length
+    );
+  }
+  return false;
+});
+
 const restartLeague = async () => {
   // Rounds:
   let rounds: string[][];
@@ -594,6 +606,35 @@ const onLastRound = async () => {
           />
         </div>
       </div>
+      <div class="champion">
+        <Transition name="winner">
+          <div class="champion-container" v-if="isLeagueFinished">
+            <div class="champion-container-img">
+              <q-img
+                src="/images/leagues/cupwinner.png"
+                spinner-color="white"
+                width="256px"
+                fit="fill"
+              />
+              <div class="champion-container-img-team">
+                <q-img
+                  v-if="queryTeamsByPoints.data.value"
+                  :src="`/images/teams-${queryTeamsByPoints.data.value[0].country}/${queryTeamsByPoints.data.value[0].shortName}.png`"
+                  spinner-color="white"
+                  width="40px"
+                  height="40px"
+                  class="champion-container-imgfront"
+                />
+              </div>
+              <div class="champion-container-img-tname">
+                <span v-if="queryTeamsByPoints.data.value">{{
+                  queryTeamsByPoints.data.value[0].name
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </div>
     </div>
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
@@ -734,6 +775,42 @@ const onLastRound = async () => {
   gap: 6px;
   // background-color: aqua;
 }
+.champion {
+  @include flexPosition(center, center);
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+
+    &-img {
+      height: 250px;
+
+      &-team {
+        position: relative;
+        left: 108px;
+        top: -163px;
+      }
+
+      &-tname {
+        position: relative;
+        top: -80px;
+        font-size: 20px;
+        text-align: center;
+        border-radius: 12px;
+        background-color: $primary;
+        color: gold;
+      }
+    }
+  }
+
+  &-subtitle {
+    font-size: 13px;
+    color: gray;
+  }
+}
 .no-teams {
   display: flex;
   flex-direction: column;
@@ -741,6 +818,10 @@ const onLastRound = async () => {
   align-items: center;
   text-align: center;
   font-size: 18px;
+}
+.my-spinner {
+  @include flexPosition(center, center);
+  margin-top: 30px;
 }
 /* Transition Group */
 .rank-move {
@@ -759,8 +840,19 @@ const onLastRound = async () => {
 .scorer-move {
   transition: all 1s ease;
 }
-.my-spinner {
-  @include flexPosition(center, center);
-  margin-top: 30px;
+/* Transition */
+.winner-enter-active,
+.winner-leave-active {
+  transition: all 2s ease;
+}
+.winner-enter-from,
+.winner-leave-to {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 2s ease;
+
+  @include response('mobile') {
+    transform: translateX(400px);
+  }
 }
 </style>

@@ -1093,6 +1093,10 @@ const getCupRoundName = (): string => {
   text-align: center;
   font-size: 18px;
 }
+.my-spinner {
+  @include flexPosition(center, center);
+  margin-top: 30px;
+}
 /* Transition Group */
 .rank-move {
   transition: all 1s ease;
@@ -1110,10 +1114,6 @@ const getCupRoundName = (): string => {
 .scorer-move {
   transition: all 1s ease;
 }
-.my-spinner {
-  @include flexPosition(center, center);
-  margin-top: 30px;
-}
 /* Transition */
 .winner-enter-active,
 .winner-leave-active {
@@ -1124,5 +1124,9 @@ const getCupRoundName = (): string => {
   opacity: 0;
   transform: translateY(500px);
   transition: all 2s ease;
+
+  @include response('mobile') {
+    transform: translateX(400px);
+  }
 }
 </style>
