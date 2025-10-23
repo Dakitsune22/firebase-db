@@ -56,7 +56,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 .item {
   background-color: lightgrey;
   // border: 1px solid darkgrey;
-  width: 234px;
+  width: 236px;
   padding-left: 5px;
   padding-right: 5px;
 }

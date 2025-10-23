@@ -373,7 +373,7 @@ $midGrey: rgb(150, 150, 150);
     font-weight: 500;
   }
   &-sim {
-    // width: 20px;
+    width: 21.5px;
     // background-color: bisque;
 
     &-enabled {

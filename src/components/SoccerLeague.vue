@@ -572,7 +572,7 @@ const onLastRound = async () => {
       <div class="my-spinner" v-if="queryRound.isLoading.value">
         <q-spinner color="primary" size="48px" />
       </div>
-      <div v-else class="round-matches">
+      <div v-else>
         <div v-for="match in queryRound.data.value?.matches" :key="match.id">
           <soccer-match
             :key="roundKey"
@@ -647,7 +647,7 @@ const onLastRound = async () => {
 
 <style lang="scss" scoped>
 .page-body {
-  @include flexPosition(center, start);
+  @include flexPosition(start, start);
   flex-wrap: wrap;
   // gap: 34px;
   padding-top: 20px;
@@ -657,6 +657,7 @@ const onLastRound = async () => {
   // padding-bottom: 0;
 
   @include response('mobile') {
+    @include flexPosition(center, start);
     // display: flex;
     // flex-direction: column;
     // width: 497px;

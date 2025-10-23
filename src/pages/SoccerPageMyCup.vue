@@ -717,8 +717,11 @@ const getCupRoundName = (): string => {
       <div class="my-spinner" v-if="queryRound.isLoading.value">
         <q-spinner color="primary" size="48px" />
       </div>
-      <div v-else class="round-matches">
-        <div v-for="match in queryRound.data.value?.matches" :key="match.id">
+      <div v-else>
+        <div
+          v-for="(match, idx) in queryRound.data.value?.matches"
+          :key="match.id"
+        >
           <soccer-match
             @game-played="
               async (matchId) => {
@@ -726,7 +729,12 @@ const getCupRoundName = (): string => {
                 await queryRound.refetch();
               }
             "
-            :class="match.id % 2 === 0 ? 'q-mb-md' : ''"
+            :class="
+              match.id % 2 === 0 &&
+              idx < queryRound.data.value?.matches.length - 1
+                ? 'q-mb-md'
+                : ''
+            "
             :key="roundKey"
             :id="match.id"
             :played="match.played"
@@ -759,6 +767,7 @@ const getCupRoundName = (): string => {
               ? 'Avanzar a la final'
               : 'Avanzar a la siguiente ronda'
           "
+          class="next-round-btn"
           color="primary"
           icon="play_arrow"
           unelevated
@@ -839,7 +848,7 @@ const getCupRoundName = (): string => {
     </div>
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-      class="wrapper wrapper-scorer"
+      class="wrapper"
     >
       <div class="my-spinner" v-if="queryTopScorers.isLoading.value">
         <q-spinner color="primary" size="48px" />
@@ -889,7 +898,7 @@ const getCupRoundName = (): string => {
 
 <style lang="scss" scoped>
 .page-body {
-  @include flexPosition(center, start);
+  @include flexPosition(start, start);
   flex-wrap: wrap;
   // gap: 0px 34px;
   padding-top: 30px;
@@ -901,12 +910,13 @@ const getCupRoundName = (): string => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 500px;
+    // width: 500px;
+    width: 482px;
     font-size: 20px;
     // margin-left: 26px;
-    padding-right: 13px;
+    // padding-right: 13px;
     // border-left: 6px solid $primary;
-    padding-left: 13px;
+    // padding-left: 13px;
     margin-bottom: 10px;
     // background-color: aqua;
 
@@ -917,6 +927,7 @@ const getCupRoundName = (): string => {
   }
 
   @include response('mobile') {
+    @include flexPosition(center, start);
     // display: flex;
     // flex-direction: column;
     // width: 497px;
@@ -926,26 +937,38 @@ const getCupRoundName = (): string => {
     // background-color: red;
   }
 }
+// .wrapper {
+//   // background-color: aqua;
+//   margin-left: 14px;
+//   margin-right: 14px;
+//   margin-bottom: 20px;
+
+//   @include response('mobile') {
+//     margin-left: 0px;
+//     margin-right: 0px;
+//     margin-bottom: 40px;
+//   }
+
+//   &-scorer {
+//     margin-left: 26px;
+//     margin-right: 26px;
+
+//     @include response('mobile') {
+//       margin-left: 0px;
+//       margin-right: 0px;
+//     }
+//   }
+// }
 .wrapper {
   // background-color: aqua;
-  margin-left: 14px;
-  margin-right: 14px;
+  margin-left: 20px;
+  margin-right: 20px;
   margin-bottom: 20px;
 
   @include response('mobile') {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 40px;
-  }
-
-  &-scorer {
-    margin-left: 26px;
-    margin-right: 26px;
-
-    @include response('mobile') {
-      margin-left: 0px;
-      margin-right: 0px;
-    }
   }
 }
 .round-header {
@@ -956,12 +979,13 @@ const getCupRoundName = (): string => {
   // background-color: aqua;
 }
 .teams-list {
-  width: 500px;
+  // width: 500px;
+  width: 482px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 4px;
-  // background-color: antiquewhite;
+  // background-color: palevioletred;
 }
 // .teams-header {
 //   @include flexPosition(start, center);
@@ -1008,20 +1032,23 @@ const getCupRoundName = (): string => {
 }
 .restart-league {
   @include flexPosition(space-between, center);
-  width: 476px;
+  width: 482px;
   padding-top: 10px;
   // background-color: aqua;
 }
 .next-round {
   @include flexPosition(center, center);
-  padding-top: 10px;
+
+  &-btn {
+    margin-top: 10px;
+  }
 }
 .champion-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 10px;
   // gap: 3px;
   // background-color: aqua;
 
@@ -1029,7 +1056,8 @@ const getCupRoundName = (): string => {
   //   @include flexPosition(center, center);
   // }
   &-img {
-    // background-color: aqua;
+    // background-color: pink;
+    height: 250px;
     // position: static;
 
     &-team {

@@ -166,7 +166,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
   &-assists {
     // align-items: center;
     margin-top: 2px;
-    width: 60px;
+    width: 60.5px;
     height: 24px;
     // background-color: aqua;
     color: $darkGrey;
