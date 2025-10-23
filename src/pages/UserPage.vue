@@ -147,7 +147,7 @@ const onSubmit = () => {
 <style lang="scss" scoped>
 .user {
   &-body {
-    margin: 20px;
+    margin: 26px;
     margin-top: 40px;
     min-width: 380px;
     max-width: 600px;

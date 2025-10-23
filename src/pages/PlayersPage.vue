@@ -582,8 +582,8 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     @include flexPosition(center, start);
   }
   // background-color: aqua;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 26px;
+  margin-right: 26px;
 
   @include response('mobile') {
     margin-left: 0px;
@@ -719,6 +719,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
 .loading-container {
   @include flexPosition(center, center);
   margin-top: 30px;
+  width: 100%;
   // width: 100vw;
   // height: fit-content;
   // background-color: aquamarine;

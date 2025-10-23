@@ -903,6 +903,8 @@ const getCupRoundName = (): string => {
   // gap: 0px 34px;
   padding-top: 30px;
   padding-bottom: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
   // padding: 16px;
   // padding-bottom: 0;
 

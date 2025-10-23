@@ -398,6 +398,14 @@ export const updateTeam = async (t: teamUpdateData): Promise<void> => {
   );
 };
 
+export const deleteTeam = async (
+  league: Leagues,
+  teamId: number
+): Promise<void> => {
+  const docRef = doc(db, `${userId.value}-teams-${league}`, teamId.toString());
+  await deleteDoc(docRef);
+};
+
 export const addTeamToMyLeague = async (team: Team): Promise<void> => {
   await setDoc(doc(db, `${userId.value}-teams-myleague`, team.id.toString()), {
     ...team,

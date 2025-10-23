@@ -569,7 +569,7 @@ const onReset = () => {
     margin: 20px;
   }
   &-body {
-    margin: 20px;
+    margin: 26px;
     margin-top: 40px;
     min-width: 600px;
     max-width: 900px;

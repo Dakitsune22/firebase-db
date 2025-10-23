@@ -96,7 +96,7 @@ const { queryTeamsByName: queryTeamsOthersEurope } = useTeams(
 const { queryTeamsByName: queryTeamsOthersWorld } = useTeams(
   Leagues.OthersWorld
 );
-const { mutateTeamAdd, mutateTeamUpdate } = useTeamMutation();
+const { mutateTeamAdd, mutateTeamUpdate, mutateTeamDelete } = useTeamMutation();
 
 // const { queryTeams: queryMDBTeamsSpain1 } = useDefaultTeams(
 //   Leagues.LaLigaPrimeraDivision
@@ -1599,6 +1599,80 @@ const onReset = () => {
     selectedTeamOriginalData.value = initialTeamData;
   }
 };
+
+const isAddingNewTeam = ref<boolean>(false);
+
+const onAddNewTeam = () => {
+  if (selectedLeague.value !== undefined && currentTeams.value.data.value) {
+    isAddingNewTeam.value = true;
+    const addIdx = currentTeams.value.data.value.length + 1;
+    mutateTeamAdd.mutate(
+      {
+        league: selectedLeague.value,
+        team: {
+          ...initialTeamData,
+          id: addIdx,
+          country:
+            selectedLeague.value === Leagues.OthersWorld
+              ? CountryLeague.OthersWorld
+              : CountryLeague.OthersEurope,
+          division: 1,
+          name: `Equipo ${addIdx}`,
+        },
+      },
+      {
+        onSuccess: async () => {
+          await sleep(1000);
+          selectedTeamId.value = addIdx;
+          updateSelectedTeamData();
+          isAddingNewTeam.value = false;
+        },
+      }
+    );
+  }
+};
+const onDeleteSelectedTeam = () => {
+  $q.dialog({
+    html: true,
+    title: '<span class="text-primary">Eliminar equipo</span>',
+    message: `Se va a eliminar el siguiente equipo de la base de datos:<BR><BR><div style="display: flex; flex-direction: column; justify-content: center; align-items: center;"><div><img src="/images/teams-${selectedTeamData.value.country}/${selectedTeamData.value.shortName}.png" /></div><div><strong>${selectedTeamData.value.name}</strong></div></div><br><br>
+        <strong>¿Estás seguro de continuar?</strong>`,
+    cancel: { label: 'Volver', flat: true },
+    ok: {
+      color: 'negative',
+      icon: 'warning',
+      label: 'Continuar',
+      flat: true,
+    },
+    persistent: true,
+  })
+    .onOk(async () => {
+      if (
+        selectedLeague.value !== undefined &&
+        selectedTeamId.value !== undefined
+      ) {
+        mutateTeamDelete.mutate(
+          {
+            league: selectedLeague.value,
+            teamId: selectedTeamId.value,
+          },
+          {
+            onSuccess: () => {
+              selectedTeamId.value = undefined;
+              selectedTeamData.value = initialTeamData;
+              selectedTeamOriginalData.value = initialTeamData;
+            },
+          }
+        );
+      }
+    })
+    .onCancel(() => {
+      return;
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+};
 </script>
 
 <template>
@@ -1762,6 +1836,41 @@ const onReset = () => {
           class="q-ml-sm"
           :disable="selectedTeamId == undefined"
         />
+        <q-space />
+        <q-btn
+          color="primary"
+          icon="add_circle"
+          size="18px"
+          flat
+          :loading="isAddingNewTeam"
+          :disable="
+            selectedLeague !== Leagues.OthersEurope &&
+            selectedLeague !== Leagues.OthersWorld
+          "
+          @click="onAddNewTeam"
+        >
+          <q-tooltip style="font-size: 12px" class="bg-primary"
+            >Añadir nuevo equipo</q-tooltip
+          >
+        </q-btn>
+        <q-btn
+          color="primary"
+          icon="delete_forever"
+          size="18px"
+          flat
+          :disable="
+            !(
+              (selectedLeague === Leagues.OthersEurope ||
+                selectedLeague === Leagues.OthersWorld) &&
+              selectedTeamId !== undefined
+            )
+          "
+          @click="onDeleteSelectedTeam"
+        >
+          <q-tooltip style="font-size: 12px" class="bg-primary"
+            >Eliminar equipo seleccionado</q-tooltip
+          >
+        </q-btn>
       </div>
     </q-form>
     <!-- <div v-if="currentTeams.data.value">
@@ -2394,7 +2503,7 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     margin: 20px;
   }
   &-body {
-    margin: 20px;
+    margin: 26px;
     margin-top: 40px;
     min-width: 600px;
     max-width: 900px;
@@ -2595,5 +2704,9 @@ $darkGrey: rgba(42, 42, 42, 0.692);
     position: absolute;
     left: 27px;
   }
+}
+.btn-container {
+  display: flex;
+  flex-direction: row;
 }
 </style>

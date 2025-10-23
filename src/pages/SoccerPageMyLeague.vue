@@ -445,6 +445,8 @@ const onLastRound = async () => {
   // gap: 0px 34px;
   padding-top: 20px;
   padding-bottom: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
   // padding: 16px;
   // padding-top: 0;
   // padding-bottom: 0;

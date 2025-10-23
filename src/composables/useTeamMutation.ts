@@ -7,6 +7,7 @@ import {
   addTeam,
   addTeamToMyCup,
   addTeamToMyLeague,
+  deleteTeam,
   deleteTeamMyCup,
   deleteTeamMyLeague,
   updateTeam,
@@ -144,6 +145,28 @@ const useTeamMutation = () => {
     },
   });
 
+  const mutateTeamDelete = useMutation({
+    mutationFn: ({ league, teamId }: { league: Leagues; teamId: number }) =>
+      deleteTeam(league, teamId),
+    // onSuccess: (fruit) => {
+    onSuccess: (data, vars) => {
+      refreshData(vars.league, vars.teamId);
+      $q.notify({
+        type: 'positive',
+        message: 'Equipo eliminado con éxito',
+      });
+    },
+    onError: () => {
+      $q.notify({
+        type: 'negative',
+        message: 'No se ha podido eliminar el equipo',
+      });
+    },
+    onSettled: () => {
+      // console.log('Team deleted');
+    },
+  });
+
   const mutateTeamAddMyLeague = useMutation({
     mutationFn: ({ team }: { team: Team }) => addTeamToMyLeague(team),
     onSuccess: (data, vars) => {
@@ -224,6 +247,7 @@ const useTeamMutation = () => {
     mutateTeamAdd,
     mutateTeamUpdate,
     mutateTeamUpdateStats,
+    mutateTeamDelete,
     mutateTeamAddMyLeague,
     mutateTeamAddMyCup,
     mutateTeamDeleteMyLeague,
