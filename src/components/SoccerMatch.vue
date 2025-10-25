@@ -243,6 +243,17 @@ const onPlayMatch = async () => {
     }
   );
 };
+
+// function reset() {
+//   // mensaje.value = 'Reiniciado ✨'
+//   console.log('Hijo reiniciado');
+// }
+
+// 👇 Esto es clave:
+defineExpose({
+  // reset,
+  onPlayMatch,
+});
 </script>
 
 <template>

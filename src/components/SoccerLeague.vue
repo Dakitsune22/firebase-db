@@ -124,6 +124,36 @@ const isLeagueFinished = computed(() => {
   return false;
 });
 
+const isLeagueRoundCompleted = computed(() => {
+  if (!queryRound.data.value) {
+    console.log('isLeagueRoundCompleted --> queryRound.data.value = UNDEFINED');
+    return false;
+  }
+  console.log(
+    'isLeagueRoundCompleted --> ¿Se han jugado todos los partidos?',
+    queryRound.data.value?.matches.findIndex((m) => m.played === false) < 0
+  );
+  return (
+    queryRound.data.value?.matches.findIndex((m) => m.played === false) < 0
+  );
+});
+
+const isLeagueRoundStarted = computed(() => {
+  if (!queryRound.data.value) {
+    console.log('isLeagueRoundStarted --> queryRound.data.value = UNDEFINED');
+    return false;
+  }
+  console.log(
+    'isLeagueRoundStarted --> ¿Se ha jugado algún partido de la jornada?',
+    queryRound.data.value?.matches.findIndex((m) => m.played === true) >= 0
+  );
+  return (
+    queryRound.data.value?.matches.findIndex((m) => m.played === true) >= 0
+  );
+});
+
+const isPlayingAllMatches = ref<boolean>(false);
+
 const restartLeague = async () => {
   // Rounds:
   let rounds: string[][];
@@ -432,6 +462,21 @@ const onLastRound = async () => {
     forceRender();
   }
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const soccerMatchRef: any[] = []; // Aquí guardaremos las refs de los hijos
+
+const onPlayAllMatches = async () => {
+  isPlayingAllMatches.value = true;
+  await sleep(500);
+  if (soccerMatchRef.length > 0) {
+  }
+  soccerMatchRef.forEach((child, i) => {
+    console.log(i);
+    child?.onPlayMatch(); // Llamamos la función de cada hijo expuesta
+  });
+  isPlayingAllMatches.value = false;
+};
 </script>
 
 <template>
@@ -510,7 +555,7 @@ const onLastRound = async () => {
               getCurrentLeague() === Leagues.LaLigaSegundaDivision ||
               getCurrentLeague() === Leagues.Championship
             "
-            label="Jugar playoff ascenso"
+            label="Iniciar playoff ascenso"
             color="primary"
             icon="play_arrow"
             @click="onStartPlayoff"
@@ -526,7 +571,7 @@ const onLastRound = async () => {
     </div>
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-      class="wrapper"
+      class="wrapper round-container"
     >
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
@@ -538,7 +583,7 @@ const onLastRound = async () => {
           color="primary"
           class="q-mr-xs"
           unelevated
-          :disable="getCurrentRound() === 1"
+          :disable="getCurrentRound() === 1 || isPlayingAllMatches"
           @click="onFirstRound"
         />
         <q-btn
@@ -546,7 +591,7 @@ const onLastRound = async () => {
           size="sm"
           color="primary"
           unelevated
-          :disable="getCurrentRound() === 1"
+          :disable="getCurrentRound() === 1 || isPlayingAllMatches"
           @click="onPreviousRound"
         />
         <span class="text-primary">············ [</span>
@@ -568,7 +613,7 @@ const onLastRound = async () => {
           size="sm"
           color="primary"
           unelevated
-          :disable="getCurrentRound() === totalRounds"
+          :disable="getCurrentRound() === totalRounds || isPlayingAllMatches"
           @click="onNextRound"
         />
         <q-btn
@@ -577,7 +622,7 @@ const onLastRound = async () => {
           color="primary"
           class="q-ml-xs"
           unelevated
-          :disable="getCurrentRound() === totalRounds"
+          :disable="getCurrentRound() === totalRounds || isPlayingAllMatches"
           @click="onLastRound"
         />
       </div>
@@ -585,7 +630,10 @@ const onLastRound = async () => {
         <q-spinner color="primary" size="48px" />
       </div>
       <div v-else>
-        <div v-for="match in queryRound.data.value?.matches" :key="match.id">
+        <div
+          v-for="(match, i) in queryRound.data.value?.matches"
+          :key="match.id"
+        >
           <soccer-match
             :key="roundKey"
             :id="match.id"
@@ -603,10 +651,27 @@ const onLastRound = async () => {
             :substitutes1="match.substitutes1"
             :substitutes2="match.substitutes2"
             :mvp="match.mvp"
+            :ref="(el) => (soccerMatchRef[i] = el)"
           />
         </div>
       </div>
       <div class="champion">
+        <Transition name="transbtn">
+          <q-btn
+            v-show="!isLeagueRoundCompleted"
+            :label="
+              isLeagueRoundStarted
+                ? 'Simular partidos restantes'
+                : 'Simular todos los partidos'
+            "
+            color="primary"
+            icon="play_arrow"
+            unelevated
+            style="margin-top: 10px; padding-right: 23px; width: 100%"
+            :loading="isPlayingAllMatches"
+            @click="onPlayAllMatches"
+          />
+        </Transition>
         <Transition name="winner">
           <div class="champion-container" v-if="isLeagueFinished">
             <div class="champion-container-img">
@@ -760,6 +825,9 @@ const onLastRound = async () => {
   height: 34px;
   // background-color: aqua;
 }
+.round-container {
+  width: 480px;
+}
 .scorers-header {
   @include flexPosition(start, center);
   padding-top: 14px;
@@ -855,6 +923,29 @@ const onLastRound = async () => {
 
   @include response('mobile') {
     transform: translateX(400px);
+  }
+}
+/* Transition */
+.transbtn-enter-active,
+.transbtn-leave-active {
+  transition: all 1s ease;
+}
+.transbtn-enter-from {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 1s ease;
+
+  @include response('mobile') {
+    transform: translateX(-500px);
+  }
+}
+.transbtn-leave-to {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 1s ease;
+
+  @include response('mobile') {
+    transform: translateX(500px);
   }
 }
 </style>

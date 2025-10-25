@@ -440,7 +440,7 @@ export const getMVP = (
     // Añadimos al array de resultados los puntos del jugador:
     diceResults.push(mvpScore);
   });
-  console.log('MVP dice throws:', diceResults);
+  // console.log('MVP dice throws:', diceResults);
 
   // Comprobamos el jugador que sumó más puntos y nos quedamos con su índice:
   const maxDice = Math.max(...diceResults);

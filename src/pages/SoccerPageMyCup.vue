@@ -106,6 +106,36 @@ const isCupRoundFinished = computed(() => {
   );
 });
 
+const isCupRoundCompleted = computed(() => {
+  if (!queryRound.data.value) {
+    console.log('isCupRoundCompleted --> queryRound.data.value = UNDEFINED');
+    return false;
+  }
+  console.log(
+    'isCupRoundCompleted --> ¿Se han jugado todos los partidos?',
+    queryRound.data.value?.matches.findIndex((m) => m.played === false) < 0
+  );
+  return (
+    queryRound.data.value?.matches.findIndex((m) => m.played === false) < 0
+  );
+});
+
+const isCupRoundStarted = computed(() => {
+  if (!queryRound.data.value) {
+    console.log('isCupRoundStarted --> queryRound.data.value = UNDEFINED');
+    return false;
+  }
+  console.log(
+    'isCupRoundStarted --> ¿Se ha jugado algún partido de la ronda?',
+    queryRound.data.value?.matches.findIndex((m) => m.played === true) >= 0
+  );
+  return (
+    queryRound.data.value?.matches.findIndex((m) => m.played === true) >= 0
+  );
+});
+
+const isPlayingAllMatches = ref<boolean>(false);
+
 const lottery = (): number[] => {
   let indexList: number[] = [];
 
@@ -536,6 +566,21 @@ const getCupRoundName = (): string => {
   }
   return 'RONDA X';
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const soccerMatchRef: any[] = []; // Aquí guardaremos las refs de los hijos
+
+const onPlayAllMatches = async () => {
+  isPlayingAllMatches.value = true;
+  await sleep(500);
+  if (soccerMatchRef.length > 0) {
+  }
+  soccerMatchRef.forEach((child, i) => {
+    console.log(i);
+    child?.onPlayMatch(); // Llamamos la función de cada hijo expuesta
+  });
+  isPlayingAllMatches.value = false;
+};
 </script>
 
 <template>
@@ -647,7 +692,7 @@ const getCupRoundName = (): string => {
     </div> -->
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
-      class="wrapper"
+      class="wrapper round-container"
     >
       <!-- <div v-if="queryCountRounds.isFetched">
         {{ queryCountRounds.data.value }}
@@ -670,7 +715,7 @@ const getCupRoundName = (): string => {
           :disable="getCurrentRound() === 1"
           @click="onPreviousRound"
         />
-        <span class="text-primary q-mr-xs">············ [</span>
+        <span class="text-primary q-mr-xs">·········· [</span>
         <!-- <q-img
           src="/images/leagues/england1.png"
           spinner-color="white"
@@ -689,7 +734,7 @@ const getCupRoundName = (): string => {
         <span class="q-mr-sm text-bold text-primary">{{
           getCupRoundName()
         }}</span>
-        <span class="text-primary">] ············</span>
+        <span class="text-primary">] ··········</span>
         <q-btn
           icon="chevron_right"
           size="sm"
@@ -751,35 +796,52 @@ const getCupRoundName = (): string => {
             :substitutes1="match.substitutes1"
             :substitutes2="match.substitutes2"
             :mvp="match.mvp"
+            :ref="(el) => (soccerMatchRef[idx] = el)"
           />
         </div>
       </div>
       <div class="next-round">
-        <q-btn
-          v-show="
-            (queryTotalRounds.data.value &&
-              getCurrentRound() >= queryTotalRounds.data.value &&
-              queryTotalRounds.data.value < totalRounds) ||
-            isLoadingNextCupRound
-          "
-          :label="
-            getCurrentRound() >= totalRounds - 1
-              ? 'Avanzar a la final'
-              : 'Avanzar a la siguiente ronda'
-          "
-          class="next-round-btn"
-          color="primary"
-          icon="play_arrow"
-          unelevated
-          :disable="
-            !queryTotalRounds.data.value ||
-            !isCupRoundFinished ||
-            (isCupRoundFinished &&
-              getCurrentRound() < queryTotalRounds.data.value)
-          "
-          :loading="isLoadingNextCupRound"
-          @click="onAdvanceCupRound"
-        />
+        <TransitionGroup name="transbtn">
+          <q-btn
+            key="1"
+            v-if="
+              (queryTotalRounds.data.value &&
+                getCurrentRound() >= queryTotalRounds.data.value &&
+                queryTotalRounds.data.value < totalRounds &&
+                isCupRoundFinished) ||
+              isLoadingNextCupRound
+            "
+            :label="
+              getCurrentRound() >= totalRounds - 1
+                ? 'Avanzar a la final'
+                : 'Avanzar a la siguiente ronda'
+            "
+            class="next-round-btn"
+            color="primary"
+            icon="chevron_right"
+            unelevated
+            style="padding-right: 23px; width: 100%"
+            :loading="isLoadingNextCupRound"
+            @click="onAdvanceCupRound"
+          />
+          <!-- </Transition>
+        <Transition name="transbtn"> -->
+          <q-btn
+            key="2"
+            v-else-if="!isCupRoundCompleted && getCurrentRound() < totalRounds"
+            :label="
+              isCupRoundStarted
+                ? 'Simular partidos restantes'
+                : 'Simular todos los partidos'
+            "
+            color="primary"
+            icon="play_arrow"
+            unelevated
+            style="margin-top: 10px; padding-right: 23px; width: 100%"
+            :loading="isPlayingAllMatches"
+            @click="onPlayAllMatches"
+          />
+        </TransitionGroup>
         <Transition name="winner">
           <div
             class="champion-container"
@@ -1039,11 +1101,18 @@ const getCupRoundName = (): string => {
   // background-color: aqua;
 }
 .next-round {
-  @include flexPosition(center, center);
+  // @include flexPosition(center, center);
+  // flex-direction: column;
+  // background-color: aqua;
+  align-self: center;
+  height: 46px;
 
   &-btn {
     margin-top: 10px;
   }
+}
+.round-container {
+  max-width: 480px;
 }
 .champion-container {
   display: flex;
@@ -1129,6 +1198,30 @@ const getCupRoundName = (): string => {
 
   @include response('mobile') {
     transform: translateX(400px);
+  }
+}
+/* Transition Group */
+.transbtn-enter-active,
+.transbtn-leave-active {
+  transition: all 1s ease;
+  transition-delay: 1s;
+}
+.transbtn-enter-from {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 1s ease;
+
+  @include response('mobile') {
+    transform: translateX(-500px);
+  }
+}
+.transbtn-leave-to {
+  opacity: 0;
+  transform: translateY(500px);
+  transition: all 1s ease;
+
+  @include response('mobile') {
+    transform: translateX(500px);
   }
 }
 </style>
