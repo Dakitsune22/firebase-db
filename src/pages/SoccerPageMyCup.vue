@@ -842,71 +842,71 @@ const onPlayAllMatches = async () => {
             @click="onPlayAllMatches"
           />
         </TransitionGroup>
-        <Transition name="winner">
+      </div>
+      <Transition name="winner">
+        <div
+          class="champion-container"
+          v-if="
+            queryRound.data.value.round === totalRounds &&
+            queryRound.data.value.matches[0].played
+          "
+        >
           <div
-            class="champion-container"
+            class="champion-container-subtitle"
             v-if="
-              queryRound.data.value.round === totalRounds &&
-              queryRound.data.value.matches[0].played
+              queryRound.data.value.matches[0].score1 ===
+              queryRound.data.value.matches[0].score2
             "
           >
-            <div
-              class="champion-container-subtitle"
-              v-if="
-                queryRound.data.value.matches[0].score1 ===
-                queryRound.data.value.matches[0].score2
-              "
-            >
-              <!-- <span v-if="Math.floor(Math.random() * 2) === 0"
-                >(victoria en la prórroga)</span
-              > -->
-              <!-- <span v-else>(victoria por penaltis)</span> -->
-              <span>(victoria por penaltis)</span>
-            </div>
-            <!-- <div
-              class="champion-container-subtitle"
-              v-else-if="
-                Math.abs(
-                  queryRound.data.value.matches[0].score1 -
-                    queryRound.data.value.matches[0].score2
-                ) === 1 && Math.floor(Math.random() * 3) === 0
-              "
-            >
-              <span>(victoria en la prórroga)</span>
-            </div> -->
-            <div class="champion-container-img">
+            <!-- <span v-if="Math.floor(Math.random() * 2) === 0"
+              >(victoria en la prórroga)</span
+            > -->
+            <!-- <span v-else>(victoria por penaltis)</span> -->
+            <span>(victoria por penaltis)</span>
+          </div>
+          <!-- <div
+            class="champion-container-subtitle"
+            v-else-if="
+              Math.abs(
+                queryRound.data.value.matches[0].score1 -
+                  queryRound.data.value.matches[0].score2
+              ) === 1 && Math.floor(Math.random() * 3) === 0
+            "
+          >
+            <span>(victoria en la prórroga)</span>
+          </div> -->
+          <div class="champion-container-img">
+            <q-img
+              src="/images/leagues/cupwinner.png"
+              spinner-color="white"
+              width="256px"
+              fit="fill"
+            />
+            <!-- <q-icon name="crown" size="32px" color="primary" /> -->
+            <!-- Campeón -->
+            <!-- <q-icon name="crown" size="32px" color="primary" /> -->
+            <div class="champion-container-img-team">
               <q-img
-                src="/images/leagues/cupwinner.png"
+                v-if="queryCupTeams.data.value"
+                :src="`/images/teams-${
+                  queryCupTeams.data.value[getCupWinnerIndex()].country
+                }/${
+                  queryCupTeams.data.value[getCupWinnerIndex()].shortName
+                }.png`"
                 spinner-color="white"
-                width="256px"
-                fit="fill"
+                width="40px"
+                height="40px"
+                class="champion-container-imgfront"
               />
-              <!-- <q-icon name="crown" size="32px" color="primary" /> -->
-              <!-- Campeón -->
-              <!-- <q-icon name="crown" size="32px" color="primary" /> -->
-              <div class="champion-container-img-team">
-                <q-img
-                  v-if="queryCupTeams.data.value"
-                  :src="`/images/teams-${
-                    queryCupTeams.data.value[getCupWinnerIndex()].country
-                  }/${
-                    queryCupTeams.data.value[getCupWinnerIndex()].shortName
-                  }.png`"
-                  spinner-color="white"
-                  width="40px"
-                  height="40px"
-                  class="champion-container-imgfront"
-                />
-              </div>
-              <div class="champion-container-img-tname">
-                <span v-if="queryCupTeams.data.value">{{
-                  queryCupTeams.data.value[getCupWinnerIndex()].name
-                }}</span>
-              </div>
+            </div>
+            <div class="champion-container-img-tname">
+              <span v-if="queryCupTeams.data.value">{{
+                queryCupTeams.data.value[getCupWinnerIndex()].name
+              }}</span>
             </div>
           </div>
-        </Transition>
-      </div>
+        </div>
+      </Transition>
     </div>
     <div
       v-if="queryRound.data.value && queryRound.data.value?.round > 0"
@@ -1105,7 +1105,7 @@ const onPlayAllMatches = async () => {
   // flex-direction: column;
   // background-color: aqua;
   align-self: center;
-  height: 46px;
+  max-height: 46px;
 
   &-btn {
     margin-top: 10px;
