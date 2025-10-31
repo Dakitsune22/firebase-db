@@ -296,7 +296,10 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               (sp) => sp.shirtNumber === playerInfo?.shirtNumber
             ) >= 0
           "
-          :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
+          :round-mvp="
+            matchRef.mvp.playerId === playerInfo.shirtNumber &&
+            matchRef.mvp.playerTeamId === matchRef.team1
+          "
           :match-id="matchRef.id"
         />
       </q-dialog>
@@ -537,7 +540,10 @@ setInterval(() => (showMvpIcon.value = !showMvpIcon.value), 3000);
               (sp) => sp.shirtNumber === playerInfo?.shirtNumber
             ) >= 0
           "
-          :round-mvp="matchRef.mvp.playerId === playerInfo.shirtNumber"
+          :round-mvp="
+            matchRef.mvp.playerId === playerInfo.shirtNumber &&
+            matchRef.mvp.playerTeamId === matchRef.team2
+          "
           :match-id="matchRef.id"
         />
       </q-dialog>

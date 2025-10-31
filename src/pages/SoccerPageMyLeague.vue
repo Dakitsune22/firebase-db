@@ -152,10 +152,17 @@ const restartLeague = async () => {
       '*** addTeam: Se van a añadir los equipos desde la tabla maestra ***'
     );
     queryTeamsByPoints.data.value.forEach((team) => {
-      mutateTeamAdd.mutate({
-        league: getCurrentLeague(),
-        team,
-      });
+      mutateTeamAdd.mutate(
+        {
+          league: getCurrentLeague(),
+          team,
+        },
+        {
+          onSuccess: () => {
+            onFirstRound();
+          },
+        }
+      );
     });
   } else {
     console.error(
@@ -163,14 +170,15 @@ const restartLeague = async () => {
     );
   }
 
-  // Inicializamos ronda a 1 y refrescamos query:
-  // currentRound.value = 1;
-  setCurrentRound(1);
-  await queryRound.refetch();
-  // Cambiamos valor a roundkey para forzar repintado de rondas:
-  roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
+  // // Inicializamos ronda a 1 y refrescamos query:
+  // // currentRound.value = 1;
+  // setCurrentRound(1);
+  // await queryRound.refetch();
+  // // Cambiamos valor a roundkey para forzar repintado de rondas:
+  // roundKey.value > 0 ? (roundKey.value = 0) : forceRender();
 
-  console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
+  // console.log('roundKey:', roundKey.value);
+  // console.log('*** TOTAL ROUNDS AFTER RESTART (computed):', totalRounds.value);
 };
 
 const onRestartLeague = () => {
